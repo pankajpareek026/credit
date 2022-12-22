@@ -8,7 +8,7 @@ const AddUser = ({ refresh }) => {
     const createUser = async (name) => {
       const parentId = localStorage.getItem('user')
       if (parentId) {
-        let result = await fetch('http://localhost:2205/addclient', {
+        let result = await fetch('https://red-glamorous-scallop.cyclic.app/addclient', {
           method: "post",
           body: JSON.stringify({ parentId, name }),
           headers: { 'content-type': 'application/json', "token": `${parentId}` }
