@@ -149,13 +149,13 @@ const Dashboard = () => {
                         </div>
                         <div className="d-hl-container">
                             <div className="d-high">
-                                {/*juser has higest credit */}
-                                <p style={{ position: "abslute", backgroundColor: "gray", color: "black", padding: "5px 7px", borderRadius: "100px", float: "right", margin: "0", top: 0, fontWeight: "900", fontSize: "x-small" }}>Max</p>
-                                <div style={{ display: "inline-flex", gap: "5px" }}><span>{max.name}</span> <span style={{ color: "red" }}>₹ {max.totalAmount}</span></div></div>
+                                {/*user has higest credit */}
+                                <p>Max</p>
+                                <div ><span>{max ?max.name:"NA"}</span> <span style={{ color: "red" }}>₹ {min ?max.totalAmount:0}</span></div></div>
                             <div className="d-low">
-                                {/*juser has lowest credit */}
-                                <p style={{ position: "relative", backgroundColor: "gray", color: "black", padding: "5px 7px", borderRadius: "100px", float: "right", margin: "0", button: "50px", fontWeight: "900", fontSize: "x-small" }}>Min</p>
-                                <div><span style={{ position: "static" }}>{min.name}</span> <span style={{ color: "green" }}>₹ {min.totalAmount}</span></div></div>
+                                {/*user has lowest credit */}
+                                <p >Min</p>
+                                <div><span >{min ?min.name :"NA"}</span> <span style={{ color: "green" }}>₹ {min ?min.totalAmount :0}</span></div></div>
                         </div>
                     </div>
                     <div className="d-chart">
