@@ -151,7 +151,7 @@ const Dashboard = () => {
                             <div className="d-high">
                                 {/*user has higest credit */}
                                 <p>Max</p>
-                                <div ><span>{max ?max.name:"NA"}</span> <span style={{ color: "red" }}>₹ {min ?max.totalAmount:0}</span></div></div>
+                                <div ><span>{max ?max.name:"NA"}</span> <span style={{ color: "red" }}>₹ {max ?max.totalAmount:0}</span></div></div>
                             <div className="d-low">
                                 {/*user has lowest credit */}
                                 <p >Min</p>
