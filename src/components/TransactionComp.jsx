@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
 
-const TransactionComp = ({ type, right, amount, date, dis }) => {
+const TransactionComp = ({ type, amount, date, dis }) => {
 
   const shiftR = {
     marginLeft: "auto",
@@ -103,18 +103,18 @@ const TransactionComp = ({ type, right, amount, date, dis }) => {
         </div>`
     })
   }
-  const ShiftL = {
-    marginLeft: "50px",
-    marginRight: "auto",
-    backgroundColor: "white",
-    border: "2px  solid green",
-    borderLeftWidth: "20px"
-  }
+  // const ShiftL = {
+  //   marginLeft: "50px",
+  //   marginRight: "auto",
+  //   backgroundColor: "white",
+  //   border: "2px  solid green",
+  //   borderLeftWidth: "20px"
+  // }
   // console.log(right)
   return (
     <>
       {click && <div>{() => showDetails(amount, date, dis, type)}</div>}
-      <div onClick={() => showDetails(amount, date, dis, type)} style={right == true ? shiftR : ShiftL} className="Transaction-comp">
+      <div onClick={() => showDetails(amount, date, dis, type)}  className={`Transaction-comp ${type}`}>
         <div className="tc-amt">{amount}</div>
         <p className='tc-date'>{date}</p>
 
