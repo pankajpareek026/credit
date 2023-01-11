@@ -12,18 +12,12 @@ import NewTransaction from './NewTransaction';
 import Swal from 'sweetalert2';
 import Success from './Success';
 
-
-
-
 const Transactions = () => {
     let balance = 0
     const redirect = useNavigate()
-    useEffect(() => {
-        getTransactions()
-    }, [])
     const params = useParams()
     const [show, Setshow] = useState(false)
-    const [trn, Settrn] = useState([])
+    const [trn, Settrn] = useState([]); //array for transactions
     const [blance, Setbalance] = useState(0)
     const [name, Setname] = useState("")
     const Thandle = () => {
@@ -39,19 +33,18 @@ const Transactions = () => {
             }
         })
         result = await result.json()
-        console.log(result)
-        Setname(result.response[0].name)
-        Settrn(result.response[0].transactions)
-        console.log("TRNS :", result.response[0].transactions[0].amount)
+        Setname(result.response[0].name); /* Set the name of user at top and in header section in transactions component */
+        Settrn(result.response[0].transactions) ;/* All transaction related to the user  */
         result.response[0].transactions.map((item, index) => {
             // console.log(item.amount)
-            balance += item.amount;
-            console.log(blance)
+           return  balance += item.amount;  
         })
         // console.log(trn)
         Setbalance(balance)
-        console.log(blance)
     }
+    useEffect(() => {
+        getTransactions();
+    },[trn]);
     document.title = `Credit | Transaction / ${name}`
     const searchHandle = async (e) => {
         console.log(e)
@@ -125,14 +118,14 @@ const Transactions = () => {
 
                     {
                         trn.map((item, index) => {
-                            return (<TransactionComp key={index} amount={item.amount} dis={item.dis} type={item.type} right={item.type == "OUT" ? true : false} date={item.date} />)
+                            return (<TransactionComp key={index} amount={item.amount} dis={item.dis} type={item.type}  date={item.date} />)
                         })
                     }
                 </div>
             </div>
-            {show && <NewTransaction refresh={getTransactions} uid={params.id} />}
+            {show && <NewTransaction refresh={getTransactions}  uid={params.id} Setshow={Setshow} />}
         </div>
     )
 }
 
-export default Transactions
+export default Transactions;
