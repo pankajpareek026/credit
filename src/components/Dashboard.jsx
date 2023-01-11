@@ -151,7 +151,7 @@ const Dashboard = () => {
                             <div className="d-high">
                                 {/*user has higest credit */}
                                 <p>Max</p>
-                                <div ><span>{max ?max.name:"NA"}</span> <span style={{ color: "red" }}>₹ {max ?max.totalAmount:0}</span></div></div>
+                                <div ><span>{max ?max.name:"NA"}</span> <span style={{ color: "red" }}>₹ {min ?max.totalAmount:0}</span></div></div>
                             <div className="d-low">
                                 {/*user has lowest credit */}
                                 <p >Min</p>
@@ -163,7 +163,14 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="d-clients-container">
-                    <h5>USERS</h5>
+                    <table>
+                        <thead>
+                            <tr><th>Name</th>
+                            <th>Date</th>
+                            <th>Amount</th></tr>
+                        </thead>
+                        <tbody>
+                            {/* <h5>USERS</h5> */}
                     {!notFound > 0 ?
                         <>
                             {users.map((user, index) => {
@@ -172,7 +179,10 @@ const Dashboard = () => {
                             })}</> : <h2>
                             <img className='nothing' src="https://i.ibb.co/K5CrdDT/error.png" alt="" />                           </h2>
                     }
+                        </tbody>
+                    </table>
                 </div>
+                
             </div>
         </div>
     )
