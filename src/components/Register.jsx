@@ -63,12 +63,12 @@ function Register() {
                     <div className='Login'>
                         <h2>Register</h2>
                         <input type="text" onChange={(e) => Setname(e.target.value)} placeholder='Full Name' />
-                        {empty && !name && <span> required</span>}
+                        {empty && !name && <span> Required</span>}
                         <input type="email" onChange={(e) => SetEmail(e.target.value)} placeholder='Email' />
-                        {empty && !validator.isEmail(email) && <span>Invalid email</span>}
+                        {empty && !validator.isEmail(email) && <span>Invalid Email</span>}
                         <input type={hide ? "password" : "text"} onChange={(e) => { Setpass(e.target.value); SetSecure(validator.isStrongPassword(e.target.value)) }} placeholder='password' />
                         {hide ? <AiFillEyeInvisible onClick={() => Sethide((e) => !e)} style={{ fontSize: "x-large", marginLeft: "40%", marginTop: "-55px", cursor: "pointer" }} /> : <AiFillEye onClick={() => Sethide((e) => !e)} style={{ fontSize: "x-large", marginLeft: "40%", marginTop: "-55px", cursor: "pointer" }} />}
-                        {empty && !pass && <span> required</span>}
+                        {empty && !pass && <span> Required</span>}
                         {pass && !secure && <span>weak password</span>}
 
                         <button className='reg-btn' style={{ backgroundColor: disabled && "gray" }} onClick={(e) => registerHandle(e)}>Register</button>
