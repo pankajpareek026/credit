@@ -8,10 +8,10 @@ const Client = ({name,amount,Id}) => {
   <Link style={{color:"white",textDecoration:"none"}} to ={`/detail/${Id}`} >{name}</Link>
 </td>
 <td>12-09-2022</td>
-<td >{amount}</td></tr>
+<td >₹{amount}</td></tr>
 </>
   )
 }
 
 
-export default Client;
+export default Client
