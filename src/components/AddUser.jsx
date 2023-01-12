@@ -14,15 +14,12 @@ const AddUser = ({ refresh }) => {
           headers: { 'content-type': 'application/json', "token": `${parentId}` }
         })
         result = await result.json()
-        // console.log(result.response)
-
         if (result.response === "success") {
           Success(`${name}; is Added `)
           refresh()  // to call all users api function in dashboard ;
         } else {
           Warning(result.response)
         }
-
       }
       else {
         Swal.fire("OMG")
@@ -42,7 +39,7 @@ const AddUser = ({ refresh }) => {
 
       inputValidator: (value) => {
         if (!value) {
-          return 'You need to write something!'
+          return 'Please input valid user name !'
         }
       }
     })
