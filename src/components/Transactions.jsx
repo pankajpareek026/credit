@@ -36,10 +36,9 @@ const Transactions = () => {
         Setname(result.response[0].name); /* Set the name of user at top and in header section in transactions component */
         Settrn(result.response[0].transactions) ;/* All transaction related to the user  */
         result.response[0].transactions.map((item, index) => {
-            // console.log(item.amount)
+    
            return  balance += item.amount;  
         })
-        // console.log(trn)
         Setbalance(balance)
     }
     useEffect(() => {
@@ -47,7 +46,7 @@ const Transactions = () => {
     },[trn]);
     document.title = `Credit | Transaction / ${name}`
     const searchHandle = async (e) => {
-        console.log(e)
+        
         let query = e
         let result = fetch('https://red-glamorous-scallop.cyclic.app/client/search', {
             headers: {
@@ -58,7 +57,7 @@ const Transactions = () => {
             }
         })
         result = await result.json()
-        console.log(result)
+       
 
 
     }
@@ -75,7 +74,6 @@ const Transactions = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.clear()
-                // console.log("hitted", localStorage.clear())
                 Success(`Logged Out`)
                 setTimeout(() => {
                     redirect('/login')
@@ -85,7 +83,7 @@ const Transactions = () => {
 
     }
     return (
-        <div className='transactions'>
+        <div  className='transactions'>
 
             <div className="left">
                 {/* for navbar in left side */}
@@ -95,30 +93,31 @@ const Transactions = () => {
                 <Link to='/user'><HiOutlineUserCircle style={{ fontSize: "xx-large" }} /></Link>
                 <Link to='/dashboard'><MdSpaceDashboard style={{ fontSize: "xx-large" }} /></Link>
                 <Link onClick={Thandle} ><SiAddthis style={{ fontSize: "x-large", padding: '5px  0px', cursor: "pointer" }} /></Link>
-                <div className="d-logout" onClick={() => logout}>
-                    <FaPowerOff />
+                <div className="d-logout" onClick={logout}>
+                    <FaPowerOff onClick={logout}/>
                 </div>
             </div>
 
             <div className="t-right">
                 <div className="t-upper-container">
-                    <div className="t-username">{name}</div>
-                    <input type="search" placeholder='Search Transaction ' onChange={(e) => searchHandle(e.target.value)} />
+                    <div style={show?{filter: "blur(.7px)"}:{}} className="t-username">{name}</div>
+                    <input style={show?{filter: "blur(3px)"}:{}} type="search" placeholder='Search Transaction ' onChange={(e) => searchHandle(e.target.value)} />
                     <div className="share">
                         <FaShareAlt />
                     </div>
                 </div>
-                <div className="t-container2">
+                <div style={show?{filter: "blur(3px)"}:{}} className="t-container2">
 
-                    <div className="t-heading">
+                    <div style={show?{filter: "blur(3px)"}:{}} className="t-heading">
                         <span className="t-user-name"> {name} </span>
                         <span className="t-lastdate"> { }</span>
                         <span className="t-balance"> ₹ {blance}</span>
                     </div>
 
                     {
+                        // to map transaction at Transaction Component
                         trn.map((item, index) => {
-                            return (<TransactionComp key={index} amount={item.amount} dis={item.dis} type={item.type}  date={item.date} />)
+                            return (<TransactionComp key={index} show={show} amount={item.amount} dis={item.dis} type={item.type}  date={item.date} />)
                         })
                     }
                 </div>
