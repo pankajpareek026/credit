@@ -6,6 +6,7 @@ import UserData from './data'
 import Client from './Client';
 import AdvanceNav from './AdvanceNav';
 import Warning from './Warning';
+import AddUser from './AddUser';
 const Dashboard = () => {
     document.title = "C | Dashboard"
     const Auth = localStorage.getItem('user')
@@ -46,9 +47,8 @@ const Dashboard = () => {
                 }
             })
             result = await result.json()
-            console.table(result.response)
+            
             if (result.response !== "Not Found !") {
-                console.log("true")
                 Setusers(result.response)
             }
             else if (result.response == "Not Found !") {
@@ -68,7 +68,8 @@ const Dashboard = () => {
                 }
             })
             users = await users.json()
-            if (users.response === "invalid token") {
+           
+            if (users.response === "invalid token"||users.response==="jwt expired") {
                 Warning("session expired !")
                 localStorage.clear()
                 navigate('/login')
@@ -82,7 +83,7 @@ const Dashboard = () => {
                 users.response.map((element) => {
                     userArray.push(element)
                     t = t + element.totalAmount;
-                    console.log("user Array :", userArray);
+                    
                 })
                 //sort array to find out maximum and minimum amount
                 let len = userArray.length;
@@ -97,13 +98,13 @@ const Dashboard = () => {
                     }
 
                 }
-                console.table(userArray)
+               
                 SetMax(userArray[0])
                 SetMin(userArray[len - 1])
                 SetTotal(t)
                 Setusers(users.response)
             }
-            console.log(short)
+           
         }
         else {
             console.log("err")
@@ -176,9 +177,13 @@ const Dashboard = () => {
                             {users.map((user, index) => {
                                 //   SetTotal(user.totalAmount)
                                 return (<Client key={index} name={user.name} amount={user.totalAmount} Id={user._id}> </Client>)
-                            })}</> : <h2>
-                            <img className='nothing' src="https://i.ibb.co/K5CrdDT/error.png" alt="" />                           </h2>
-                    }
+                            })}</> :<tr style={{backgroundColor:"red"}}>
+                                <td style={{color:"black",backgroundColor:"orange",fontWeight:"900"}} > ! USER</td>
+                            <td style={{color:"black",backgroundColor:"orange",fontWeight:"900"}} >NOT FOUND</td>
+                            <td style={{color:"black",backgroundColor:"orange",fontWeight:"900"}} ><AddUser/> </td>
+                            </tr>
+                            
+                             }
                         </tbody>
                     </table>
                 </div>
