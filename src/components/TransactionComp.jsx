@@ -96,7 +96,7 @@ const TransactionComp = ({ type, amount, date, dis ,show}) => {
     <>
       {click && <div>{() => showDetails(amount, date, dis, type)}</div>}
       <div style={show?{filter: "blur(3px)"}:{}} onClick={() => showDetails(amount, date, dis, type)}  className={`Transaction-comp ${type}`}>
-        <div className="tc-amt">{amount}</div>
+        <div className="tc-amt">₹{amount}</div>
         <p className='tc-date'>{date}</p>
 
       </div>
