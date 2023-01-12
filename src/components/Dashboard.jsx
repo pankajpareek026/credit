@@ -172,7 +172,7 @@ const Dashboard = () => {
                         </thead>
                         <tbody>
                             {/* <h5>USERS</h5> */}
-                    {!notFound > 0 ?
+                    {!notFound ||users 0> ?
                         <>
                             {users.map((user, index) => {
                                 //   SetTotal(user.totalAmount)
