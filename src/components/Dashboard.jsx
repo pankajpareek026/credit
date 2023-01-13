@@ -14,10 +14,14 @@ const Dashboard = () => {
     useEffect(() => {
         getUsers()
     }, [])
+
     const [total, SetTotal] = useState(0)
     const [min, SetMin] = useState({})
     const [max, SetMax] = useState({})
-    const [notFound, SetnotFound] = useState(false)
+    const [notFound, SetnotFound] = useState(false);
+    const [users, Setusers] = useState([]);
+    console.log(users.length)
+
     const opt = {
         responsive: true,
         plugins: {
@@ -47,7 +51,7 @@ const Dashboard = () => {
                 }
             })
             result = await result.json()
-            
+
             if (result.response !== "Not Found !") {
                 Setusers(result.response)
             }
@@ -57,6 +61,7 @@ const Dashboard = () => {
             }
         }
     }
+
     const getUsers = async () => {
         let short = []
 
@@ -68,8 +73,8 @@ const Dashboard = () => {
                 }
             })
             users = await users.json()
-           
-            if (users.response === "invalid token"||users.response==="jwt expired") {
+
+            if (users.response === "invalid token" || users.response === "jwt expired") {
                 Warning("session expired !")
                 localStorage.clear()
                 navigate('/login')
@@ -83,7 +88,7 @@ const Dashboard = () => {
                 users.response.map((element) => {
                     userArray.push(element)
                     t = t + element.totalAmount;
-                    
+
                 })
                 //sort array to find out maximum and minimum amount
                 let len = userArray.length;
@@ -98,20 +103,20 @@ const Dashboard = () => {
                     }
 
                 }
-               
+
                 SetMax(userArray[0])
                 SetMin(userArray[len - 1])
                 SetTotal(t)
                 Setusers(users.response)
             }
-           
+
         }
         else {
             console.log("err")
         }
     }
-    const [users, Setusers] = useState([])
-    //   ChartJS.defaults.global.legend.display = false;
+
+
     const [userData, setUserData] = React.useState({
         labels: UserData.map((data) => data.user),
         datasets: [
@@ -131,6 +136,7 @@ const Dashboard = () => {
         ],
     });
     let t = 0
+    console.log("condition :", (!notFound || users.length == 0));
     // get all users
     return (
         <div className='dashboard'>
@@ -152,11 +158,11 @@ const Dashboard = () => {
                             <div className="d-high">
                                 {/*user has higest credit */}
                                 <p>Max</p>
-                                <div ><span>{max ?max.name:"NA"}</span> <span style={{ color: "red" }}>₹ {min ?max.totalAmount:0}</span></div></div>
+                                <div ><span>{max ? max.name : "NA"}</span> <span style={{ color: "red" }}>₹ {min ? max.totalAmount : 0}</span></div></div>
                             <div className="d-low">
                                 {/*user has lowest credit */}
                                 <p >Min</p>
-                                <div><span >{min ?min.name :"NA"}</span> <span style={{ color: "green" }}>₹ {min ?min.totalAmount :0}</span></div></div>
+                                <div><span >{min ? min.name : "NA"}</span> <span style={{ color: "green" }}>₹ {min ? min.totalAmount : 0}</span></div></div>
                         </div>
                     </div>
                     <div className="d-chart">
@@ -167,27 +173,31 @@ const Dashboard = () => {
                     <table>
                         <thead>
                             <tr><th>Name</th>
-                            <th>Date</th>
-                            <th>Amount</th></tr>
+                                <th>Date</th>
+                                <th>Amount</th></tr>
                         </thead>
                         <tbody>
                             {/* <h5>USERS</h5> */}
-                    {!notFound ||users 0> ?
-                        <>
-                            {users.map((user, index) => {
-                                //   SetTotal(user.totalAmount)
-                                return (<Client key={index} name={user.name} amount={user.totalAmount} Id={user._id}> </Client>)
-                            })}</> :<tr style={{backgroundColor:"red"}}>
-                                <td style={{color:"black",backgroundColor:"orange",fontWeight:"900"}} > ! USER</td>
-                            <td style={{color:"black",backgroundColor:"orange",fontWeight:"900"}} >NOT FOUND</td>
-                            <td style={{color:"black",backgroundColor:"orange",fontWeight:"900"}} ><AddUser/> </td>
-                            </tr>
-                            
-                             }
+                            {
+                                (notFound) ? <><tr style={{ backgroundColor: "red" }}>
+                                    <td style={{ color: "black", backgroundColor: "orange", fontWeight: "900" }} > ! USER</td>
+                                    <td style={{ color: "black", backgroundColor: "orange", fontWeight: "900" }} >NOT FOUND</td>
+                                    <td style={{ color: "black", backgroundColor: "orange", fontWeight: "900" }} ><AddUser /> </td>
+                                </tr></> : (users.length == 0) ? <><tr style={{ backgroundColor: "red" }}>
+                                    <td style={{ color: "black", backgroundColor: "orange", fontWeight: "900" }} > ! NO</td>
+                                    <td style={{ color: "black", backgroundColor: "orange", fontWeight: "900" }} >User </td>
+                                    <td style={{ color: "black", backgroundColor: "orange", fontWeight: "900" }} ><AddUser /> </td>
+                                </tr></> : <>{
+                                    users.map((user, index) => {
+                                        //   SetTotal(user.totalAmount)
+                                        return (<Client key={index} name={user.name} amount={user.totalAmount} Id={user._id}> </Client>)
+                                    })}</>
+                            }
+
                         </tbody>
                     </table>
                 </div>
-                
+
             </div>
         </div>
     )
