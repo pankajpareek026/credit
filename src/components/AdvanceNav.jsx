@@ -38,17 +38,17 @@ const AdvanceNav = ({ refresh }) => {
 
   }
   return (
-    <div className="left">
+    <div className="left mobile-nav">
       {/* for navbar in left side */}
       <h2 className="logo small">C</h2>
 
       <Link to="/" ><HiHome style={{ fontSize: "xx-large" }} /></Link>
       <Link to='/user'><HiOutlineUserCircle style={{ fontSize: "xx-large" }} /></Link>
-      {/* <Link to='/detail'>T</Link> */}
+    
 
       <div ><AddUser refresh={refresh} /></div>
       <div className="d-logout" onClick={logout}>
-        <FaPowerOff />
+        <FaPowerOff onClick={logout} style={{ hover: { color: "red" } }} />
       </div>
       <ToastContainer />
 
