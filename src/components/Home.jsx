@@ -6,6 +6,7 @@ const Home = () => {
     const isUser=localStorage.getItem('user')
     const redirect = useNavigate()
     document.title="C | HOME"
+
     return (
 <>
 <Navbar/>
@@ -14,15 +15,11 @@ const Home = () => {
 
 
             <div className="title">
-                {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                    <path fill="rgb(20, 241, 149)" fill-opacity="1" d="M0,224L48,218.7C96,213,192,203,288,213.3C384,224,480,256,576,256C672,256,768,224,864,202.7C960,181,1056,171,1152,181.3C1248,192,1344,224,1392,240L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-                </svg> */}
-                
                 <h2>Track Your Credits Digitaly ,
-                    say goodbay to khata's and books
+                    say goodbay to khata's and books .
                 </h2>
-              {  <button className='get-btn' style={{display:isUser?"hidden":"flex"}} onClick={() => redirect('/login')}>Get started</button>}
-                <img className='title-img' src="https://cdn1.designhill.com/uploads/personal_designs/6eab37b4c0aff0a81cb41bbcba7dd97a-4ff20032494dc4cdb094b2dfbfebae6216299591083257.png?ver=2.12.17" alt="img" />
+              {  <button className='get-btn' style={{display:isUser?"none":"flex"}} onClick={() => redirect('/login')}>Get started</button>}
+                <img className='title-img' style={isUser&&{marginTop:"5rem"}} src="https://cdn1.designhill.com/uploads/personal_designs/6eab37b4c0aff0a81cb41bbcba7dd97a-4ff20032494dc4cdb094b2dfbfebae6216299591083257.png?ver=2.12.17" alt="img" />
             </div>
             
             
@@ -39,10 +36,10 @@ const Home = () => {
             <div className="events">
                 <h1>Events</h1>
                 <div className="event-container">
-                    <div className="event"> obcaecati. Impedit sequi quasi eveniet quam, incidunt iusto? Ea voluptates pariatur ducimus excepturi. </div>
-                    <div className="event"> obcaecati. Impedit sequi quasi eveniet quam, incidunt iusto? Ea voluptates pariatur ducimus excepturi. </div>
-                    <div className="event"> obcaecati. Impedit sequi quasi eveniet quam, incidunt iusto? Ea voluptates pariatur ducimus excepturi. </div>
-                    <div className="event"> obcaecati. Impedit sequi quasi eveniet quam, incidunt iusto? Ea voluptates pariatur ducimus excepturi. </div>
+                    <div className="event"> Lorem ipsum dolor sit amet. Ea voluptates pariatur ducimus excepturi. </div>
+                    <div className="event"> Lorem ipsum dolor sit amet. Ea voluptates pariatur ducimus excepturi. </div>
+                    <div className="event"> Lorem ipsum dolor sit amet. Ea voluptates pariatur ducimus excepturi. </div>
+                    <div className="event"> Lorem ipsum dolor sit amet. Ea voluptates pariatur ducimus excepturi. </div>
                 </div>
             </div>
 
