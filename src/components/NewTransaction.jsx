@@ -47,7 +47,7 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
   }
 
   return (
-    <div style={show ? { display: "none" } : {}} className="add-t-container">
+    <div  className="add-t-container">
       <div className='add-t'>
         <span className='close'onClick={()=>Setshow(now=>!now)}>X</span>
         <h1>Add Transaction</h1>
