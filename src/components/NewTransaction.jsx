@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import Success from './Success';
 import Warning from './Warning';
 import { ToastContainer, } from 'react-toastify';
-const NewTransaction = ({ uid, refresh }) => {
-
+const NewTransaction = ({ uid, refresh, Setshow }) => {
   const [clickIn, SetClickIn] = React.useState({ dsp: true, active: true })
   const [clickOut, SetClickOut] = React.useState({ dsp: false, active: false })
   const [amount, Setamount] = useState("")
@@ -11,11 +10,10 @@ const NewTransaction = ({ uid, refresh }) => {
   const [disc, Setdisc] = useState("")
   const [type, SetType] = useState("")
   const HideOut = (e) => { // this will run when we click on In => Task To hide the out div and giv the 100% widht to IN
-    // console.log("in Button licked")
+
     SetClickIn({ dsp: true, active: true })
     SetClickOut({ dsp: false, active: false })
-    // console.log(clickIn)
-    // a()
+
   }
   const AddApi = async (amt, date, dis, type) => {
     let result = await fetch('https://red-glamorous-scallop.cyclic.app/client/newTransaction', {
@@ -26,12 +24,12 @@ const NewTransaction = ({ uid, refresh }) => {
     result = await result.json();
     if (result.response == "success") {
       Success(result.response)
+      Setshow(now => !now)
       refresh()
     }
     else {
       Warning(result.response)
     }
-    // console.log(result)
   }
   const handleIn = (e) => {
     SetType("IN")
@@ -40,20 +38,18 @@ const NewTransaction = ({ uid, refresh }) => {
     AddApi(amount, date, disc, "IN")
   }
   const handleOut = (e) => {
-
-    console.log(`${amount},${date},${disc},${type},`)
-    AddApi(amount * (-1), date, disc, "OUT")
+      console.log(`"Handle OUT IF :",${amount*(-1)},${date},${disc},${type},`)
+      AddApi(amount*(-1), date, disc, "OUT")
   }
 
   const HideIn = () => {
     SetClickOut({ dsp: true, active: true })
     SetClickIn({ dsp: false, active: false })
-    // console.log("Out Button Clicked")
-    // a()
   }
 
   return (
-    <div className='add-t'>
+   <div className="add-t-container">
+     <div className='add-t'>
       <h1>Add Transaction</h1>
       <div className="buttons">
         <button className='in' style={{ backgroundColor: clickIn.active ? "green" : "#100e0f" }} onClick={() => { HideOut(); SetType("OUT") }} >IN</button>
@@ -75,8 +71,8 @@ const NewTransaction = ({ uid, refresh }) => {
         {clickOut.dsp && <div className="out" style={{ display: clickIn.display, }}>
           <div className='form'>
             <h1>OUT</h1>
-            <input type="number" defaultValue={amount} onChange={(e) => Setamount(e.target.value * -1)} placeholder='Amount' required />
-            <input type="date" defaultValue={date} onChange={(e) => Setdate(e.target.value)} placeholder='date' required />
+            <input type="number" defaultValue={amount} onChange={(e) => Setamount(e.target.value)} placeholder='Amount' required />
+            <input type="datetime-local" defaultValue={date} onChange={(e) => Setdate(e.target.value)} placeholder='date' required />
             <input type="text" defaultValue={disc} onChange={(e) => Setdisc(e.target.value)} placeholder='Comment' required />
             <button value={"OUT"} onClick={(e) => handleOut(e)}>OUT</button>
           </div>
@@ -85,7 +81,8 @@ const NewTransaction = ({ uid, refresh }) => {
       </div>
       <ToastContainer />
     </div>
+   </div>
   )
 }
 
-export default NewTransaction
+export default NewTransaction;
