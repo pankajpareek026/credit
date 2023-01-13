@@ -122,7 +122,7 @@ const Transactions = () => {
                     }
                 </div>
             </div>
-            {show && <NewTransaction refresh={getTransactions}  uid={params.id} Setshow={Setshow} />}
+            {show && <NewTransaction refresh={getTransactions}   uid={params.id} Setshow={Setshow} />}
         </div>
     )
 }
