@@ -141,7 +141,7 @@ body {
 .one {
   color: rgb(5, 5, 5);
   width: 85vw;
-  margin-left: 0.5vw;
+  margin-left: 2%;
   margin-right: 0.5vw;
   margin-top: 10%;
   padding: 25px;
@@ -1319,7 +1319,7 @@ canvas {
   .dashboard .left,
   .transactions .left {
     position: absolute;
-    bottom: .5rem;
+    bottom: .2rem;
     margin: 0;
     text-align: left;
     padding: 0;
@@ -1671,7 +1671,7 @@ canvas {
 
   /* footer ---End */
   .one {
-    height: 12rem;
+    height: fit-content;
     margin-left: 1rem;
     font-family: sans-serif;
   }
@@ -1679,7 +1679,7 @@ canvas {
   .two {
     font-family: sans-serif;
     margin-top: 3rem;
-    height: 21rem;
+    height:fit-content;
     margin-left: 1rem;
   }
 
