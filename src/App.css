@@ -206,6 +206,21 @@ body {
   box-shadow: 2px 2px 2px orange, -2px -2px 2px orange;
 }
 
+.close {
+  color: red;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: xx-large;
+  position: absolute;
+  top: -50px;
+  right: 0;
+  margin-left: auto;
+}
+
+.close:hover {
+  color: var(--main);
+}
+
 .footer {
   margin-top: 5%;
   position: absolute;
@@ -383,12 +398,10 @@ body {
 
 /* master class for dashboard component  */
 .dashboard {
-  overflow: hidden;
   font-family: sans-serif;
   color: white;
   display: flex;
   background-color: #121212;
-  height: fit-content;
 }
 
 /* for navbar In DashBoard Section  */
@@ -847,8 +860,6 @@ canvas {
   font-family: sans-serif;
   color: white;
   display: flex;
-  overflow: hidden;
-  height: fit-content;
 }
 
 .t-upper-container {

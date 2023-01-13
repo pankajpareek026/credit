@@ -13,7 +13,6 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
 
     SetClickIn({ dsp: true, active: true })
     SetClickOut({ dsp: false, active: false })
-
   }
   const AddApi = async (amt, date, dis, type) => {
     let result = await fetch('https://red-glamorous-scallop.cyclic.app/client/newTransaction', {
@@ -48,8 +47,9 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
   }
 
   return (
-    <div style={!show ? { display: "none" } : {}} className="add-t-container">
+    <div style={show ? { display: "none" } : {}} className="add-t-container">
       <div className='add-t'>
+        <span className='close'onClick={()=>Setshow(now=>!now)}>X</span>
         <h1>Add Transaction</h1>
         <div className="buttons">
           <button className='in' style={{ backgroundColor: clickIn.active ? "green" : "#100e0f" }} onClick={() => { HideOut(); SetType("OUT") }} >IN</button>
