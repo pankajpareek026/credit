@@ -388,6 +388,7 @@ body {
   color: white;
   display: flex;
   background-color: #121212;
+  height: fit-content;
 }
 
 /* for navbar In DashBoard Section  */
@@ -847,6 +848,7 @@ canvas {
   color: white;
   display: flex;
   overflow: hidden;
+  height: fit-content;
 }
 
 .t-upper-container {
