@@ -95,9 +95,9 @@ const Transactions = () => {
                 <Link to="/" ><HiHome style={{ fontSize: "xx-large" }} /></Link>
                 <Link to='/user'><HiOutlineUserCircle style={{ fontSize: "xx-large" }} /></Link>
                 <Link to='/dashboard'><MdSpaceDashboard style={{ fontSize: "xx-large" }} /></Link>
-                <Link onClick={Thandle} ><SiAddthis style={{ fontSize: "x-large", padding: '5px  0px', cursor: "pointer" }} /></Link>
+                <Link onClick={Thandle} onTouchStart={Thandle} ><SiAddthis style={{ fontSize: "x-large", padding: '5px  0px', cursor: "pointer" }} /></Link>
                 <div className="d-logout" onClick={logout}>
-                    <FaPowerOff onClick={logout}/>
+                    <FaPowerOff onClick={logout} onTouchStart={logout}/>
                 </div>
             </div>
 

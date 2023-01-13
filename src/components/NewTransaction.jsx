@@ -48,7 +48,7 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
   }
 
   return (
-    <div style={!show?{ display: "none" }:{}} className="add-t-container">
+    <div style={!show ? { display: "none" } : {}} className="add-t-container">
       <div className='add-t'>
         <h1>Add Transaction</h1>
         <div className="buttons">
