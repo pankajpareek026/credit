@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Success from './Success';
 import Warning from './Warning';
 import { ToastContainer, } from 'react-toastify';
-const NewTransaction = ({ uid, refresh, Setshow }) => {
+const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
   const [clickIn, SetClickIn] = React.useState({ dsp: true, active: true })
   const [clickOut, SetClickOut] = React.useState({ dsp: false, active: false })
   const [amount, Setamount] = useState("")
@@ -38,8 +38,8 @@ const NewTransaction = ({ uid, refresh, Setshow }) => {
     AddApi(amount, date, disc, "IN")
   }
   const handleOut = (e) => {
-      console.log(`"Handle OUT IF :",${amount*(-1)},${date},${disc},${type},`)
-      AddApi(amount*(-1), date, disc, "OUT")
+    console.log(`"Handle OUT IF :",${amount * (-1)},${date},${disc},${type},`)
+    AddApi(amount * (-1), date, disc, "OUT")
   }
 
   const HideIn = () => {
@@ -48,40 +48,40 @@ const NewTransaction = ({ uid, refresh, Setshow }) => {
   }
 
   return (
-   <div className="add-t-container">
-     <div className='add-t'>
-      <h1>Add Transaction</h1>
-      <div className="buttons">
-        <button className='in' style={{ backgroundColor: clickIn.active ? "green" : "#100e0f" }} onClick={() => { HideOut(); SetType("OUT") }} >IN</button>
-        <button className='out' style={{ backgroundColor: clickOut.active ? "red" : "#100e0e" }} onClick={() => { HideIn(); SetType("IN") }}>OUT</button>
-      </div>
-      <div className="inner">
-        {clickIn.dsp && <div className="in" >
-
-          <div className='form' >
-            <h1>IN</h1>
-            <input type="number" defaultValue={amount} onChange={(e) => Setamount(e.target.value)} placeholder='Amount' required />
-            <input type="datetime-local" defaultValue={date} onChange={(e) => Setdate(e.target.value)} placeholder='date' required />
-            <input type="text" defaultValue={disc} onChange={(e) => Setdisc(e.target.value)} placeholder='Comment' required />
-            <button onClick={(e) => handleIn(e)}>IN</button>
-          </div>
-
-        </div>}
-
-        {clickOut.dsp && <div className="out" style={{ display: clickIn.display, }}>
-          <div className='form'>
-            <h1>OUT</h1>
-            <input type="number" defaultValue={amount} onChange={(e) => Setamount(e.target.value)} placeholder='Amount' required />
-            <input type="datetime-local" defaultValue={date} onChange={(e) => Setdate(e.target.value)} placeholder='date' required />
-            <input type="text" defaultValue={disc} onChange={(e) => Setdisc(e.target.value)} placeholder='Comment' required />
-            <button value={"OUT"} onClick={(e) => handleOut(e)}>OUT</button>
-          </div>
+    <div style={!show?{ display: "none" }:{}} className="add-t-container">
+      <div className='add-t'>
+        <h1>Add Transaction</h1>
+        <div className="buttons">
+          <button className='in' style={{ backgroundColor: clickIn.active ? "green" : "#100e0f" }} onClick={() => { HideOut(); SetType("OUT") }} >IN</button>
+          <button className='out' style={{ backgroundColor: clickOut.active ? "red" : "#100e0e" }} onClick={() => { HideIn(); SetType("IN") }}>OUT</button>
         </div>
-        }
+        <div className="inner">
+          {clickIn.dsp && <div className="in" >
+
+            <div className='form' >
+              <h1>IN</h1>
+              <input type="number" defaultValue={amount} onChange={(e) => Setamount(e.target.value)} placeholder='Amount' required />
+              <input type="datetime-local" defaultValue={date} onChange={(e) => Setdate(e.target.value)} placeholder='date' required />
+              <input type="text" defaultValue={disc} onChange={(e) => Setdisc(e.target.value)} placeholder='Comment' required />
+              <button onClick={(e) => handleIn(e)}>IN</button>
+            </div>
+
+          </div>}
+
+          {clickOut.dsp && <div className="out" style={{ display: clickIn.display, }}>
+            <div className='form'>
+              <h1>OUT</h1>
+              <input type="number" defaultValue={amount} onChange={(e) => Setamount(e.target.value)} placeholder='Amount' required />
+              <input type="datetime-local" defaultValue={date} onChange={(e) => Setdate(e.target.value)} placeholder='date' required />
+              <input type="text" defaultValue={disc} onChange={(e) => Setdisc(e.target.value)} placeholder='Comment' required />
+              <button value={"OUT"} onClick={(e) => handleOut(e)}>OUT</button>
+            </div>
+          </div>
+          }
+        </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </div>
-   </div>
   )
 }
 

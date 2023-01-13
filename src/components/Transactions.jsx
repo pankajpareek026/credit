@@ -14,18 +14,23 @@ import Success from './Success';
 
 const Transactions = () => {
     let balance = 0
+    useEffect(() => {
+       
+        getTransactions();
+       
+           });
+    
     const redirect = useNavigate()
     const params = useParams()
     const [show, Setshow] = useState(false)
     const [trn, Settrn] = useState([]); //array for transactions
     const [blance, Setbalance] = useState(0)
     const [name, Setname] = useState("")
-    const Thandle = () => {
+    const Thandle=()=> {
         Setshow((now) => !now)
     }
     const auth = localStorage.getItem('user')
     const getTransactions = async () => {
-
         let result = await fetch('https://red-glamorous-scallop.cyclic.app/client/transactions', {
             headers: {
                 uid: params.id,
@@ -41,9 +46,7 @@ const Transactions = () => {
         })
         Setbalance(balance)
     }
-    useEffect(() => {
-        getTransactions();
-    },[trn]);
+    
     document.title = `Credit | Transaction / ${name}`
     const searchHandle = async (e) => {
         
@@ -57,7 +60,7 @@ const Transactions = () => {
             }
         })
         result = await result.json()
-       
+       console.log(result)
 
 
     }
@@ -122,7 +125,7 @@ const Transactions = () => {
                     }
                 </div>
             </div>
-            {show && <NewTransaction refresh={getTransactions}   uid={params.id} Setshow={Setshow} />}
+            {show && <NewTransaction show={show} refresh={getTransactions} Thandle={Thandle}   uid={params.id} Setshow={Setshow} />}
         </div>
     )
 }
