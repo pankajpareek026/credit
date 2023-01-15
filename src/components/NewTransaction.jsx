@@ -37,8 +37,9 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
     AddApi(amount, date, disc, "IN")
   }
   const handleOut = (e) => {
+    let amt = amount * (-1);
     console.log(`"Handle OUT IF :",${amount * (-1)},${date},${disc},${type},`)
-    AddApi(amount * (-1), date, disc, "OUT")
+    AddApi(amt, date, disc, "OUT")
   }
 
   const HideIn = () => {
@@ -47,9 +48,9 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
   }
 
   return (
-    <div  className="add-t-container">
+    <div className="add-t-container">
       <div className='add-t'>
-        <span className='close'onClick={()=>Setshow(now=>!now)}>X</span>
+        <span className='close' onClick={() => Setshow(now => !now)}>X</span>
         <h1>Add Transaction</h1>
         <div className="buttons">
           <button className='in' style={{ backgroundColor: clickIn.active ? "green" : "#100e0f" }} onClick={() => { HideOut(); SetType("OUT") }} >IN</button>
