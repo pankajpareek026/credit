@@ -8,20 +8,19 @@ import AdvanceNav from './AdvanceNav';
 import Warning from './Warning';
 import AddUser from './AddUser';
 const Dashboard = () => {
+    let i=0
     document.title = "C | Dashboard"
     const Auth = localStorage.getItem('user')
     const navigate = useNavigate()
+    const [users, Setusers] = useState([]);
     useEffect(() => {
         getUsers()
-    }, [])
+    }, [users])
 
     const [total, SetTotal] = useState(0)
     const [min, SetMin] = useState({})
     const [max, SetMax] = useState({})
     const [notFound, SetnotFound] = useState(false);
-    const [users, Setusers] = useState([]);
-    console.log(users.length)
-
     const opt = {
         responsive: true,
         plugins: {
@@ -61,7 +60,7 @@ const Dashboard = () => {
             }
         }
     }
-
+    
     const getUsers = async () => {
         let short = []
 
@@ -136,7 +135,7 @@ const Dashboard = () => {
         ],
     });
     let t = 0
-    console.log("condition :", (!notFound || users.length == 0));
+    // console.log("condition :", (!notFound || users.length == 0));
     // get all users
     return (
         <div className='dashboard'>
