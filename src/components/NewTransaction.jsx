@@ -10,11 +10,10 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
   const [disc, Setdisc] = useState("")
   const [type, SetType] = useState("")
   const HideOut = (e) => { // this will run when we click on In => Task To hide the out div and giv the 100% widht to IN
-
     SetClickIn({ dsp: true, active: true })
     SetClickOut({ dsp: false, active: false })
   }
-  const AddApi = async (amt, date, dis, type) => {
+  const AddApi = async (amount, date, dis, type) => {
     let result = await fetch('https://red-glamorous-scallop.cyclic.app/client/newTransaction', {
       method: "post",
       body: JSON.stringify({ amount, date, dis: dis, type }),
@@ -30,15 +29,17 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
       Warning(result.response)
     }
   }
+  // to Handle the Api Operation at "In" Section OR inser data
   const handleIn = (e) => {
     SetType("IN")
     console.log(type)
     console.log(`${amount},${date},${disc},${type},`)
     AddApi(amount, date, disc, "IN")
   }
+  // to Handle the Api Operations at "In" Section OR inser data
   const handleOut = (e) => {
     let amt = amount * (-1);
-    console.log(`"Handle OUT IF :",${amount * (-1)},${date},${disc},${type},`)
+    console.log(`"Handle OUT IF :",${amt},${date},${disc},${type},`)
     AddApi(amt, date, disc, "OUT")
   }
 
