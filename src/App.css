@@ -1339,7 +1339,7 @@ canvas {
   .dashboard .left,
   .transactions .left {
     position: absolute;
-    bottom: 2.5px;
+    bottom: 0px;
     margin: 0;
     text-align: left;
     padding: 0;
