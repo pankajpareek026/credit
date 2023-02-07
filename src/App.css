@@ -1338,7 +1338,7 @@ canvas {
   .dashboard .left,
   .transactions .left {
     position: absolute;
-    bottom: .2rem;
+    bottom: 2.5px;
     margin: 0;
     text-align: left;
     padding: 0;
