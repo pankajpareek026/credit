@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
-import {SlOptionsVertical} from 'react-icons/si'
-const TransactionComp = ({ type, amount, date, dis ,show}) => {
+import { SlOptionsVertical } from 'react-icons/sl'
+const TransactionComp = ({ type, amount, date, dis, show }) => {
   // to display the popUp
   const [click, Setclick] = useState(false)
   const showDetails = (amount, date, dis, type) => {
@@ -91,13 +91,13 @@ const TransactionComp = ({ type, amount, date, dis ,show}) => {
         </div>`
     })
   }
-  
+
   return (
     <>
       {click && <div>{() => showDetails(amount, date, dis, type)}</div>}
-      <div  onClick={() => showDetails(amount, date, dis, type)}  className={`Transaction-comp ${type}`}>
+      <div onClick={() => showDetails(amount, date, dis, type)} className={`Transaction-comp ${type}`}>
         <div className="tc-amt">₹{amount}</div>
-        <p className='tc-date'>{date}</p> <SlOptionsVertical/>
+        <p className='tc-date'>{date}</p> 
       </div>
     </>
   )

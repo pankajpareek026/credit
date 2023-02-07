@@ -26,8 +26,7 @@ function App() {
           <Route element={<Protected />}>
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/detail/:id' element={<Transactions />} />
-            <Route path='/d' element={<Detail />} />
-            <Route path='/user' element={<><h1 style={{ color: "white", textAlign: "center", marginTop: "10rem" }}>Under Constraction </h1> <a href='/' style={{ color: "rgb(20, 241, 149)", marginLeft: "20rem", textAlign: "center", marginTop: "20rem", fontSize: "50px" }}>/Home</a></>} />
+            <Route path='/user' element={<><h1 style={{ color: "white", fontSize: "medium", textAlign: "center", marginTop: "10rem" }}>Under Constraction </h1> <a href='/' style={{ color: "rgb(20, 241, 149)", marginLeft: "50%", textAlign: "center", marginTop: "50rem", fontSize: "15px" }}>/Home</a></>} />
           </Route>
           <Route path="/" element={<h1> Error 404 Page not Found </h1>} />
         </Routes>
