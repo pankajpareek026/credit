@@ -10,7 +10,7 @@
   --main: rgb(20, 241, 149);
   --main-back: #100F0F;
   --advance: #0F3D3E;
-  --shadow: 0 4px 6px 0 #171717;
+  --shadow: 0 3px 3px 0 #171717;
 
 }
 
@@ -1312,6 +1312,7 @@ canvas {
 @media (max-width:590px) {
   .dashboard {
     margin: 0;
+    overflow-y: hidden;
     display: inline;
     background-color: #303134;
     min-height: 100%;
