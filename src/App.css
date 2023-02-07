@@ -1321,6 +1321,7 @@ canvas {
   .right {
     margin: 0;
     width: 100vw;
+    height: max-content;
     min-height: fit-content;
     padding: 0;
     border-radius: 0;
