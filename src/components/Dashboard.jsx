@@ -17,7 +17,7 @@ const Dashboard = () => {
     const [users, Setusers] = useState([]);
     useEffect(() => {
         getUsers()
-    }, [users,loading])
+    }, [users])
 
     const [total, SetTotal] = useState(0)
     const [min, SetMin] = useState({})
