@@ -7,6 +7,7 @@ import { AiFillEyeInvisible } from 'react-icons/ai';
 import { ToastContainer, toast } from 'react-toastify';
 import Success from './Success'
 import Warning from './Warning'
+import Loading from './Loading';
 
 
 
@@ -19,6 +20,7 @@ function Login(e) {
     const [hide, Sethide] = useState(true)
     const [err, Seterr] = useState(false)
     const [disable, SetDisable] = useState(false)
+    const [loading, SetLoading] = useState(false)
 
     const loginHandle = async () => {
         if (!email || !pass) {
@@ -28,6 +30,7 @@ function Login(e) {
         else {
 
             SetDisable(true)
+            SetLoading(true)
             let result = await fetch('https://red-glamorous-scallop.cyclic.app/login', {
                 method: "post",
                 body: JSON.stringify({ email, pass }),
@@ -36,6 +39,7 @@ function Login(e) {
             result = await result.json()
             if (result.response == "success") {
                 localStorage.setItem("user", result.user)
+                SetLoading(false)
                 Success(result.response)
                 setTimeout(() => {
                     redirect('/dashboard')
@@ -45,6 +49,7 @@ function Login(e) {
                 Warning(result.response);
                 // e.target.disabled = false
                 SetDisable(false)
+                SetLoading(false)
             }
 
             console.log(result);
@@ -54,7 +59,9 @@ function Login(e) {
         <Navbar />
         <div className="login-container">
             <ToastContainer />
+
             <div className='Login'>
+                {loading && <Loading />}
                 <h2>Login</h2>
                 <input type="email" onChange={(e) => SetEmail(e.target.value)} placeholder='Email' />
                 {(err && !email) && <span style={{ color: "red" }}>Email Requires</span>}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import validator from 'validator'
 import { AiFillEye } from 'react-icons/ai';
 import { AiFillEyeInvisible } from 'react-icons/ai';
@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Navbar from './Navbar';
 import Success from './Success';
 import Warning from './Warning';
+import Loader from './Loading';
 // import Alert from  './Alert.js'
 // import { json } from 'body-parser';
 function Register() {
@@ -20,6 +21,7 @@ function Register() {
     const [secure, SetSecure] = React.useState(true)
     const [disabled, SetDisabled] = React.useState(false)
     const [hide, Sethide] = React.useState(true)
+    const [loading, SetLoading] = useState(false)
 
     document.title = "C | REGISTER "
     const registerHandle = async (e) => {
@@ -31,6 +33,7 @@ function Register() {
 
             e.target.disabled = true;
             SetDisabled(true)
+            SetLoading(true)
             // call api 
             let result = await fetch('https://red-glamorous-scallop.cyclic.app/register', {
                 method: "post",
@@ -49,6 +52,7 @@ function Register() {
                 // console.log(result)
                 e.target.disabled = false;
                 SetDisabled(false)
+                SetLoading(false)
             }
 
 
@@ -61,6 +65,7 @@ function Register() {
             {Isuser ? redirect('/') :
                 <> <Navbar />
                     <div className='Login'>
+                        {loading&&<Loader/>}
                         <h2>Register</h2>
                         <input type="text" onChange={(e) => Setname(e.target.value)} placeholder='Full Name' />
                         {empty && !name && <span> Required</span>}

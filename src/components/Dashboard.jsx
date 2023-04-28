@@ -7,20 +7,24 @@ import Client from './Client';
 import AdvanceNav from './AdvanceNav';
 import Warning from './Warning';
 import AddUser from './AddUser';
+import Loader from './Loading';
 const Dashboard = () => {
-    let i=0
+    let i = 0
     document.title = "C | Dashboard"
     const Auth = localStorage.getItem('user')
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
     const [users, Setusers] = useState([]);
     useEffect(() => {
         getUsers()
-    }, [users])
+    }, [users,loading])
 
     const [total, SetTotal] = useState(0)
     const [min, SetMin] = useState({})
     const [max, SetMax] = useState({})
+   
     const [notFound, SetnotFound] = useState(false);
+
     const opt = {
         responsive: true,
         plugins: {
@@ -60,11 +64,12 @@ const Dashboard = () => {
             }
         }
     }
-    
+
     const getUsers = async () => {
         let short = []
 
         if (Auth) {
+            setLoading(true)
             let users = await fetch("https://red-glamorous-scallop.cyclic.app/clients", {
                 headers: {
                     "content-type": "application/json",
@@ -72,9 +77,13 @@ const Dashboard = () => {
                 }
             })
             users = await users.json()
-
+           
+            
+           
+          
             if (users.response === "invalid token" || users.response === "jwt expired") {
                 Warning("session expired !")
+                setLoading(false)
                 localStorage.clear()
                 navigate('/login')
             }
@@ -82,6 +91,7 @@ const Dashboard = () => {
                 SetnotFound(true)
             }
             else {
+               
                 let userArray = [] // arrray to store data of all uset for sorting 
                 t = 0;
                 users.response.map((element) => {
@@ -107,6 +117,7 @@ const Dashboard = () => {
                 SetMin(userArray[len - 1])
                 SetTotal(t)
                 Setusers(users.response)
+                setLoading(false)
             }
 
         }
@@ -169,7 +180,7 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="d-clients-container">
-                    <table>
+                    {loading ? <Loader margin="33% 35%" /> : <table>
                         <thead>
                             <tr><th>Name</th>
                                 <th>Date</th>
@@ -194,7 +205,7 @@ const Dashboard = () => {
                             }
 
                         </tbody>
-                    </table>
+                    </table>}
                 </div>
 
             </div>
