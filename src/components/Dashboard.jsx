@@ -8,6 +8,7 @@ import AdvanceNav from './AdvanceNav';
 import Warning from './Warning';
 import AddUser from './AddUser';
 import Loader from './Loading';
+import api from '../api_source';
 const Dashboard = () => {
     let i = 0
     document.title = "C | Dashboard"
@@ -16,13 +17,13 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(false)
     const [users, Setusers] = useState([]);
     useEffect(() => {
-        getUsers()
-    }, [users])
+        getUsers();
+    }, [users, loading])
 
     const [total, SetTotal] = useState(0)
     const [min, SetMin] = useState({})
     const [max, SetMax] = useState({})
-   
+
     const [notFound, SetnotFound] = useState(false);
 
     const opt = {
@@ -46,7 +47,7 @@ const Dashboard = () => {
         }
         else {
 
-            let result = await fetch('https://red-glamorous-scallop.cyclic.app/search', {
+            let result = await fetch(`${api}/search`, {
                 headers: {
                     "content-type": "application/json",
                     token: Auth,
@@ -54,33 +55,29 @@ const Dashboard = () => {
                 }
             })
             result = await result.json()
-
             if (result.response !== "Not Found !") {
                 Setusers(result.response)
             }
             else if (result.response == "Not Found !") {
                 SetnotFound(true)
-
             }
         }
     }
 
     const getUsers = async () => {
         let short = []
-
+        setLoading(true)
         if (Auth) {
-            setLoading(true)
-            let users = await fetch("https://red-glamorous-scallop.cyclic.app/clients", {
+
+            let users = await fetch(`${api}/clients`, {
                 headers: {
                     "content-type": "application/json",
                     token: Auth
                 }
             })
             users = await users.json()
-           
-            
-           
-          
+            setLoading(false)
+
             if (users.response === "invalid token" || users.response === "jwt expired") {
                 Warning("session expired !")
                 setLoading(false)
@@ -91,13 +88,12 @@ const Dashboard = () => {
                 SetnotFound(true)
             }
             else {
-               
+
                 let userArray = [] // arrray to store data of all uset for sorting 
                 t = 0;
                 users.response.map((element) => {
                     userArray.push(element)
                     t = t + element.totalAmount;
-
                 })
                 //sort array to find out maximum and minimum amount
                 let len = userArray.length;
@@ -117,7 +113,7 @@ const Dashboard = () => {
                 SetMin(userArray[len - 1])
                 SetTotal(t)
                 Setusers(users.response)
-                setLoading(false)
+                //setLoading(false)
             }
 
         }
@@ -180,7 +176,7 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="d-clients-container">
-                    {loading ? <Loader margin="33% 35%" /> : <table>
+                    <table>
                         <thead>
                             <tr><th>Name</th>
                                 <th>Date</th>
@@ -205,7 +201,7 @@ const Dashboard = () => {
                             }
 
                         </tbody>
-                    </table>}
+                    </table>
                 </div>
 
             </div>
