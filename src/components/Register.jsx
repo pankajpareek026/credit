@@ -9,6 +9,7 @@ import Navbar from './Navbar';
 import Success from './Success';
 import Warning from './Warning';
 import Loader from './Loading';
+import api from '../api_source'
 // import Alert from  './Alert.js'
 // import { json } from 'body-parser';
 function Register() {
@@ -35,7 +36,7 @@ function Register() {
             SetDisabled(true)
             SetLoading(true)
             // call api 
-            let result = await fetch('https://red-glamorous-scallop.cyclic.app/register', {
+            let result = await fetch(`${api}/register`, {
                 method: "post",
                 body: JSON.stringify({ name, email, pass }),
                 headers: { 'content-type': 'application/json' }

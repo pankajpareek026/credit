@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Success from './Success'
 import Warning from './Warning'
 import Loading from './Loading';
+import api from '../api_source'
 
 
 
@@ -31,7 +32,7 @@ function Login(e) {
 
             SetDisable(true)
             SetLoading(true)
-            let result = await fetch('https://red-glamorous-scallop.cyclic.app/login', {
+            let result = await fetch(`${api}/login`, {
                 method: "post",
                 body: JSON.stringify({ email, pass }),
                 headers: { 'content-type': "application/json" }

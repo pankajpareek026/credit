@@ -3,12 +3,14 @@ import Swal from 'sweetalert2'
 import Success from './Success';
 import Warning from './Warning';
 import { ImUserPlus } from "react-icons/im";
+import api from '../api_source';
+
 const AddUser = ({ refresh }) => {
   const AddUserHandle = async () => {
     const createUser = async (name) => {
       const parentId = localStorage.getItem('user')
       if (parentId) {
-        let result = await fetch('https://red-glamorous-scallop.cyclic.app/addclient', {
+        let result = await fetch(`${api}/addclient`, {
           method: "post",
           body: JSON.stringify({ parentId, name }),
           headers: { 'content-type': 'application/json', "token": `${parentId}` }

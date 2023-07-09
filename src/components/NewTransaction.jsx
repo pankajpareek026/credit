@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Success from './Success';
 import Warning from './Warning';
 import { ToastContainer, } from 'react-toastify';
+import api from '../api_source'
 const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
   const [clickIn, SetClickIn] = React.useState({ dsp: true, active: true })
   const [clickOut, SetClickOut] = React.useState({ dsp: false, active: false })
@@ -14,7 +15,7 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
     SetClickOut({ dsp: false, active: false })
   }
   const AddApi = async (amount, date, dis, type) => {
-    let result = await fetch('https://red-glamorous-scallop.cyclic.app/client/newTransaction', {
+    let result = await fetch(`${api}/newTransaction`, {
       method: "post",
       body: JSON.stringify({ amount, date, dis: dis, type }),
       headers: { 'content-type': 'application/json', uid: uid, token: localStorage.getItem('user') }

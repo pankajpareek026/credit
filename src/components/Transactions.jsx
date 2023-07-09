@@ -11,6 +11,7 @@ import TransactionComp from './TransactionComp';
 import NewTransaction from './NewTransaction';
 import Swal from 'sweetalert2';
 import Success from './Success';
+import api from '../api_source'
 
 const Transactions = () => {
     let balance = 0
@@ -31,7 +32,7 @@ const Transactions = () => {
     }
     const auth = localStorage.getItem('user')
     const getTransactions = async () => {
-        let result = await fetch('https://red-glamorous-scallop.cyclic.app/client/transactions', {
+        let result = await fetch(`${api}/client/transactions`, {
             headers: {
                 uid: params.id,
                 token: auth,

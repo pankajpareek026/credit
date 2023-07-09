@@ -1,7 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
-import { SlOptionsVertical } from 'react-icons/sl'
+// import { SlOptionsVertical } from 'react-icons/sl'
+// import api from '../api_source'
 const TransactionComp = ({ type, amount, date, dis, show }) => {
   // to display the popUp
   const [click, Setclick] = useState(false)
