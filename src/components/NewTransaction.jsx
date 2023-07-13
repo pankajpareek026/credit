@@ -15,7 +15,7 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
     SetClickOut({ dsp: false, active: false })
   }
   const AddApi = async (amount, date, dis, type) => {
-    let result = await fetch(`${api}/newTransaction`, {
+    let result = await fetch(`${api}/client/newTransaction`, {
       method: "post",
       body: JSON.stringify({ amount, date, dis: dis, type }),
       headers: { 'content-type': 'application/json', uid: uid, token: localStorage.getItem('user') }
