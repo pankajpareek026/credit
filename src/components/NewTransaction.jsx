@@ -52,7 +52,7 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
   return (
     <div className="add-t-container">
       <div className='add-t'>
-        <span className='close' onClick={() => Setshow(now => !now)}>X</span>
+        <span className='close' onClick={() => Setshow(false)}>X</span>
         <h1>Add Transaction</h1>
         <div className="buttons">
           <button className='in' style={{ backgroundColor: clickIn.active ? "green" : "#100e0f" }} onClick={() => { HideOut(); SetType("OUT") }} >IN</button>
