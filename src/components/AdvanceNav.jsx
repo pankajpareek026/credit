@@ -42,8 +42,8 @@ const AdvanceNav = ({ refresh }) => {
       {/* for navbar in left side */}
       <h2 className="logo small">C</h2>
 
-      <Link to="/" ><HiHome style={{ fontSize: "xx-large" }} /></Link>
-      <Link to='/user'><HiOutlineUserCircle style={{ fontSize: "xx-large" }} /></Link>
+      <Link to="/" ><HiHome style={{ fontSize: "xx-large!important" }} /></Link>
+      <Link to='/user'><HiOutlineUserCircle style={{ fontSize: "xx-large!important" }} /></Link>
     
 
       <div ><AddUser refresh={refresh} /></div>
