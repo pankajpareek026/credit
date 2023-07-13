@@ -93,10 +93,10 @@ const Transactions = () => {
                 {/* for navbar in left side */}
                 <h2 className="logo small">C</h2>
 
-                <Link style={{ fontSize: "xx-large" }} to="/" ><HiHome style={{ fontSize: "xx-large" }} /></Link>
-                <Link style={{ fontSize: "xx-large" }} to='/user'><HiOutlineUserCircle style={{ fontSize: "xx-large" }} /></Link>
-                <Link style={{ fontSize: "xx-large" }} to='/dashboard'><MdSpaceDashboard style={{ fontSize: "xx-large" }} /></Link>
-                <Link style={{ fontSize: "xx-large" }} onClick={Thandle} onTouchStart={Thandle} ><SiAddthis style={{ fontSize: "x-large", padding: '5px  0px', cursor: "pointer" }} /></Link>
+                <Link style={{ fontSize: "xx-large" }} to="/" ><HiHome style={{ fontSize: "x-large!important" }} /></Link>
+                <Link style={{ fontSize: "xx-large" }} to='/user'><HiOutlineUserCircle style={{ fontSize: "x-large!important" }} /></Link>
+                <Link style={{ fontSize: "xx-large" }} to='/dashboard'><MdSpaceDashboard style={{ fontSize: "x-large!important" }} /></Link>
+                <Link style={{ fontSize: "xx-large" }} onClick={Thandle} onTouchStart={Thandle} ><SiAddthis style={{ fontSize: "x-large !important", padding: '5px  0px', cursor: "pointer" }} /></Link>
                 <div style={{ fontSize: "xx-large" }} className="d-logout" onClick={logout}>
                     <FaPowerOff onClick={logout} onTouchStart={logout}/>
                 </div>
