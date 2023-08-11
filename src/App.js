@@ -13,11 +13,11 @@ import Private from './components/Private';
 import Detail from './components/Detail';
 
 function App() {
-  document.addEventListener('contextmenu', (e) => e.preventDefault());
+//   document.addEventListener('contextmenu', (e) => e.preventDefault());
 
-function ctrlShiftKey(e, keyCode) {
-  return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
-}
+// function ctrlShiftKey(e, keyCode) {
+//   return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+// }
 
 // document.onkeydown = (e) => {
 //   // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U

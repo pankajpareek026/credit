@@ -2,7 +2,8 @@ import React from 'react'
 import Swal from 'sweetalert2'
 import Success from './Success';
 import Warning from './Warning';
-import { ImUserPlus } from "react-icons/im";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import api from '../api_source';
 
 const AddUser = ({ refresh }) => {
@@ -51,7 +52,7 @@ const AddUser = ({ refresh }) => {
     }
   }
   return (
-    <div onClick={AddUserHandle} className='d-adduser'><ImUserPlus /></div>
+    <div className='addUser' onClick={AddUserHandle} ><PersonAddIcon fontSize="large"  /></div>
 
   )
 }

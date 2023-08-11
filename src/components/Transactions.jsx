@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
+//react icons --start
 import { FaPowerOff } from "react-icons/fa";
 import { SiAddthis } from "react-icons/si";
 import { MdSpaceDashboard } from "react-icons/md";
 import { HiHome } from "react-icons/hi";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { FaShareAlt } from "react-icons/fa";
+//react icons --end
+
+
+//mui icons  --start
+import HomeIcon from '@mui/icons-material/Home';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+//mui icons --end
+
 import TransactionComp from './TransactionComp';
 import NewTransaction from './NewTransaction';
 import Swal from 'sweetalert2';
@@ -93,12 +105,12 @@ const Transactions = () => {
                 {/* for navbar in left side */}
                 <h2 className="logo small">C</h2>
 
-                <Link style={{ fontSize: "x-large " }} to="/" ><HiHome style={{ fontSize: "x-large!important" }} /></Link>
-                <Link style={{ fontSize: "x-large " }} to='/user'><HiOutlineUserCircle style={{ fontSize: "x-large!important" }} /></Link>
-                <Link style={{ fontSize: "x-large " }} to='/dashboard'><MdSpaceDashboard style={{ fontSize: "x-large!important" }} /></Link>
-                <Link style={{ fontSize: "x-large" }} onClick={Thandle}  ><SiAddthis style={{ fontSize: "x-large !important", padding: '5px  0px', cursor: "pointer" }} /></Link>
+                <Link style={{ fontSize: "x-large " }} to="/" ><HomeIcon fontSize="large" style={{ fontSize: "x-large!important" }} /></Link>
+                {/* <Link style={{ fontSize: "x-large " }} to='/user'><AccountCircleIcon  fontSize="large"style={{ fontSize: "x-large!important" }} /></Link> */}
+                <Link style={{ fontSize: "x-large " }} to='/dashboard'><DashboardIcon  fontSize="large"style={{ fontSize: "x-large!important" }} /></Link>
+                <Link style={{ fontSize: "x-large" }} onClick={Thandle}  ><PostAddIcon fontSize="large"  /></Link>
                 <div style={{ fontSize: "x-large " }} className="d-logout" onClick={logout}>
-                    <FaPowerOff onClick={logout} onTouchStart={logout}/>
+                    <PowerSettingsNewIcon fontSize="large" onClick={logout} onTouchStart={logout}/>
                 </div>
             </div>
 

@@ -6,7 +6,7 @@
 :root {
   --dashboard_bg:#303134;
   --card: #24262b;
-  --bg-c: #082032;
+  --bg-c: #415c71;
   --p: rgb(255, 0, 111);
   --main: rgb(20, 241, 149);
   --main-back: #100F0F;
@@ -14,16 +14,37 @@
   --shadow: 0 3px 3px 0 #171717;
 
 }
+/* svg css ---start */
+.background {
+      fill:var(--bg-c);
+    }
+    .wave {
+      fill: #3498db;
+    }
+    .chart-line {
+      fill: none;
+      stroke: #2ecc71;
+      stroke-width: 2;
+    }
+    .chart-area {
+      fill: #2ecc71;
+      opacity: 0.3;
+    }
+    .text {
+      font-family: Arial, sans-serif;
+      fill: #ffffff;
+      font-size: 16px;
+    }
+/* svg css ---End */
 
 body {
-  background-color: var(--dashboard_bg);
+  background-color: var(--main-back);
   font-family: sans-serif;
+  padding:0;
+  margin:0;
 }
 
-.app {
-  background-color: black;
-  height: 100%;
-}
+
 
 .home {
   background-color: black;
@@ -39,7 +60,7 @@ body {
   width: 100%;
   background-color: black;
   border-bottom: 1px solid gray;
-  margin-bottom: 5%;
+  margin-bottom: 0px;
 }
 
 .user {
@@ -721,15 +742,18 @@ canvas {
   margin-top: 2.25rem;
   height: 55%;
   overflow: scroll;
+  
 
 }
 
 .d-clients-container table {
+  padding-bottom: 25px;
   border-collapse: separate;
   border-spacing: 0px 10px;
   width: 90%;
   margin-left: 4%;
   overflow-y: auto;
+  overflow-x: scroll;
   /* height: 100%; */
   /* background-color: #303130; */
   box-shadow: var(--shadow);
@@ -1169,29 +1193,13 @@ canvas {
 } */
 
 .add-t .inner .out .form h1 {
-  /* height: 30px;
-  padding: 0px;
-  padding: 5px;
-  text-align: center;
-  border-bottom: 2px solid black;
-  margin-top: 0px;
-  gap: 0; */
+  
   color: red;
-  /* font-weight: 500;
-  padding-top: 0;
-  background-color: #e6d6d6;
-  padding-bottom: 10px; */
+  
 }
-
-/* .add-t .inner .out .form input {
-  height: 35px;
-  padding: 2px 4px;
-  width: auto;
-  margin-left: 2.5%;
-  margin-right: 2.5%;
-  border: 3px solid;
-  border-radius: 5px;
-} */
+.addUser:hover{
+  color: var(--main);
+}
 
 .add-t .inner .out .form button {
   height: 40px;
@@ -1320,6 +1328,7 @@ canvas {
     display: inline;
     background-color: #303134;
     height: 100vh;
+    
   }
 
   .right {
@@ -1331,6 +1340,9 @@ canvas {
     border-radius: 0;
     background-color: #303134;
   }
+  .transactions .t-right{
+    background: #000;
+  }
 
   .right .upper-container {
     margin: 0;
@@ -1341,6 +1353,7 @@ canvas {
   /* .left {
     display: none;
   } */
+
   .dashboard .left,
   .transactions .left {
     position: absolute;
@@ -1348,19 +1361,30 @@ canvas {
     margin: 0;
     text-align: left;
     padding: 0;
-    width: 90%;
-    margin-left: 2%;
-    padding: 10px;
+    width: 100%;
+    margin-left: 0%;
+    padding: .5rem .75rem;
     display: flex;
-    flex-direction: row;
-    height: 30px;
-    justify-content: space-between;
-    background-color: rgb(33, 30, 30);
-    border-radius: 50px;
-    padding-bottom: 15px;
+ justify-content: space-between;
+  flex-direction: row;
+    font-size: xx-large;
+    height: 45px;
+    /* justify-content: space-evenly; */
+    background-color: rgb(14, 13, 13);
+    /* border-radius: 25px; */
+    /* padding-bottom: 15px; */
     font-size:x-large;
-    box-shadow: 0px 0px 3px rgb(238, 189, 189);
+    box-shadow: 0px 0px 0px 1px rgb(255, 253, 253);
   }
+     .dashboard .left {
+      cursor: pointer;
+     }
+     .transactions .left{
+      width: 95%;
+     }
+     .dashboard .left :first-child{
+      margin-left: 5px;
+     }
 
   /* for logout button  */
   .dashboard .left .d-logout,
@@ -1682,7 +1706,9 @@ canvas {
     width: 100Vw;
     overflow: hidden;
   }
-
+table>tbody>tr:last-child{
+margin-bottom: 50px;
+}
   /* login and Register --End  */
 
   /* footer ---start */

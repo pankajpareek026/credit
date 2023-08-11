@@ -176,7 +176,7 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="d-clients-container">
-                    <table>
+                    <table >
                         <thead>
                             <tr><th>Name</th>
                                 <th>Date</th>
