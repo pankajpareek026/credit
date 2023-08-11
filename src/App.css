@@ -1358,7 +1358,7 @@ canvas {
   /* .left {
     display: none;
   } */
-
+.left{position: sticky;}
   .dashboard .left,
   .transactions .left {
     position: absolute;
@@ -1515,9 +1515,10 @@ canvas {
   .d-clients-container {
     /* background: #121212; */
     margin-top: 1rem;
-    height: max-content;
+    height: 60vh;
     width: 100%;
-    overflow: scroll;
+    overflow-x: scroll;
+    margin-bottom: 35px;
 
 
   }
@@ -1529,6 +1530,7 @@ canvas {
     margin-left: 2%;
     overflow-y: auto;
     box-shadow: none;
+    margin-bottom: 150px;
 
 
   }
@@ -1551,6 +1553,8 @@ canvas {
   .d-clients-container table tbody {
     width: 90%;
     overflow-y: scroll;
+    max-width: 90%;
+    margin-bottom: 150px;
 
   }
 
@@ -1575,6 +1579,7 @@ canvas {
     background-color: #24262b;
 
   }
+
 
   .d-clients-container table tbody tr:hover {
     border: 1px solid black;
