@@ -1363,6 +1363,7 @@ canvas {
   .transactions .left {
     position: absolute;
     bottom: 0px;
+    margin: 0;
     padding: 5px;
     margin: 0;
     width: 100%;
@@ -1370,14 +1371,9 @@ canvas {
     display: flex;
  justify-content: space-around;
   flex-direction: row;
-    /* font-size: xx-large; */
     height: 45px;
-    /* justify-content: space-evenly; */
     background-color: rgb(13, 13, 13);
-    /* border-radius: 25px; */
-    /* padding-bottom: 15px; */
     font-size:x-large;
-    /* box-shadow: 0px 0px 0px 1px rgb(255, 253, 253); */
   }
      .dashboard .left {
       cursor: pointer;
@@ -1519,7 +1515,7 @@ canvas {
   .d-clients-container {
     /* background: #121212; */
     margin-top: 1rem;
-    height: 56.5vh;
+    height: max-content;
     width: 100%;
     overflow: scroll;
 
@@ -1710,8 +1706,8 @@ canvas {
     width: 100Vw;
     overflow: hidden;
   }
-table>tbody>tr:last-child{
-margin-bottom: 50px;
+.right >table>tbody>tr:last-child{
+margin-bottom: 150px;
 }
   /* login and Register --End  */
 
