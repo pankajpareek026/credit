@@ -110,7 +110,7 @@ const Transactions = () => {
                 <Link style={{ fontSize: "x-large " }} to='/dashboard'><DashboardIcon  fontSize="large"style={{ fontSize: "x-large!important" }} /></Link>
                 <Link style={{ fontSize: "x-large" }} onClick={Thandle}  ><PostAddIcon fontSize="large"  /></Link>
                 <div style={{ fontSize: "x-large " }} className="d-logout" onClick={logout}>
-                    <PowerSettingsNewIcon fontSize="large" onClick={logout} onTouchStart={logout}/>
+                    <PowerSettingsNewIcon  fontSize="large" onClick={logout} onTouchStart={logout} style={{ hover: { color: "red" } }}/>
                 </div>
             </div>
 
