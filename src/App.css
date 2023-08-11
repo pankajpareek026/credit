@@ -1338,7 +1338,8 @@ canvas {
   .right {
     margin: 0;
   width: 100vw;
-    overflow-x: auto;
+  max-height: 100vh;
+    overflow: hidden;
     height: max-content;
     min-height: fit-content;
     padding: 0;
@@ -1358,7 +1359,7 @@ canvas {
   /* .left {
     display: none;
   } */
-.left{position: sticky;}
+
   .dashboard .left,
   .transactions .left {
     position: absolute;
