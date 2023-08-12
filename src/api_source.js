@@ -1,2 +1,2 @@
- const api ="https://poised-onesies-ox.cyclic.app"
+ const api ="https://credit-sgtj.onrender.com"
  export default api
