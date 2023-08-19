@@ -2,8 +2,8 @@ import { React, useEffect, useState } from 'react'
 import { Link, redirect, useNavigate } from 'react-router-dom'
 import Footer from './Footer'
 import Navbar from './Navbar'
-import { AiFillEye } from 'react-icons/ai';
-import { AiFillEyeInvisible } from 'react-icons/ai';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { ToastContainer, toast } from 'react-toastify';
 import Success from './Success'
 import Warning from './Warning'
@@ -64,14 +64,19 @@ function Login(e) {
             <div className='Login'>
                 {loading && <Loading />}
                 <h2>Login</h2>
+
                 <input type="email" onChange={(e) => SetEmail(e.target.value)} placeholder='Email' />
-                {(err && !email) && <span style={{ color: "red" }}>Email Requires</span>}
-                <input type={hide ? "password" : 'text'} onChange={(e) => Setpass(e.target.value)} placeholder='password' />
-                {(err && !pass) && <span style={{ color: "red" }}>Password Requires</span>}
-                {hide ? <AiFillEyeInvisible onClick={() => Sethide((e) => !e)} style={{ fontSize: "x-large", width: "30px", marginLeft: "auto", marginRight: "25px", color: 'gray', marginTop: "-55px", cursor: "pointer" }} /> : <AiFillEye onClick={() => Sethide((e) => !e)} style={{ width: "30px", fontSize: "x-large", marginLeft: "auto", marginRight: "25px", color: 'gray', marginTop: "-55px", cursor: "pointer" }} />}
+                {(err && !email) ? <span style={{ color: "red" }}>Email Requires</span>:""}
+
+               
+              <div className="pass">  <input type={hide ? "password" : 'text'} onChange={(e) => Setpass(e.target.value)} placeholder='password' />
+
+                       <p> {hide ? <VisibilityOffIcon onClick={() => Sethide((e) => !e)} sx={{ fontSize: "x-large",  cursor: "pointer" }} /> : 
+                        <VisibilityIcon onClick={() => Sethide((e) => !e)} sx={{ fontSize: "x-large", cursor: "pointer"  }} />}</p>
+</div>
                 <Link>Forget password ?</Link>
-                <button disabled={disable} style={{ backgroundColor: disable && "gray" }} onClick={(e) => loginHandle(e)}>Login</button>
-                <p>Don't have an account  <Link to="/register">Creare New </Link>?</p>
+                <button className='log-btn' disabled={disable} style={{ backgroundColor: disable && "gray" }} onClick={(e) => loginHandle(e)}>Login</button>
+                <p>Don't have an account  <Link to="/register">Create New </Link>?</p>
             </div>
         </div>
         <Footer />

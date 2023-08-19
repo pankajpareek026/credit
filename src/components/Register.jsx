@@ -2,6 +2,10 @@ import React,{useState} from 'react'
 import validator from 'validator'
 import { AiFillEye } from 'react-icons/ai';
 import { AiFillEyeInvisible } from 'react-icons/ai';
+//mui icons --start
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+// mui icons --end
 import { ToastContainer, } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom'
@@ -24,7 +28,7 @@ function Register() {
     const [hide, Sethide] = React.useState(true)
     const [loading, SetLoading] = useState(false)
 
-    document.title = "C | REGISTER "
+    document.title = "Credit | REGISTER "
     const registerHandle = async (e) => {
         if (!name || !validator.isEmail(email) || !validator.isStrongPassword(pass) || !pass) {
             SetEmpty(true)
@@ -65,15 +69,21 @@ function Register() {
 
             {Isuser ? redirect('/') :
                 <> <Navbar />
-                    <div className='Login'>
+                  <div className="login-container">
+                      <div className='Login'>
                         {loading&&<Loader/>}
                         <h2>Register</h2>
                         <input type="text" onChange={(e) => Setname(e.target.value)} placeholder='Full Name' />
                         {empty && !name && <span> Required</span>}
+
                         <input type="email" onChange={(e) => SetEmail(e.target.value)} placeholder='Email' />
                         {empty && !validator.isEmail(email) && <span>Invalid Email</span>}
-                        <input type={hide ? "password" : "text"} onChange={(e) => { Setpass(e.target.value); SetSecure(validator.isStrongPassword(e.target.value)) }} placeholder='password' />
-                        {hide ? <AiFillEyeInvisible onClick={() => Sethide((e) => !e)} style={{ fontSize: "x-large", marginLeft: "40%", marginTop: "-55px", cursor: "pointer" }} /> : <AiFillEye onClick={() => Sethide((e) => !e)} style={{ fontSize: "x-large", marginLeft: "40%", marginTop: "-55px", cursor: "pointer" }} />}
+
+                       <div className="pass"> <input type={hide ? "password" : "text"} onChange={(e) => { Setpass(e.target.value); SetSecure(validator.isStrongPassword(e.target.value)) }} placeholder='password' />
+
+                       <p> {hide ? <VisibilityOffIcon onClick={() => Sethide((e) => !e)} sx={{ fontSize: "x-large",  cursor: "pointer" }} /> : 
+                        <VisibilityIcon onClick={() => Sethide((e) => !e)} sx={{ fontSize: "x-large", cursor: "pointer"  }} />}</p>
+</div>
                         {empty && !pass && <span> Required</span>}
                         {pass && !secure && <span>weak password</span>}
 
@@ -81,7 +91,10 @@ function Register() {
                         <p> Have an account  <Link to="/login">Login </Link>?</p>
 
                     </div>
-                    <ToastContainer /></>}
+                  </div>
+                    <ToastContainer />
+                    </>
+                    }
 
         </>
     )

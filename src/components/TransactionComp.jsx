@@ -4,6 +4,9 @@ import Swal from 'sweetalert2'
 // import { SlOptionsVertical } from 'react-icons/sl'
 // import api from '../api_source'
 const TransactionComp = ({ type, amount, date, dis, show }) => {
+   date=String(date)
+   const d = new Date(date);
+let dateString=d.toLocaleString("en-IN")
   // to display the popUp
   const [click, Setclick] = useState(false)
   const showDetails = (amount, date, dis, type) => {
@@ -59,7 +62,7 @@ const TransactionComp = ({ type, amount, date, dis, show }) => {
       padding: 10px;
       padding-top: 13px;
       text-align: center;
-      overflow: auto; color:white;"> ${date}</span></div>
+      overflow: auto; color:white;"> ${dateString}</span></div>
             <div style=" display: flex;
             text-align: center;
             width: 100%;

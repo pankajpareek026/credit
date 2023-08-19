@@ -5,8 +5,8 @@ function Navbar() {
     // console.log(isuser)
     return (
         <div className="home-nav">
-            <div className='logo'>C</div>
-
+            {/* <span className='logo'>C</span> */}
+<Link><div className="logo">cred<sub>i</sub>t</div></Link>
             <ul>
                 <Link to="/">Home </Link>
                 <Link to="/">About</Link>

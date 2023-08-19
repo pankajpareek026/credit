@@ -133,7 +133,9 @@ const Transactions = () => {
                     {
                         // to map transaction at Transaction Component
                         trn.map((item, index) => {
-                            return (<TransactionComp key={index} show={show} amount={item.amount} dis={item.dis} type={item.type}  date={item.date} />)
+                            let D=new Date(item.date)
+                            D=D.toLocaleString("en-IN")
+                            return (<TransactionComp key={index} show={show} amount={item.amount} dis={item.dis} type={item.type}  date={D} />)
                         })
                     }
                 </div>
