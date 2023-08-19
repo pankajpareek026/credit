@@ -1043,7 +1043,7 @@ canvas {
 .IN {
   background-color: rgb(33, 30, 30);
   box-shadow: var(--shadow);
-  border: 2px solid green;
+  border: 2px solid rgb(92, 106, 92);
   border-left-width: 11px;
   margin-left: 1.2rem;
   margin-top: 1rem;
@@ -1054,7 +1054,7 @@ canvas {
 .OUT {
   background-color: rgb(33, 30, 30);
   box-shadow: var(--shadow);
-  border: 2px solid rgb(255, 0, 0);
+  border: 2px solid rgb(90, 64, 64);
   border-left-width: 11px;
   margin-left: auto;
   margin-right: 1rem;
