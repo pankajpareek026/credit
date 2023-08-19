@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
-import { useParams } from 'react-router-dom';
+import { Link,useParams, useNavigate } from 'react-router-dom'
+
 //react icons --start
 import { FaPowerOff } from "react-icons/fa";
 import { SiAddthis } from "react-icons/si";
@@ -103,7 +103,7 @@ const Transactions = () => {
 
             <div className="left">
                 {/* for navbar in left side */}
-                <h2 className="logo small">C</h2>
+                <h2 style={{cursor:'pointer'}} onClick={()=>redirect('/')} className="logo small">C</h2>
 
                 <Link style={{ fontSize: "x-large " }} to="/" ><HomeIcon fontSize="large" style={{ fontSize: "x-large!important" }} /></Link>
                 {/* <Link style={{ fontSize: "x-large " }} to='/user'><AccountCircleIcon  fontSize="large"style={{ fontSize: "x-large!important" }} /></Link> */}

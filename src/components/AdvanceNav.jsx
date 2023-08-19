@@ -41,7 +41,7 @@ const AdvanceNav = ({ refresh }) => {
   return (
     <div className="left mobile-nav">
       {/* for navbar in left side */}
-      <h2 className="logo small">C</h2>
+      <h2  style={{cursor:'pointer'}} onClick={()=>redirect('/')} className="logo small">C</h2>
 
       <Link to="/" > <HomeIcon fontSize="large"/> </Link>
       <Link to='/user'><AccountCircleIcon fontSize="large" style={{ fontSize: "xx-large" }} /></Link>
