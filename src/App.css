@@ -1,6 +1,10 @@
 * {
   margin: 0;
   padding: 0;
+  
+}
+body{
+   background-color: bla;
 }
 
 :root {
@@ -409,11 +413,13 @@ font-weight: 900;
   border: none;
   border: 2px solid var(--main);
   background-color: transparent;
+  color: var(--main);
 }
 .log-btn{
 
   border: 2px solid var(--main);
   background-color: transparent;
+  color: var(--main);
 }
 .log-btn:hover,.reg-btn:hover{
 background-color: var(--main);
@@ -455,7 +461,7 @@ background-color: var(--main);
   font-family: sans-serif;
   color: white;
   display: flex;
-  background-color: #121212;
+   background-color: #303134 !important;
 }
 
 /* for navbar In DashBoard Section  */
@@ -468,7 +474,7 @@ background-color: var(--main);
   border-radius: 20px;
 } */
 .left{
-  /* background-color: #9b8c8c; */
+  background-color: #303134;
   margin-left: 7px;
 }
 .left a {
@@ -529,6 +535,7 @@ svg {
 
 .right,
 .t-right {
+   background-color: #303134;
   margin: 1vh;
   width: 95%;
   margin-left: 10px;
@@ -1269,7 +1276,7 @@ canvas {
 
 .details {
   display: grid;
-  background-color: black;
+  background-color: black ;
   width: 320px;
   color: white;
   position: absolute;
@@ -1643,7 +1650,7 @@ canvas {
     height: 100%;
     padding: 0;
     margin: 0;
-    background-color: #303134;
+    background-color: #303134 !important;
 
   }
 
