@@ -1738,7 +1738,19 @@ canvas {
   .logo {
     width: 100%;
   }
+.Login .reg-btn {
+  margin-left: 40%;
+  margin-top: 0px;
+  outline: none;
+  border: none;
+  border: none;
+  background-color: var(--main);
+}
+.log-btn{
 
+  border:none;
+  background-color: var(--main);
+}
   /* Login --End */
   .home-nav {
     flex-wrap: wrap;
