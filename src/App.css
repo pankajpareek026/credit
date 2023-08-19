@@ -1719,7 +1719,7 @@ canvas {
 }
 
   .Login {
-background: var(--dashboard_bg);
+background: var(--card);
     width: 94%;
     /* border-radius: 0;
     margin-left: 0px;
@@ -1733,6 +1733,7 @@ background: var(--dashboard_bg);
   }
   .pass{
      border-radius: 10px;
+     background-color: black;
   }
 
   .logo {
