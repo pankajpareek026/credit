@@ -184,10 +184,14 @@ app.get('/clients', authy, async (req, res) => {
                     "totalAmount": {
                         "$sum": "$transactions.amount"
                     },
+                    "lastDate": { $slice: ["$transactions.date", -1] }
 
                 }
             }
         ])
+
+  
+ 
 
         if (result) { res.json({ response: result }) }
         else {
