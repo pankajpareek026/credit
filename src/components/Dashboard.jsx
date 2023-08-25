@@ -301,7 +301,7 @@ const Dashboard = () => {
                       <Client
                         key={index}
                         lastDate={
-                          user.lastDate
+                          (user.lastDate instanceof Date && !isNaN(date.valueOf())) /*to check is a date */
                             ? new Date(user.lastDate).toLocaleDateString(
                                 "en-IN"
                               )
