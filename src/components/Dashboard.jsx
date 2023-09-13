@@ -22,7 +22,7 @@ const Dashboard = () => {
   const [users, Setusers] = useState([]);
   useEffect(() => {
     getUsers();
-  }, [users, loading]);
+  }, []);
 
   const [total, SetTotal] = useState(0);
   const [min, SetMin] = useState({});
@@ -301,7 +301,7 @@ const Dashboard = () => {
                       <Client
                         key={index}
                         lastDate={
-                          (user.lastDate instanceof Date && !isNaN(date.valueOf())) /*to check is a date */
+                          user.lastDate.lenght > 0 /*to check is a date */
                             ? new Date(user.lastDate).toLocaleDateString(
                                 "en-IN"
                               )
