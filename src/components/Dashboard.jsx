@@ -13,9 +13,9 @@ const Dashboard = () => {
   let i = 0;
   document.title = "Credit | Dashboard";
   let date = new Date();
-  console.log(date);
+  // console.log(date);
   const today = date.toLocaleDateString();
-  console.log(today);
+  // console.log(today);
   const Auth = localStorage.getItem("user");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -114,7 +114,7 @@ const Dashboard = () => {
         //setLoading(false)
       }
     } else {
-      console.log("err");
+      // console.log("err");
     }
   };
 
@@ -296,7 +296,7 @@ const Dashboard = () => {
                 <>
                   {users.map((user, index) => {
                     //   SetTotal(user.totalAmount)
-                    console.log("USER :", user);
+                    // console.log("USER :", user);
                     return (
                       <Client
                         key={index}
