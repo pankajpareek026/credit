@@ -14,7 +14,7 @@ const Dashboard = () => {
   document.title = "Credit | Dashboard";
   let date = new Date();
   // console.log(date);
-  const today = date.toLocaleDateString();
+  const today = date.toLocaleDateString("en-IN");
   // console.log(today);
   const Auth = localStorage.getItem("user");
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ const Dashboard = () => {
   const [total, SetTotal] = useState(0);
   const [min, SetMin] = useState({});
   const [max, SetMax] = useState({});
-
   const [notFound, SetnotFound] = useState(false);
 
   const opt = {
@@ -301,7 +300,7 @@ const Dashboard = () => {
                       <Client
                         key={index}
                         lastDate={
-                          user.lastDate.lenght > 0 /*to check is a date */
+                          user.lastDate.length > 0 /*to check is a date */
                             ? new Date(user.lastDate).toLocaleDateString(
                                 "en-IN"
                               )
