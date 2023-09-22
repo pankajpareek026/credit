@@ -6,10 +6,11 @@ const express = require('express')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 require('./db/config.js')
+
 const app = express()
 const user = require('./Models/user.js');
 const clients = require('./Models/clients')
-//meddilswares
+
 //meddilswares
 const privetKey = "WeShoulHaveAStrongPriVaTeKek@24-12-2022"
 let i = 0
@@ -37,7 +38,9 @@ async function authy(req, res, next) {
         res.json({ response: "some thing went wrong !" })
     }
 }
-// register route
+
+
+// register route --start
 app.post('/register', async (req, res) => {
     const { name, email, pass } = req.body;
     if (!name || !email || !pass) {
@@ -84,7 +87,6 @@ app.post('/login', async (req, res) => {
                 // delete result.name
                 delete result.pass
                 delete result.email;
-
                 const token = jwt.sign(result, privetKey, {
                     expiresIn: "2d"
                 })
@@ -93,12 +95,10 @@ app.post('/login', async (req, res) => {
                     httpOnly: true
                 }
                 res.cookie("tkn", token, options).json({ response: "success", user: token })
-
                 // res.send('login successfully !')
             }
             //invalid password
             else {
-
                 res.status(402).json({ response: "Invalid Password !" })
             }
         }
@@ -110,7 +110,6 @@ app.post('/login', async (req, res) => {
 //add clients 
 app.post('/addclient', authy, async (req, res) => {
     //get all data
-
     const parentId = req.body.user._id
     const name = req.body.name
 
@@ -130,11 +129,9 @@ app.post('/addclient', authy, async (req, res) => {
 // search the user from dashboard search bar
 let hit = 0
 app.get('/search', authy, async (req, res) => {
-
     hit++;
     const parentId = req.body.user._id
     const query = req.headers.query
-
     let result = await clients.aggregate([
         { "$match": { name: { "$regex": query, $options: "i" } } },
         {
