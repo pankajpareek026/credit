@@ -1,14 +1,15 @@
 * {
   margin: 0;
   padding: 0;
-  
+
 }
-body{
+
+body {
   background-color: #303134;
 }
 
 :root {
-  --dashboard_bg:#303134;
+  --dashboard_bg: #303134;
   --card: #24262b;
   --bg-c: #415c71;
   --p: rgb(255, 0, 111);
@@ -18,29 +19,37 @@ body{
   --shadow: 0 3px 3px 0 #171717;
 
 }
+
 /* svg css ---start */
 .background {
-      fill:var(--bg-c);
-    }
-    .wave {
-      fill: #3498db;
-    }
-    .chart-line {
-      fill: none;
-      stroke: #2ecc71;
-      stroke-width: 2;
-    }
-    .chart-area {
-      fill: #2ecc71;
-      opacity: 0.3;
-    }
-    .text {
-      font-family: Arial, sans-serif;
-      fill: #ffffff;
-      font-size: 16px;
-    }
+  fill: var(--bg-c);
+}
+
+.wave {
+  fill: #3498db;
+}
+
+.chart-line {
+  fill: none;
+  stroke: #2ecc71;
+  stroke-width: 2;
+}
+
+.chart-area {
+  fill: #2ecc71;
+  opacity: 0.3;
+}
+
+.text {
+  font-family: Arial, sans-serif;
+  fill: #ffffff;
+  font-size: 16px;
+}
+
 /* svg css ---End */
-sub{color: white;}
+sub {
+  color: white;
+}
 
 
 .home-nav {
@@ -95,12 +104,12 @@ sub{color: white;}
 }
 
 .logo {
- color: var(--main);
-font-size: xx-large;
-font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-padding:  2px;
-font-weight: 900;
-/* border-left: 5px solid var(--main); */
+  color: var(--main);
+  font-size: xx-large;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  padding: 2px;
+  font-weight: 900;
+  /* border-left: 5px solid var(--main); */
 }
 
 
@@ -272,15 +281,17 @@ font-weight: 900;
   margin-left: 25%;
 
 }
-  .login-container {
-    width: 100vw;
-    margin-left: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    place-items: center;
-    height: 100vh;
-  }
+
+.login-container {
+  width: 100vw;
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  place-items: center;
+  height: 100vh;
+}
+
 .Login {
   /* margin-top: 60px; */
   font-family: sans-serif;
@@ -289,14 +300,14 @@ font-weight: 900;
   height: auto;
   box-shadow: 0px 0px 10px rgb(48, 37, 37);
   width: 330px;
- justify-content: center;
+  justify-content: center;
   border-radius: 25px;
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
   gap: 7px;
   height: 450px;
-  
+
 }
 
 
@@ -327,27 +338,30 @@ font-weight: 900;
   color: white;
   font-size: medium;
   outline: none;
- /* outline-style: solid;
+  /* outline-style: solid;
  outline-width: 2px;
  outline-color: var(--main); */
 
 }
-.pass{
+
+.pass {
   /* margin-left: auto; */
   margin-left: 2%;
-   width: 94%;
-   display: flex;
-   border: 2px solid white;
-     height: 45px;
-     border-radius: 25px;
-     margin-bottom: 5%;
+  width: 94%;
+  display: flex;
+  border: 2px solid white;
+  height: 45px;
+  border-radius: 25px;
+  margin-bottom: 5%;
 }
-.pass input{
+
+.pass input {
   border: none;
   width: 95%;
 }
+
 /* for  password  ---Start */
-.pass p{
+.pass p {
   margin-right: 0px;
   text-align: center;
   justify-content: center;
@@ -355,6 +369,7 @@ font-weight: 900;
   margin-top: -4px;
   margin-right: 9px;
 }
+
 /* for  password  ---End */
 
 *.swal2-popup {
@@ -402,9 +417,10 @@ font-weight: 900;
   color: rgb(5, 0, 0);
   font-family: sans-serif;
   font-weight: 700;
-  
+
   border: 2px solid var(--main);
 }
+
 .Login .reg-btn {
   margin-left: 40%;
   margin-top: 0px;
@@ -414,14 +430,17 @@ font-weight: 900;
   background-color: transparent;
   color: var(--main);
 }
-.log-btn{
+
+.log-btn {
 
   border: 2px solid var(--main);
   background-color: transparent;
   color: var(--main);
 }
-.log-btn:hover,.reg-btn:hover{
-background-color: var(--main);
+
+.log-btn:hover,
+.reg-btn:hover {
+  background-color: var(--main);
 }
 
 
@@ -460,7 +479,7 @@ background-color: var(--main);
   font-family: sans-serif;
   color: white;
   display: flex;
-   background-color: #303134 !important;
+  background-color: #303134 !important;
 }
 
 /* for navbar In DashBoard Section  */
@@ -472,10 +491,11 @@ background-color: var(--main);
   margin-top: 1vh;
   border-radius: 20px;
 } */
-.left{
+.left {
   background-color: #303134;
   margin-left: 7px;
 }
+
 .left a {
   color: white;
   text-decoration: none;
@@ -534,7 +554,7 @@ svg {
 
 .right,
 .t-right {
-   background-color:var(--dashboard_bg);
+  background-color: var(--dashboard_bg);
   margin: 1vh;
   width: 95%;
   margin-left: 10px;
@@ -784,7 +804,7 @@ canvas {
   margin-top: 2.25rem;
   height: 55%;
   overflow: scroll;
-  
+
 
 }
 
@@ -1235,11 +1255,12 @@ canvas {
 } */
 
 .add-t .inner .out .form h1 {
-  
+
   color: red;
-  
+
 }
-.addUser:hover{
+
+.addUser:hover {
   color: var(--main);
 }
 
@@ -1275,7 +1296,7 @@ canvas {
 
 .details {
   display: grid;
-  background-color: black ;
+  background-color: black;
   width: 320px;
   color: white;
   position: absolute;
@@ -1364,10 +1385,13 @@ canvas {
 }
 
 @media (max-width:590px) {
-  html, body {
-  overflow-x: hidden;
-}
-/* body {
+
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  /* body {
   position: relative;
 } */
   .dashboard {
@@ -1378,13 +1402,13 @@ canvas {
     background-color: #303134;
     height: 100vh;
     width: 100%;
-    
+
   }
 
   .right {
     margin: 0;
-  width: 100vw;
-  height: 100vh;
+    width: 100vw;
+    height: 100vh;
     overflow: hidden;
     height: max-content;
     min-height: fit-content;
@@ -1392,7 +1416,8 @@ canvas {
     border-radius: 0;
     background-color: #303134;
   }
-  .transactions .t-right{
+
+  .transactions .t-right {
     background: #000;
   }
 
@@ -1408,7 +1433,7 @@ canvas {
 
   .dashboard .left,
   .transactions .left {
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     margin: 0;
     padding: 5px;
@@ -1416,22 +1441,25 @@ canvas {
     width: 100%;
     margin-left: 0%;
     display: flex;
- justify-content: space-around;
-  flex-direction: row;
+    justify-content: space-around;
+    flex-direction: row;
     height: 45px;
     background-color: rgb(13, 13, 13);
-    font-size:x-large;
+    font-size: x-large;
   }
-     .dashboard .left {
-      cursor: pointer;
-      
-     }
-     .transactions .left{
-      max-width: 100vw;
-     }
-     .dashboard .left :first-child{
-      margin-left: 5px;
-     }
+
+  .dashboard .left {
+    cursor: pointer;
+
+  }
+
+  .transactions .left {
+    max-width: 100vw;
+  }
+
+  .dashboard .left :first-child {
+    margin-left: 5px;
+  }
 
   /* for logout button  */
   .dashboard .left .d-logout,
@@ -1663,8 +1691,8 @@ canvas {
   }
 
   .transactions .t-right {
-  max-width: 100%;
-  overflow-y: hidden;
+    max-width: 100%;
+    overflow-y: hidden;
     margin: 0;
     height: 100vh;
     border: none;
@@ -1729,12 +1757,12 @@ canvas {
   /* for transactions route ---End */
   /* Login --start */
 
-.login-container{
-  background: #000;
-}
+  .login-container {
+    background: #000;
+  }
 
   .Login {
-background: var(--card);
+    background: var(--card);
     width: 94%;
     /* border-radius: 0;
     margin-left: 0px;
@@ -1746,36 +1774,42 @@ background: var(--card);
   .Login input {
     border-radius: 10px;
   }
-  .pass{
-     border-radius: 10px;
-     background-color: black;
+
+  .pass {
+    border-radius: 10px;
+    background-color: black;
   }
 
   .logo {
     width: 100%;
   }
-.Login .reg-btn {
-  margin-left: 40%;
-  margin-top: 0px;
-  outline: none;
-  border: none;
-  border: none;
-  background-color: var(--main);
-}
-.log-btn{
 
-  border:none;
-  background-color: var(--main);
-}
+  .Login .reg-btn {
+    margin-left: 40%;
+    margin-top: 0px;
+    outline: none;
+    border: none;
+    border: none;
+    background-color: var(--main);
+  }
+
+  .log-btn {
+
+    border: none;
+    background-color: var(--main);
+  }
+
   /* Login --End */
   .home-nav {
     flex-wrap: wrap;
     width: 100Vw;
     overflow: hidden;
   }
-.right >table>tbody>tr:last-child{
-margin-bottom: 150px;
-}
+
+  .right>table>tbody>tr:last-child {
+    margin-bottom: 150px;
+  }
+
   /* login and Register --End  */
 
   /* footer ---start */
@@ -1805,7 +1839,7 @@ margin-bottom: 150px;
     margin-left: 1rem;
   }
 
-  
+
 
   .home h2 {
     font-family: 'Courier New', Courier, monospace;
