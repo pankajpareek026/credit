@@ -31,7 +31,7 @@ const Transactions = () => {
   const [name, Setname] = useState("");
   const [shareData, setShareData] = useState();
   const [isOpened, setIsOpened] = useState(false);
-  const[requestSent,setRequestSent]=useState(false)
+  const [requestSent, setRequestSent] = useState(false);
   const Thandle = () => {
     Setshow(true);
   };
@@ -57,7 +57,7 @@ const Transactions = () => {
   };
   document.title = `Credit | Transaction / ${name}`;
   const getTransactionsLink = async () => {
-    
+    console.log("transaction is running :>");
     try {
       fetch(`${api}/shareRequest`, {
         method: "post",
@@ -71,14 +71,12 @@ const Transactions = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-         
-          setRequestSent(true)
+          console.log("share Link :", data);
           setShareData(data);
           setIsOpened(true);
-          
         });
     } catch (error) {
-     
+      console.log("share :", error);
     }
   };
 
@@ -93,7 +91,7 @@ const Transactions = () => {
       },
     });
     result = await result.json();
-   
+    console.log(result);
   };
   const logout = () => {
     Swal.fire({
@@ -180,7 +178,7 @@ const Transactions = () => {
             placeholder="Search Transaction "
             onChange={(e) => searchHandle(e.target.value)}
           />
-          <button onClick={getTransactionsLink} disabled={!requestSent}  className="share">
+          <button onClick={getTransactionsLink} className="share">
             <ShareIcon sx={{ color: "rgb(20, 241, 149)", fontsize: "30px" }} />
           </button>
         </div>
