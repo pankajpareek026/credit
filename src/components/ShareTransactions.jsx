@@ -25,7 +25,7 @@ const ShareTransactions = () => {
   const [APIdata, setAPIData] = useState();
   const [transactions, setTransactions] = useState();
   const { source } = useParams();
-  console.log(source);
+
   useEffect(() => {
     fetch(`${api}/share`, {
       method: "get",
@@ -36,7 +36,7 @@ const ShareTransactions = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("parentName :", data.parentName);
+        
 
         const besicData = {
           clientName: data.clientName,

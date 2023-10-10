@@ -57,7 +57,7 @@ const Transactions = () => {
   };
   document.title = `Credit | Transaction / ${name}`;
   const getTransactionsLink = async () => {
-    console.log("transaction is running :>");
+    
     try {
       fetch(`${api}/shareRequest`, {
         method: "post",
@@ -71,14 +71,14 @@ const Transactions = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("share Link :", data);
+         
           setRequestSent(true)
           setShareData(data);
           setIsOpened(true);
           
         });
     } catch (error) {
-      console.log("share :", error);
+     
     }
   };
 
@@ -93,7 +93,7 @@ const Transactions = () => {
       },
     });
     result = await result.json();
-    console.log(result);
+   
   };
   const logout = () => {
     Swal.fire({
@@ -192,7 +192,7 @@ const Transactions = () => {
             style={show ? { filter: "blur(3px)" } : {}}
             className="t-heading"
           >
-            <span className="t-user-name"> Total Balance:{params.id} </span>
+            <span className="t-user-name"> Total Balance: </span>
             <span className="t-lastdate"> {}</span>
             <span className="t-balance"> ₹ {blance}</span>
           </div>
