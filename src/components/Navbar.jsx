@@ -1,5 +1,7 @@
 import React from "react";
 import { Link,useNavigate } from 'react-router-dom'
+import Logo from "./Logo";
+
 function Navbar() {
     const redirect=useNavigate()
     const isuser = localStorage.getItem('user')
@@ -7,7 +9,7 @@ function Navbar() {
     return (
         <div className="home-nav">
             {/* <span className='logo'>C</span> */}
-<div  style={{cursor:'pointer'}} onClick={()=>redirect('/')} className="logo">cred<sub>i</sub>t</div>
+<Logo/>
             <ul>
                 <Link to="/">Home </Link>
                 <Link to="/">About</Link>

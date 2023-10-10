@@ -6,8 +6,8 @@ const connectionParams = {
     useUnifiedTopology: true
 }
 mongoose.connect(url, connectionParams).then((e) => {
-    console.log(e)
-    console.log("connected")
+    // console.log(e)
+    console.log("DB > connected")
 }).catch((ee) => {
     console.info("ERR: ", ee)
 })

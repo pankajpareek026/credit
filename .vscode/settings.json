@@ -1,3 +1,5 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "editor.fontFamily": "'PT Mono'",
+    "editor.fontSize": 25
 }

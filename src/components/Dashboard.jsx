@@ -19,6 +19,7 @@ const Dashboard = () => {
   const Auth = localStorage.getItem("user");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [ApiUserData, setApiUserData] = useState([]);
   const [users, Setusers] = useState([]);
   useEffect(() => {
     getUsers();
@@ -75,6 +76,8 @@ const Dashboard = () => {
         },
       });
       users = await users.json();
+      setApiUserData(users.response);
+      console.table(users.response);
       setLoading(false);
 
       if (
@@ -121,7 +124,7 @@ const Dashboard = () => {
     labels: UserData.map((data) => data.user),
     datasets: [
       {
-        label: "DEBITORS",
+        label: "DEBITORS/CREDITORS",
         data: UserData.map((data) => data.amount),
         backgroundColor: [
           "rgba(75,192,192,1)",
@@ -206,11 +209,15 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="d-chart">
-            <PieChart
-              chartData={userData}
-              options={opt}
-              style={{ hight: "500px" }}
-            />
+            {ApiUserData.length > 0 ? (
+              <PieChart
+                chartData={userData}
+                options={opt}
+                style={{ hight: "500px" }}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div className="d-clients-container">
@@ -300,7 +307,7 @@ const Dashboard = () => {
                       <Client
                         key={index}
                         lastDate={
-                          user.lastDate.length > 0 /*to check is a date */
+                          user?.lastDate.length > 0 /*to check is a date */
                             ? new Date(user.lastDate).toLocaleDateString(
                                 "en-IN"
                               )

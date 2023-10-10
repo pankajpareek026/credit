@@ -1,7 +1,13 @@
 const mongoose=require('mongoose')
 const clientsSchema=mongoose.Schema({
-    parentId:String,
-    name:String,
+    parentId:{
+        type:String,
+        require:true
+    },
+    name: {
+        type: String,
+        require: true
+    },
     transactions:[]
 })
 

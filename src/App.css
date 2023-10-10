@@ -6,10 +6,12 @@
 
 body {
   background-color: #303134;
+  font-family: sans-serif;
 }
 
 :root {
   --dashboard_bg: #303134;
+  --second-dark: #1c1b1b;
   --card: #24262b;
   --bg-c: #415c71;
   --p: rgb(255, 0, 111);
@@ -17,9 +19,103 @@ body {
   --main-back: #100F0F;
   --advance: #0F3D3E;
   --shadow: 0 3px 3px 0 #171717;
+  --shadow2: 0 1.5px 1.5px 0 #302a2a;
 
 }
 
+/* css for Dialog --Start */
+dialog {
+
+  background-color: var(--card);
+  border-radius: 5px;
+  height: max-content;
+  padding-bottom: 9px;
+  width: 350px;
+  position: fixed;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 20%;
+  margin-bottom: auto;
+  color: white;
+  box-shadow: 0px 0px 150px 15px gray;
+
+
+}
+
+dialog>.title {
+  text-align: center;
+  padding: 5px;
+  border-bottom: 1px solid white;
+  color: var(--main);
+  font-family: sans-serif;
+  font-weight: 500;
+  font-size: large;
+  background-color: black;
+}
+
+dialog>.text {
+  padding: 5px 7px;
+  font-family: sans-serif;
+}
+
+dialog>.link-container {
+  padding: 5px;
+  display: flex;
+  width: 100%;
+  margin-left: 5px;
+}
+
+dialog>.link-container>.link {
+  width: 75%;
+  overflow: scroll;
+  color: var(--p);
+  background-color: black;
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-size: small;
+  outline: none;
+  border: none;
+
+}
+
+dialog>.link-container>.copy-btn {
+  cursor: pointer;
+  color: var(--main);
+  position: relative;
+  background-color: black;
+  padding: 4px 6px;
+  border: none;
+  margin-left: 2px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--main);
+  font-weight: 500;
+  border-radius: 3px;
+
+}
+
+dialog>.link-container>.copy-btn:hover {
+  color: black;
+  background-color: var(--main);
+
+}
+
+dialog>.close-icon {
+  /* background-color: orange; */
+  color:white;
+  font-weight: 750;
+  cursor: pointer;
+  margin-top: 5px;
+  background-color:gray;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  padding: 5px 9px;
+  border-radius: 5px;
+  border: none;
+}
+
+/* css for Dialog --End */
 /* svg css ---start */
 .background {
   fill: var(--bg-c);
@@ -58,7 +154,7 @@ sub {
   flex-wrap: wrap;
   position: fixed;
   top: 0;
-  /* height: 50px; */
+  height: 70px;
   /* margin-bottom: 25px; */
   width: 100%;
   background-color: black;
@@ -79,7 +175,9 @@ sub {
   flex-wrap: wrap;
   margin-left: auto;
   color: black;
-  margin-top: 7px;
+  margin-top: auto;
+  margin-bottom: 17px;
+  margin-right: 23px;
 }
 
 .home-nav a {
@@ -108,6 +206,8 @@ sub {
   font-size: xx-large;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   padding: 2px;
+  margin-left: 18px;
+  padding-top: 9px;
   font-weight: 900;
   /* border-left: 5px solid var(--main); */
 }
@@ -414,10 +514,9 @@ sub {
   /* background-color: var(--main); */
   font-weight: bold;
   font-size: large;
-  color: rgb(5, 0, 0);
+  color: var(--main);
   font-family: sans-serif;
   font-weight: 700;
-
   border: 2px solid var(--main);
 }
 
@@ -425,7 +524,6 @@ sub {
   margin-left: 40%;
   margin-top: 0px;
   outline: none;
-  border: none;
   border: 2px solid var(--main);
   background-color: transparent;
   color: var(--main);
@@ -441,6 +539,7 @@ sub {
 .log-btn:hover,
 .reg-btn:hover {
   background-color: var(--main);
+  color: black;
 }
 
 
@@ -559,9 +658,10 @@ svg {
   width: 95%;
   margin-left: 10px;
   height: 97vh;
-  border: 2px solid rgb(64, 25, 25);
+  border: 2px solid rgb(4, 4, 4);
   border-radius: 20px;
   overflow: scroll;
+  padding-bottom: 9px;
 }
 
 /* in dashboard input and generate report section */
@@ -585,6 +685,7 @@ svg {
   font-weight: bold;
 }
 
+/* heading of dashboard */
 .upper-container .heading {
   margin-left: 2vw;
 }
@@ -595,11 +696,12 @@ svg {
   margin-right: 1.5vw;
   border-radius: 10px;
   padding: 2px 5px;
-  background-color: var(--main);
-  color: black;
-  font-weight: 600;
+  background-color: black;
+  color: var(--main);
+  font-weight: 500;
   cursor: pointer;
-  border: none;
+  border: 1.5px solid var(--main);
+  box-shadow: var(--shadow);
 }
 
 /* for user-search icon  */
@@ -617,6 +719,7 @@ svg {
 
 
 */
+/* second container in dash */
 .d-container2 {
   display: flex;
 }
@@ -634,7 +737,7 @@ svg {
   text-align: center;
   padding-top: 2px;
   padding-right: 2px;
-  padding-bottom: 5px;
+  padding-bottom: 9px;
   box-shadow: 0 4px 6px 0 #171717;
 }
 
@@ -671,7 +774,7 @@ svg {
   padding: 10px;
   padding-top: 15px;
   overflow: hidden;
-  box-shadow: 0 4px 6px 0 #171717;
+  box-shadow: 0 3px 4px 0 #1b201b;
 }
 
 .d-high div {
@@ -689,9 +792,12 @@ svg {
 }
 
 .d-low div span,
-.d-high div span {
-  font-size: medium;
-  padding: auto;
+.d-high div span,
+.d-low p,
+.d-high p {
+  font-size: small !important;
+
+  padding: 0;
 }
 
 /* {
@@ -707,7 +813,7 @@ svg {
   color: black;
   position: relative;
   float: right;
-  /* top:0px */
+
 }
 
 .dashboard .left .d-logout {
@@ -730,27 +836,45 @@ svg {
 
 
 @media (max-width:1200px) {
-  .d-low div span {
-    font-size: medium;
+
+  .d-overview,
+  .d-chart {
+    height: max-content;
+    /* box-shadow: 0px 0.2px 0.2px 1px rgb(11, 11, 11) !important; */
+  }
+
+
+  .d-high>div {
+    height: max-content !important;
+    overflow: auto;
   }
 
   .d-balance {
     /* dashboard balance */
     padding-top: 20px;
     color: white;
-    font-size: x-large;
+    font-size: large;
     text-align: center;
     width: auto;
     height: 38%;
     padding: 7px;
   }
 
-  .d-high div span {
-    font-size: medium;
+  .d-hl-container {
+    height: max-content;
+    font-size: small !important;
+  }
+
+  .d-high>div>span {
+    font-size: small !important;
+    text-transform: capitalize;
+    height: max-content;
+
   }
 
 }
 
+/* media 1200 --End */
 
 
 /* @media (min-width:400px) {
@@ -777,7 +901,7 @@ svg {
   padding-top: 15px;
   overflow: hidden;
   background-color: #303134;
-  box-shadow: 0 4px 6px 0 #171717;
+  box-shadow: 0 3px 4px 0 #1b201b;
 }
 
 
@@ -790,6 +914,7 @@ svg {
   box-shadow: 0 4px 6px 0 #171717;
   background-color: #303134;
   padding: 2px;
+  padding-bottom: 9px;
   text-align: center;
 
 }
@@ -816,6 +941,7 @@ canvas {
   margin-left: 4%;
   overflow-y: auto;
   overflow-x: scroll;
+  font-family: sans-serif;
   /* height: 100%; */
   /* background-color: #303130; */
   /* box-shadow: var(--shadow); */
@@ -859,6 +985,7 @@ canvas {
   margin-top: 10px;
   height: 55px;
   font-size: large;
+  font-family: sans-serif;
   /* box-shadow: var(--shadow); */
   background-color: #1e2026;
   /* border-radius: 50px; */
@@ -878,9 +1005,15 @@ canvas {
 }
 
 .d-clients-container table tbody tr td:last-child {
-  font-family: monospace;
+  font-family: sans-serif;
   font-size: large;
   border-radius: 0px 5px 5px 0px;
+}
+
+.Login {
+  height: auto;
+  width: 400px !important;
+  margin-top: 9%;
 }
 
 
@@ -952,9 +1085,216 @@ canvas {
   display: flex;
 }
 
+/* css for Share Page=>  ---start*/
+.logo-and-join-container-at-shate-page {
+  display: flex;
+}
+
+.join-btn {
+  border: 1.5px solid var(--main);
+  /* border: none; */
+  border-radius: 5px;
+  padding: 3px 13px;
+  height: fit-content;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 16px;
+  margin-left: auto;
+  /* color: black; */
+
+  font-weight: 450;
+  text-decoration: none;
+  box-shadow: 0px 0px 3px 3px rgb(30, 29, 29);
+  color: var(--main);
+}
+
+.join-btn:hover {
+  background-color: var(--main);
+  color: black;
+  border: none;
+}
+
+.share-container {
+  margin: auto;
+  margin-top: 3px;
+  height: auto;
+  padding: 5px;
+  max-width: 400px;
+  background-color: var(--second-dark);
+  color: white;
+  font-family: sans-serif;
+  border-radius: 5px;
+  box-shadow: 0px 0px 9px 0px rgba(105, 103, 103, 0.692);
+}
+
+.first-heading {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 3px;
+  font-family: sa;
+  font-weight: 200;
+  margin-top: 3px;
+}
+
+.share-name {
+  /* display: flex; */
+  max-width: max-content;
+  text-align: center;
+  background-color: #030303;
+  box-shadow: var(--shadow2);
+  color: var(--main);
+  font-size: medium;
+  padding: 6px 15px;
+  margin-left: 3px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  border-radius: 3px;
+  font-weight: 400;
+  font-size: large;
+  /* box-shadow: 1px 1px 5px black inset,-1px -1px 5px  inset; */
+  color: var(--p);
+
+
+}
+
+.total-transctions-amount-container {
+  max-width: 99%;
+  height: 32%;
+  display: grid;
+  gap: 9px;
+  margin: auto;
+  margin-top: 6px;
+  padding: 7px 5px;
+  border-radius: 5px;
+  background: black;
+  box-shadow: var(--shadow2);
+}
+
+.upper {
+  display: flex;
+}
+
+.remaining-balance {
+  background-color: var(--card);
+  box-shadow: var(--shadow2);
+  width: 92%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+  padding: 9px;
+  text-align: center;
+  font-size: medium;
+  font-family: sans-serif;
+}
+
+.share-right,
+.share-left {
+  width: 46%;
+  background-color: var(--card);
+  padding: 14px 5px;
+  margin: 0px 6px;
+  border-radius: 5px;
+  display: flex;
+  box-shadow: var(--shadow2);
+  justify-content: space-between;
+  padding-left: 12px;
+  font-weight: 600;
+  font-size: large;
+
+}
+
+.share-left {
+  color: rgb(6, 253, 6);
+}
+
+.share-right {
+  color: rgb(249, 8, 8);
+}
+
+.share-right .share-left>span {
+  margin-left: auto;
+}
+
+.share-right>span:hover {
+  color: var(--main);
+  cursor: pointer;
+}
+
+
+.share-heading {
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 400;
+  color: #e1e3e2;
+  padding: 3px;
+}
+
+.transaction-card-container {
+
+  height: 45vh;
+  overflow-y: scroll;
+  /* background: red; */
+  padding-bottom: 5px;
+}
+
+.transaction-card-in-share {
+  height: 40px;
+  width: 96%;
+  margin-left: 1%;
+  padding: 11px 4px;
+  background-color: var(--card);
+  display: flex;
+  border-radius: 9px;
+  margin-top: 9px;
+  box-shadow: var(--shadow);
+  /* justify-content:space-evenl; */
+
+}
+
+.transaction-card-in-share>div {
+
+  justify-content: right;
+  display: flex;
+  flex-direction: column;
+  gap: auto;
+
+}
+
+.sender-reciver-transaction-comment {
+  color: white;
+  font-size: medium;
+  margin-left: 13px;
+  font-family: sans-serif;
+}
+
+/* Transaction amount for share page in transaction tile */
+.share-transaction-amount {
+  margin-left: auto;
+  margin-right: 13px;
+  font-size: large;
+  font-weight: 400;
+  font-family: monospace;
+}
+
+/* Transaction date for share page in transaction tile */
+.transaction-date {
+
+  font-size: small;
+  color: gray;
+  margin-left: 15px;
+  padding: 3px;
+}
+
+/* css for Share Page=>  ---End*/
 .t-upper-container {
   display: flex;
   margin-top: 2%;
+  padding-left: 2%;
+}
+
+.t-container {
+  display: flex;
+  margin-top: 2%;
+  padding-left: 9px;
 }
 
 .t-username {
@@ -966,12 +1306,14 @@ canvas {
   margin-right: auto;
   text-align: center;
   font-family: Georgia, 'Times New Roman', Times, serif;
-  border-radius: 10px;
-  background-color: rgb(250, 248, 248);
+  border-radius: 5px;
+  background-color: var(--second-dark);
   font-weight: bold;
+  font-weight: 300;
   font-size: medium;
-  /* box-shadow: 1px 1px 5px black inset,-1px -1px 5px  inset; */
-  color: black;
+  /* box-shadow: 1px 1px 5px rgb(15, 15, 15) inset;/ */
+  /* border: 1px solid rgb(104, 101, 101); */
+  color: var(--main);
 }
 
 .t-upper-container input {
@@ -986,12 +1328,30 @@ canvas {
   padding: 5px;
   text-align: center;
   font-weight: bold;
+  border: 1.5px solid rgb(152, 151, 151);
 }
 
 .share {
   font-size: xx-large;
   margin-left: auto;
   margin-right: 2vw;
+  background-color: red;
+  border: none;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: x-large;
+  padding: 5px;
+  width: 15%;
+  color: var(--main);
+  border: 2px solid var(--main);
+  height: 40px;
+  font-size: large;
+  /* box-shadow: 0 3px 3px 0 #171616 ,0px -1px 1px 0px white  ; */
+  border-radius: 9px;
+  background-color: var(--main-back);
+  font-weight: 700;
+  cursor: pointer;
+
 }
 
 .t-container2 {
@@ -1002,19 +1362,23 @@ canvas {
   margin-left: 1.2%;
   border-radius: 30px 30px 10px 10px;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .t-heading {
   /* border: 2px solid red; */
-  height: 7vh;
+  height: 35px;
   border-radius: 20px 20px 0px 0px;
-  width: 101%;
+  width: 100%;
   margin: 0;
-  padding: 0;
-  background-color: #363738;
+  /* margin-left: 7px; */
+  margin-right: auto;
+  background-color: #121212;
   position: sticky;
+  text-align: center;
+  box-shadow: var(--shadow2);
   top: 0;
-  padding: 12px 0px 0px 0px;
+  padding: 12px 12px 0px 0px;
 }
 
 .t-user-name {
@@ -1026,23 +1390,14 @@ canvas {
   font-size: medium;
 }
 
-.t-lastdate {
-  text-align: center;
-  margin-top: 9px;
-  padding: 5px 12px;
-  margin-left: 25%;
-  margin-right: 15%;
-  font-size: medium;
-  color: gray;
-  font-family: sans-serif;
-  font-weight: 700;
-}
+
 
 .t-balance {
   text-align: center;
   margin-top: 5px;
-  padding: 5px 12px;
+  padding: 5px 18px;
   margin-left: auto;
+  border-radius: 20px;
   font-size: large;
   font-family: 'Courier New', Courier, monospace;
   font-weight: 900;
@@ -1510,12 +1865,12 @@ canvas {
   .upper-container input {
     height: auto;
     width: 50%;
-    border-radius: 6px;
+    border-radius: 13px;
+    padding: 3px;
     margin-left: auto;
     margin-right: .5rem;
-    border: none;
-    background-color: #303134;
-    border: 1px solid white;
+    background-color: #0c0c0c;
+    border: 2px solid white;
   }
 
   .right {
@@ -1691,7 +2046,7 @@ canvas {
   }
 
   .transactions .t-right {
-    max-width: 100%;
+    width: 100%;
     overflow-y: hidden;
     margin: 0;
     height: 100vh;
@@ -1701,13 +2056,26 @@ canvas {
   }
 
   .share {
-    margin-top: 1.2rem;
+    margin-top: auto;
+    margin-bottom: auto;
     font-size: medium;
-    display: none;
+    padding: 5px;
+    width: 15%;
+    color: var(--main);
+    border: none;
+    height: 40px;
+    font-size: large;
+    box-shadow: var(--shadow);
+    border-radius: 9px;
+    background-color: var(--dashboard_bg);
+    font-weight: 700;
+    /* display: none; */
   }
 
   .t-upper-container {
     margin-top: 1.2rem;
+    display: flex;
+    justify-content: space-between;
   }
 
   .t-upper-container input {
@@ -1716,15 +2084,22 @@ canvas {
     border: 2px solid white;
     height: auto;
     margin-top: 5px;
+    display: none;
   }
 
   .t-container2 .t-heading {
-    width: 100%;
+    width: 95%;
     background-color: black;
     box-shadow: 0 2px 4px 0 #4f5050;
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
+    position: fixed;
+    top: 13.2%;
+  }
+
+  .t-container1 {
+    margin-left: 25px;
   }
 
   .t-user-name {
@@ -1742,6 +2117,7 @@ canvas {
     height: 75.2vh;
     border-radius: 0px;
     border: none;
+    margin-bottom: 5px;
   }
 
 
@@ -1758,11 +2134,18 @@ canvas {
   /* Login --start */
 
   .login-container {
-    background: #000;
+    width: 100vw;
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    place-items: center;
+    height: 100vh;
+    /* background: #000; */
   }
 
   .Login {
-    background: var(--card);
+    background: black;
     width: 94%;
     /* border-radius: 0;
     margin-left: 0px;
@@ -1788,15 +2171,15 @@ canvas {
     margin-left: 40%;
     margin-top: 0px;
     outline: none;
-    border: none;
-    border: none;
     background-color: var(--main);
   }
 
   .log-btn {
-
+    border: 2px solid var(--main);
+    background-color: transparent;
+    color: var(--main);
     border: none;
-    background-color: var(--main);
+    /* background-color: var(--main); */
   }
 
   /* Login --End */
@@ -1804,6 +2187,12 @@ canvas {
     flex-wrap: wrap;
     width: 100Vw;
     overflow: hidden;
+    height: 90px;
+    padding-bottom: 5px;
+  }
+
+  .home-nav a {
+    padding-bottom: 50px;
   }
 
   .right>table>tbody>tr:last-child {
