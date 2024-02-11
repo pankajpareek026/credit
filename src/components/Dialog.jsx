@@ -27,6 +27,9 @@ export default function Dialog({ onClose, link, message, isOpened, on }) {
   return (
     <dialog ref={dialogRef}>
       <p className="title">Link Generated successfully !</p>
+      <hr />
+      <hr />
+     
       <p className="text">{message}</p>
       <div className="link-container">
         <input ref={linkRef} className="link" value={link} readOnly />

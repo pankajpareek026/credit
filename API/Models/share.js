@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const shareSchema = mongoose.Schema({
+const shareSchema = new mongoose.Schema({
     parentId: {
         type: String,
         required: [true, 'parentID is Required !']
@@ -12,10 +12,14 @@ const shareSchema = mongoose.Schema({
         type: String,
         required: [true, 'share Token is Required !']
     },
+     clientName: {
+    type: String,
+    required: [true, 'client Name is Required !']
+},
     expireTime: {
-        type: String,
-        required: true
-    }
+    type: String,
+    required: true
+}
 
 })
 

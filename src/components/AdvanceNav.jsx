@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,12 +9,19 @@ import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import AddUser from './AddUser';
 
 import Success from './Success';
 
-const AdvanceNav = ({ refresh }) => {
+
+const AdvanceNav = ({ refresh, isDashboard = false, isAddUser }) => {
   const redirect = useNavigate()
+  const location = useLocation()
+  const path = location.pathname
+  console.log("locatiion =..>>", location)
+  console.log("locatiion PATH =..>>", path)
+  const activeColor = "rgb(20, 241, 149)"
   const logout = () => {
     // localStorage.clear()
     Swal.fire({
@@ -41,19 +48,46 @@ const AdvanceNav = ({ refresh }) => {
   return (
     <div className="left mobile-nav">
       {/* for navbar in left side */}
-      <h2  style={{cursor:'pointer'}} onClick={()=>redirect('/')} className="logo small">C</h2>
+      <h2 style={{ cursor: 'pointer' }} onClick={() => redirect('/')} className="logo small">C</h2>
 
-      <Link to="/" > <HomeIcon fontSize="large"/> </Link>
-      <Link to='/user'><AccountCircleIcon fontSize="large" style={{ fontSize: "xx-large" }} /></Link>
-    
+      <Link to="/" > <HomeIcon fontSize="large" style={{ color: path == "/" && activeColor }} /> </Link>
 
-      <div ><AddUser fontSize="large" refresh={refresh} /></div>
+      <Link to='/me'><AccountCircleIcon fontSize="large" style={{ fontSize: "xx-large", color: (path == "/me") && activeColor }} /></Link>
+
+      {isDashboard && <Link to='/dashboard'>
+        <DashboardIcon
+          fontSize="large"
+          style={{
+            fontSize: "xx-large",
+            color: (path == "/dashboard") && activeColor
+          }} /></Link>}
+
+      {isAddUser && <div ><AddUser fontSize="large" refresh={refresh} /></div>}
+
+
       <div className="d-logout" onClick={logout}>
-        <PowerSettingsNewIcon fontSize="large"  onClick={logout} style={{ hover: { color: "red" } }} />
+        <PowerSettingsNewIcon fontSize="large" onClick={logout} style={{ hover: { color: "red" } }} />
       </div>
       <ToastContainer />
 
     </div>
+
+    //------------------------------------------------
+
+    // <div className="left mobile-nav">
+    //   {/* for navbar in left side */}
+    //   <h2 style={{ cursor: 'pointer' }} onClick={() => redirect('/')} className="logo small">C</h2>
+
+    //   {
+    //    navData.map((item, index) => (
+    //     <Link key={index} to={item.href}>
+    //       {item.icon && <item.icon fontSize={item.fontSize} style={item.style} />}
+    //     </Link>
+    //   ))
+
+    //   }
+
+    // </div>
   )
 }
 

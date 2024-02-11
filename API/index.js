@@ -19,66 +19,127 @@ const jwtVerify = require('./utils/jwtVerify.js')
 const privetKey = "WeShoulHaveAStrongPriVaTeKek@24-12-2022"
 let i = 0
 app.use(express.json())
-app.use(cookieParser())
-app.use(cors())
+app.use(cookieParser());
+
+app.use(cors({
+    origin: 'http://localhost:3000', // Adjust the origin to match your React app's URL
+    credentials: true
+}))
+
 //
 const port = process.env.port || 2205
 
 async function authy(req, res, next) {
+    try {
+        const token = req.headers.token;
+        console.log("token=>>>>", token);
+        // Check if token is missing or undefined
+        if (!token || token === "undefined") {
+            // Respond with session expired error
+            return res.status(401).json({ message: "Session expired", type: "error" });
+        }
 
-    if (req.headers.token) {
-        const user = jwt.verify(req.headers.token, privetKey, (err, valid) => {
+        // Verify JWT token
+        jwt.verify(token, privetKey, (err, decodedToken) => {
+            // If error occurs during token verification
             if (err) {
-                res.json({ response: err.message })
-                console.log("AUTHY ERROR :", err)
+                // Handle invalid signature error
+                if (err.message === 'invalid signature') {
+                    return res.status(401).json({ type: 'error', message: 'Unauthorized user access!' });
+                }
+                // Handle other errors during token verification
+                return res.status(500).json({ type: 'error', message: err.message });
+            } else {
+                // If token is valid, attach decoded user information to request body
+                req.body.user = decodedToken;
+                // Proceed to the next middleware or route handler
+                next();
             }
-            else {
-                req.body.user = valid;
-                next()
-            }
-        })
-    }
-    else {
-        res.json({ response: "some thing went wrong !" })
+        });
+    } catch (error) {
+        // Handle internal server error
+        res.status(500).json({ type: 'error', message: 'Internal server error!' });
     }
 }
-// register route
-app.post('/register', async (req, res) => {
-    const { name, email, pass } = req.body;
-    if (!name || !email || !pass) {
-        res.status(402).json({ response: "All fields are required" })
-    }
-    //process for registration :
-    else {
-        // check if use exists
-        const userExist = await user.findOne({ email })
-        if (userExist) {
-            res.send({ response: "user Already Exists " })
-        }
-        else {
-            //save data in DB
-            const enPass = await bcrypt.hash(pass, 10)
-            let query = await user.create({ name, email, pass: enPass })
-            query = await query.toObject()
-            delete query.pass
-            delete query.email
-            const token = jwt.sign(query, privetKey)
-            const options = {
-                expiresIn: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-                httpOnly: true
-            }
-            res.status(200).cookie("tkn", token, options).json({ response: "success" })
 
+
+// register route
+// Endpoint for user registration
+app.post('/register', async (req, res) => {
+    try {
+        // Extracting name, email, and password from request body
+        const { name, email, pass } = req.body;
+
+        // Checking if any required field is missing
+        if (!name || !email || !pass) {
+            res.status(402).json({
+                type: 'warning',
+                message: "All fields are required"
+            });
+        } else {
+            // Check if user already exists
+            const userExist = await user.findOne({ email });
+            if (userExist) {
+                res.send({
+                    type: 'warning',
+                    message: "User Already Exists"
+                });
+            } else {
+                // Encrypting password
+                const enPass = await bcrypt.hash(pass, 10);
+
+                // Saving user data in database
+                let query = await user.create({ name, email, pass: enPass });
+                query = await query.toObject();
+
+                // Removing sensitive data before sending response
+                delete query.pass;
+                delete query.email;
+
+                // Generate JWT token for authentication
+                const token = await jwtGenetator(query, privetKey);
+
+                // Configuring JWT token options
+                const options = {
+                    expiresIn: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                    httpOnly: true
+                };
+
+                // Sending JWT token as a cookie along with registration success message
+                res.status(200).cookie("tkn", token, options).json({
+                    'type': 'success',
+                    message: 'Registration successful!'
+                });
+            }
         }
+    } catch (error) {
+        // Handling errors
+        console.log(error);
+        let errorMessage = error.message;
+
+        // Parsing and formatting error messages
+        errorMessage = errorMessage.replaceAll('credit-users validation failed:', '');
+        errorMessage = errorMessage.replace(' name: ', '');
+        errorMessage = errorMessage.replace(' email: ', '');
+        errorMessage = errorMessage.replace(' pass: ', '');
+
+        // Sending error message as response
+        res.json({
+            type: 'error',
+            message: errorMessage
+        });
     }
-})
+});
+
 // login
 app.post('/login', async (req, res) => {
-    const { email, pass } = req.body
-    if (!email || !pass) {
-        res.status(402).json({ result: "All fiels are Requires" });
-    }
-    else {
+    try {
+        const { email, pass } = req.body
+        if (!email || !pass) {
+            return res.status(402).json({ result: "All fiels are Requires" });
+        }
+
+        // find is user exists
         let result = await user.findOne({ email: email })
         if (result) {
             //validate password
@@ -88,77 +149,263 @@ app.post('/login', async (req, res) => {
                 result = await result.toObject()
                 // delete result.name
                 delete result.pass
-                delete result.email;
+                delete result.email
+                delete result.__v
 
-                const token = jwt.sign(result, privetKey, {
+                const token = await jwt.sign(result, privetKey, {
                     expiresIn: "28d"
                 })
+
+                //  
                 const options = {
-                    expiresIn: new Date(Date.now() * 15 * 24 * 60 * 60 * 60 * 1000),
+                    expiresIn: new Date(Date.now() + 29 * 24 * 60 * 60 * 60 * 1000),
                     httpOnly: true
                 }
-                res.cookie("tkn", token, options).json({ response: "success", user: token })
+
+                return res.cookie("user", token, options).json(
+                    {
+                        type: "success", messsage: "Loggedin successfully 👍 !",
+                        user: token
+                    }
+                )
 
                 // res.send('login successfully !')
             }
             //invalid password
             else {
 
-                res.status(402).json({ response: "Invalid Password !" })
+                return res.status(402).json({
+                    type: "error",
+                    message: "Invalid Password !"
+                })
             }
         }
-        else {
-            res.status(402).json({ response: "User Does Not Exist" })
+
+        if (!result) {
+            return res.status(402).json({
+                type: 'error',
+                message: "User Does Not Exist"
+            })
         }
+
+
+    } catch (error) {
+        return res.json({
+            type: 'error',
+            message: 'internal server error !',
+            actulaErroAtLogin: error.message
+        })
     }
 })
+
+// to logout user
+app.get('/logout', authy, (req, res) => {
+    res.cookie.Clear("user");
+})
+
 //add clients 
+// Route to add a new client
 app.post('/addclient', authy, async (req, res) => {
-    //get all data
+    try {
+        // Extract necessary data from the request
+        const parentId = req.body.user._id; // Get the parent user's ID
+        const name = req.body.name; // Get the name of the new client
+        console.log("parentId=>", parentId, "name :=>", name);
 
-    const parentId = req.body.user._id
-    const name = req.body.name
+        // Check if required fields are provided
+        if (!parentId || !name) {
+            // If any required field is missing, send a warning response
+            return res.send({
+                type: 'warning',
+                message: "All fields are required !"
+            });
+        }
 
-    if (!parentId || !name) {
-        res.send({ response: "All fiels are required !" })
+        // Check if the client name exceeds the maximum length
+        if (name.length > 15) {
+            // If the name is too long, send an error response
+            return res.json({
+                type: 'error',
+                message: "Name is too long. Maximum length is 15 characters."
+            });
+        }
+
+        // Create a new client with provided data
+        const result = await clients.create({ parentId, name });
+        console.log("add client result =>", result);
+
+        // Check if the client was successfully added to the database
+        if (result.id) {
+            // If the client was added successfully, send a success response
+            return res.status(200).json({
+                type: "success",
+                message: `'${name}' added successfully.`
+            });
+        }
+
+        // If adding the client failed for some reason, send an error response
+        return res.status(402).json({
+            type: 'error',
+            message: "Something went wrong while adding the client."
+        });
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error("Error at /addClient", error.message);
+        res.json({
+            type: 'error',
+            message: 'Internal server error occurred while adding the client.'
+        });
     }
-    else {
+});
 
-        const result = await clients.create({ parentId, name })
+// edit client name
+app.put("/editClient", authy, async (req, res) => {
 
-        result ? res.status(200).json({ response: "success" }) : res.status(402).json({ response: "Something went wrong !" })
+    try {
+        const { clientId, newName, currentName } = req.body
+        const { _id: parentId } = req.body.user
+
+
+        if (!currentName || !clientId || !newName) {
+            return res.json({
+                type: 'error',
+                message: "internal Server error !",
+
+            })
+        }
+
+
+        // console.log("Body =>", req.body)
+        // console.log("searching user with clientId and parentId ........")
+
+        // find user and update name 
+        const result = await clients.findOneAndUpdate(
+            {
+                $and: [
+                    { parentId: parentId },
+                    { _id: mongoose.Types.ObjectId(clientId) }]
+            }, { name: newName }
+        )
+
+        // console.log("DB result =>", result)
+        res.json({
+            type: 'success',
+            message: `Name '${currentName}' to '${newName}' updated successfully !`,
+        })
+    } catch (error) {
+        console.log(error.message)
+        return res.json({
+            type: 'error',
+            message: "internal Server error !",
+
+        })
+    }
+
+})
+
+
+// to delete client from database 
+app.delete('/deleteClient', authy, async (req, res) => {
+    try {
+        const { _id: parentId } = req.body.user
+        const { clientid: clientId } = req.headers
+
+
+        // if clientId or parentId not in request
+        if (!clientId || !parentId) {
+            console.log("missing client")
+            return res.json({
+                type: 'error',
+                message: "internal Server error !",
+
+            })
+        }
+
+
+        // delete client from the database
+        const deleteResult = await clients.deleteOne(
+
+            { parentId, _id: mongoose.Types.ObjectId(clientId) }
+
+        )
+
+
+        // if client deleted successfully
+        console.log("deleteResult=>>>", deleteResult)
+        if (deleteResult.deletedCount >= 1) {
+            return res.json({
+                type: "success",
+                message: "user deleted successfully"
+            })
+        }
+
+
+
+        // in case of client not deleted OR client not found
+        return res.json({
+            type: 'error',
+            message: "something went wrong !",
+
+        })
+
+
+
+    }
+
+    catch (error) {
+        console.log("ERROR=>>>", error.message)
+        return res.json({
+            type: 'error',
+            message: "internal Server error !",
+
+        })
 
     }
 
 })
 
 // search the user from dashboard search bar
-let hit = 0
+
 app.get('/search', authy, async (req, res) => {
 
-    hit++;
-    const parentId = req.body.user._id
-    const query = req.headers.query
+    try {
 
-    let result = await clients.aggregate([
-        { "$match": { name: { "$regex": query, $options: "i" } } },
-        {
-            "$project": {
-                "name": 1, "parentId": 1,
-                "totalAmount": {
-                    "$sum": "$transactions.amount"
-                },
+        const parentId = req.body.user._id
+        const query = req.headers.query
+
+        let result = await clients.aggregate([
+            { "$match": { name: { "$regex": query, $options: "i" } } },
+            {
+                "$project": {
+                    "name": 1, "parentId": 1,
+                    "totalAmount": {
+                        "$sum": "$transactions.amount"
+                    },
+                }
             }
+        ])
+
+        if (result.length > 0) {
+            res.json({
+                type: 'success',
+                responseData: result
+            })
         }
-    ])
+        else {
+            res.json({
+                type: 'warning',
+                message: "Not Found !"
+            })
+        }
 
-    if (result.length > 0) {
-        res.json({ response: result })
-    }
-    else {
-        res.json({ response: "Not Found !" })
-    }
 
+    } catch (error) {
+        res.json({
+            type: 'error',
+            message: 'internal server error !',
+            actulaErroAtLogin: error.message
+        })
+    }
 })
 
 app.get('/client/search', authy, async (req, res) => {
@@ -174,11 +421,12 @@ app.get('/client/search', authy, async (req, res) => {
         }
     )
 
-    res.json({ response: "hitted" })
+    // res.json({ type: "hitted" })
 })
 app.get('/clients', authy, async (req, res) => {
     const parentId = req.body.user._id
     // res.send(parentId)
+    console.log("parentId=>", parentId)
     if (parentId) {
 
         let result = await clients.aggregate([
@@ -193,26 +441,34 @@ app.get('/clients', authy, async (req, res) => {
 
                 }
             }
-        ])
+        ]);
+        // console.log("result =>", result)
 
-        if (result) { res.json({ type: 'successs', response: result }) }
+
+        if (result) { res.json({ type: 'successs', responseData: result }) }
         else {
-            res.json({ type: 'successs', response: "Not Found !" })
+            res.json({ type: 'successs', messsage: "Not Found !" })
         }
     }
     else {
-        res.json({ response: "Unautherised user" })
+        res.json({
+            type: 'error',
+            message: "Unautherised user"
+        })
     }
 })
 // to add new transactions in users page
 app.post('/client/newTransaction', authy, async (req, res) => {
     const parentId = req.body.user._id
     const _id = req.headers.uid
-
+    console.log("BODY+>", req.body)
     const { amount, date, dis, type } = req.body;
     if (!parentId || !_id || !amount || !date || !dis || !type) {
 
-        res.json({ response: "all fiels are required" })
+        return res.json({
+            type: 'warning',
+            message: "all fiels are required"
+        })
     }
     else {
         const result = await clients.updateOne({ _id, parentId }, {
@@ -227,52 +483,124 @@ app.post('/client/newTransaction', authy, async (req, res) => {
         })
 
         if (result.modifiedCount == 1) {
-            res.json({ response: "success" })
+            res.json({ type: "success", message: 'transaction saved !' })
 
         }
         else {
-            res.json({ response: "Someting went wrong ! " })
+            res.json({
+                type: 'error',
+                message: "Someting went wrong ! "
+            })
         }
     }
 })
 
-// ************************************************** 
+// **************************************************  to fetch all transactions with a user
 app.get('/client/transactions', authy, async (req, res) => {
 
     const _id = req.headers.uid
     const parentId = req.body.user._id;
     if (!_id || !parentId) {
-        res.json({ response: "invalid user" })
+        return res.json({
+            type: 'error',
+            message: "invalid user !"
+        })
     }
     else {
         const result = await clients.find({ _id, parentId })
-        res.json({ response: result })
+        console.log("result: ", result[0])
+        res.json({
+            type: 'success',
+            responseData: result[0]
+        })
     }
 })
 
 app.post('/shareRequest', authy, async (req, res) => {
-    const { clientId } = req.body;
-    const parentId = req.body.user._id;
-    const expireTime = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000)
-    const actulaTime = new Date(expireTime).toLocaleString('en-IN')
-    const shareToken = await jwtGenetator({ Tn: expireTime + parentId })
-    let result = await share.create({ clientId, shareToken, parentId, expireTime })
+    try {
+        /* --- Tasks ---
+        1. all fiels are required >
+        2. check if link is present with given parentId and expire time is greater than presentTime
+        3. if link is present then send respose with existing link
+        4. otherwise generate new link and send type
+        5.
+        */
+        console.log("req recived __")
+        const { clientId } = req.body;
 
-    // console.log(result)
-    res.json({
-        "message": 'share this link with your friend . this link will be invalid after 24 Hours ',
-        "link": `https://creditc.vercel.app/share/${result._id}`
-    })
+        const parentId = req.body.user._id;
+        const currentTime = Date.now()
+        const expireTime = Date.now() + 1 * 24 * 60 * 60 * 1000
+        //  ------- check if any of field is empty   -------------
+        if (!clientId || !clientId) {
+            res.json({
+                type: 'error',
+                message: 'All Fields Are Required !',
+
+            })
+            return;
+        }
+        const linkAlReadyExists = await share.findOne(
+            {
+                $expr: {
+                    $and: [
+                        { parentId }, { clientId }, { $gt: ['$expireTime', currentTime] }
+                    ]
+                }
+            })
+        console.log("LinkAlReadyExists", linkAlReadyExists)
+        if (linkAlReadyExists != null) {
+            res.json({
+                "link exists": 'true',
+                "message": 'share this link with your friend . this link will be invalid after 24 Hours ',
+                "link": `https://creditc.vercel.app/share/${linkAlReadyExists._id}`
+            })
+            return
+        }
+
+        console.log('EXISTS :', linkAlReadyExists);
+
+
+        let clientName = await clients.find({ parentId, _id: clientId });
+        clientName = clientName[0].name;
+
+        console.log('client Name  :', clientName)
+        const shareToken = await jwtGenetator({ Tn: expireTime + parentId })
+        let result = await share.create({ clientId, shareToken, parentId, expireTime: Number(expireTime), clientName })
+
+        // console.log(result)
+        res.json({
+            "message": 'share this link with your friend . this link will be invalid after 24 Hours ',
+            "link": `https://creditc.vercel.app/share/${result._id}`
+        })
+    } catch (error) {
+        res.send(
+            {
+                type: 'error',
+                message: 'something went wrong !',
+
+            }
+        )
+    }
 
 
 })
+
+
 
 /* Route : to show the data at client  */
 app.get('/share', async (req, res) => {
     try {
         const shareRequestId = req.headers.sharetoken;  /* id send by user */
+        console.log("req Recived share request !")
+        if (!shareRequestId) {
+            return res.json({
+                'type': 'error',
+                'message': 'invalid Link !',
 
 
+            })
+        }
         if (shareRequestId.length > 9) {
             const shareIdResult = await share.find({ _id: shareRequestId }) /*indicates the document id inwhich token info is seved */
 
@@ -286,7 +614,7 @@ app.get('/share', async (req, res) => {
                 //  if JWT is expired
                 if (tokenStatus === "jwt expired") {
                     res.json({
-                        'type': 'Error',
+                        'type': 'error',
                         'message': 'Expired link !',
 
 
@@ -320,21 +648,15 @@ app.get('/share', async (req, res) => {
                 const totalRemainingAmount = totalRecivedAmount - (totalSentAmount * -1)
                 console.table(transactions, changedTransactinFormat)
                 res.json({
-                    //   'shareTokenId': shareRequestId,
-                    //   'jsonToken': shareToken,
-                    //   'parentId': parentId,
-                    //   'clientId': clientId,
-                    // 'JWT tokenStatus': tokenStatus,
-                    // 'shareIdResult': shareIdResult
-                    // clientData,
-                    // parentData,
-                    // changedTransactinFormat,
-                    clientName: name,
-                    parentName,
-                    totalRecivedAmount,
-                    totalSentAmount,
-                    totalRemainingAmount,
-                    transactions
+                    type: 'success',
+                    responseData: {
+                        clientName: name,
+                        parentName,
+                        totalRecivedAmount,
+                        totalSentAmount,
+                        totalRemainingAmount,
+                        transactions
+                    }
 
                 })
                 return
@@ -344,7 +666,7 @@ app.get('/share', async (req, res) => {
                 res.json({
                     'type': 'Error',
                     'message': 'invalid Link ! 1',
-                    'shareIdResult': shareIdResult
+                    'responseData': shareIdResult
 
                 })
                 return
@@ -354,13 +676,13 @@ app.get('/share', async (req, res) => {
 
         }
         else {
-            res.json({
-                'type': 'Error',
+            return res.json({
+                'type': 'error',
                 'message': 'invalid Link !',
 
 
             })
-            return;
+
         }
         // console.log(req)
 
@@ -372,6 +694,139 @@ app.get('/share', async (req, res) => {
     }
 })
 
+app.get('/userProfile', authy, async (req, res) => {
+    const currentTime = Date.now()
+    // requirements
+    /*
+    1. username
+    2. associated cliets (all clients list)
+    3. all share links generated by usser
+
+    */
+    try {
+        const { name, _id } = req.body.user
+        console.log('req recived')
+        const allClients = await clients.find({ parentId: _id }, { transactions: 0, parentId: 0 });
+        let allSharedLinks = await share.find({ parentId: _id })
+        allSharedLinks = allSharedLinks.map(({ shareToken, clientName, expireTime, _id }) => {
+
+            // "_id": "65bfdd3b0c52bc39ca3debb8",
+            // "parentId": "65b89f6c0d8aae52d5a6feec",
+            // "clientId": "65bfd9f3c73ec07c2b907f8d",
+            // "shareToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUbiI6IjE3MDcxNTkyMjY4OTU2NWI4OWY2YzBkOGFhZTUyZDVhNmZlZWMiLCJpYXQiOjE3MDcwNzI4MjcsImV4cCI6MTcwNzE1OTIyN30.zI6uwM3gmlDwsNmuYqEmdUboBIknvLFpIzP3dcaxxiQ",
+            // "clientName": "test3",
+            // "expireTime": "1707159226895",
+            // "__v": 0
+            // if(currentTime>expireTime){
+            //     ret
+            // }
+            return {
+                linkId: _id,
+                isActive: currentTime < expireTime,
+                clientName, shareToken
+            }
+
+        })
+        res.json({
+            'status': 'ok',
+            'name': name,
+            'symbol': name.charAt(0),
+            'id': _id,
+            allClients,
+            allSharedLinks
+        })
+    } catch (error) {
+
+        res.json({
+            type: 'error',
+            'message': 'Internal Server Error  !'
+        })
+    }
+})
+
+app.delete('/deleteSharedLink', authy, async (req, res) => {
+    try {
+        const { shareid } = req.headers
+        console.log("Headers =>>>", req.headers)
+        //*********** */ to find out that provided id is valid object Id or not********
+        const isObjectId = mongoose.isValidObjectId(shareid)
+
+        // ***************** if  not a valid object id **********************
+        if (!isObjectId) {
+            res.status(502).json(
+                {
+                    type: 'error',
+                    message: 'Bad requiest !'
+                }
+
+            )
+            return
+        }
+        // *********  valid object id ******
+        else {
+            //**********  find the record in database by provided id  ************
+            const result = await share.findOne({ _id: shareid });
+
+            // ******** if record  not not found 
+            if (result == null) {
+                res.status(502).json(
+                    {
+                        type: 'error',
+                        message: 'invalid request !'
+                    }
+
+                )
+                return
+            }
+
+            // **************   record (share link) found *****
+            if (result.id === shareid) {
+
+                // delete record from database
+                const deleteResult = await share.deleteOne({ _id: shareid })
+
+                // if record deleted successfully 
+                if (deleteResult.deletedCount == 1) {
+                    res.json({
+                        type: 'success',
+                        message: 'link deleted successfully !'
+
+                    })
+                    return
+                }
+                // if record is not deleted or any error at database
+                else {
+                    res.status(500).json({
+                        type: 'error',
+                        message: 'something went wrong'
+
+                    })
+                    return
+                }
+                return
+            }
+
+        }
+
+
+
+    }
+    catch (error) {
+
+        res.status(500).json({
+            type: 'error',
+            message: 'internal server error !'
+        })
+    }
+
+})
+
+// app.('/changeUserName',authy,(req,res)=>{
+//    
+// })
+app.delete('/deleteAccount', authy, (req, res) => {
+
+})
 
 app.listen(port, (err) => {
     if (err) throw err;

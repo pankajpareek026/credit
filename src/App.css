@@ -8,11 +8,24 @@ body {
   background-color: #303134;
   font-family: sans-serif;
 }
-
+/* MUI CUSTOM CSS ---START */
+.MuiFormLabel-root.Mui-focused {
+  color: white !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
+/* .MuiCircularProgress-colorPrimary {
+  color: rgb(20, 241, 149) !important;
+} */
+/* MUI CUSTOM CSS ---END */
 :root {
+  --profile-card-bg:#303134;
+  --profile-container-bg:#1E1E1E;
   --dashboard_bg: #303134;
   --second-dark: #1c1b1b;
   --card: #24262b;
+  --black:#000000;
   --bg-c: #415c71;
   --p: rgb(255, 0, 111);
   --main: rgb(20, 241, 149);
@@ -27,7 +40,8 @@ body {
 dialog {
 
   background-color: var(--card);
-  border-radius: 5px;
+  border: none;
+  border-radius: 25px;
   height: max-content;
   padding-bottom: 9px;
   width: 350px;
@@ -42,15 +56,20 @@ dialog {
 
 }
 
+
 dialog>.title {
+  margin-top: 10px;
   text-align: center;
   padding: 5px;
-  border-bottom: 1px solid white;
+  width: 94%;
+  border-radius: 25px;
+  margin-left: 2%;
+  /* border-bottom: 1px solid white; */
   color: var(--main);
   font-family: sans-serif;
   font-weight: 500;
   font-size: large;
-  background-color: black;
+  /* background-color: black; */
 }
 
 dialog>.text {
@@ -101,11 +120,11 @@ dialog>.link-container>.copy-btn:hover {
 
 dialog>.close-icon {
   /* background-color: orange; */
-  color:white;
+  color: white;
   font-weight: 750;
   cursor: pointer;
   margin-top: 5px;
-  background-color:gray;
+  background-color: gray;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
@@ -514,7 +533,7 @@ sub {
   /* background-color: var(--main); */
   font-weight: bold;
   font-size: large;
-  color: var(--main);
+  color: var(--main-back);
   font-family: sans-serif;
   font-weight: 700;
   border: 2px solid var(--main);
@@ -526,7 +545,7 @@ sub {
   outline: none;
   border: 2px solid var(--main);
   background-color: transparent;
-  color: var(--main);
+  color: var(--main-back);
 }
 
 .log-btn {
@@ -593,6 +612,7 @@ sub {
 .left {
   background-color: #303134;
   margin-left: 7px;
+  padding: 9px;
 }
 
 .left a {
@@ -625,15 +645,13 @@ sub {
 
 /* logout button in dashboard */
 .d-logout {
-  margin-top: 40vh;
-  color: gray;
+  margin-top: 49vh;
+  color: white;
   cursor: pointer;
   font-size: xx-large;
 }
 
-.dashboard .d-logout:hover {
-  color: red;
-}
+
 
 /* add user button in dashboard */
 .d-adduser {
@@ -817,26 +835,197 @@ svg {
 }
 
 .dashboard .left .d-logout {
-  margin-top: 25rem;
+  margin-top: 23rem;
   box-shadow: none;
   font-size: xx-large;
-  color: wheat;
+ 
+  color: red;
 }
-
-.transactions .left .d-logout {
-  margin-top: 20rem;
-  box-shadow: none;
-  font-size: xx-large;
-  color: wheat;
-}
-
-.dashboard .left .d-logout:hover {
+.d-logout:hover{
   color: red;
 }
 
+.transactions .left .d-logout {
+  margin-top: 25rem;
+  box-shadow: none;
+  font-size: xx-large;
+  color: white;
+}
+
+d-logout:hover {
+  color: red;
+}
+/* profilr css ----start */
+.profile {
+  padding: 0;
+  margin: 0;
+background-color:var(--dashboard_bg) !important;
+width: 100%;
+}
+
+.profile >.profile-right-sec{
+  width: 98%;
+  display: flex;
+  /* flex:1; */
+  flex-wrap: wrap;
+  margin:  0px ;
+  background-color: var(--black);
+}
+.profile> .profile-right-sec> .left-container,
+.profile> .profile-right-sec> .right-container{
+  display: flex;
+  width: 49%;
+  flex-direction: column;
+  background-color: var(--black);
+  height: auto;
+}
+.profile >.profile-right-sec >.left-container >.left-upper{
+  display: grid;
+  flex-direction:column;
+  gap: 2px;
+  background-color:var(--profile-container-bg);
+  width: 98%;
+  margin: 2%;
+  height: max-content;
+  box-shadow: var(--card);
+  border-radius: 7px;
+  padding: 12px 5px;
+
+}
+.profile >.profile-right-sec >.left-container >.left-upper>.profile-pic{
+  margin: auto;
+  margin-top:10px;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  padding: 10px;
+  font-size: xxx-large;
+  color: var(--main);
+  font-family:sans-serif;
+
+  background-color: var(--black);
+
+
+}
+.profile >.profile-right-sec >.left-container >.left-upper>.profile-name{
+  padding-top: 17px;
+  text-align: center;
+  font-size: large;
+}
+hr{
+  margin-bottom: 7px;
+  margin-top: 7px;
+}
+.left-lower>.share-link-wrappwer{
+  padding: 9px 5px;
+  background-color: #1E1E1E;
+  width: 98%;
+  margin: 2%;
+  margin-top: 0;
+  height:370px;
+  box-shadow: var(--card);
+  border-radius: 7px;
+  
+}
+.user-wrapper>p ,.left-lower>.share-link-wrappwer>p{
+  /* text-align: center; */
+  font-weight: 650;
+  font-size: large;
+  padding: 5px 0px;
+  margin-left: 5px;
+}
+/* container which contains all shared link cards */
+.users-container,.left-lower>.share-link-wrappwer>.share-link-container{
+  overflow-y: scroll;
+  height: 88.5%;
+  
+  
+  /* background-color: red; */
+}
+.share-link-card{
+  display: flex;
+  width: 96%;
+  height: 35px;
+  justify-content: space-around;
+  padding: 7px 3px;
+  background-color: var(--profile-card-bg);
+  margin:auto ;
+  margin-top: 5px;
+  border-radius: 7px;
+}
+.profile >.profile-right-sec >.left-container>.left-lower >.share-link-container,svg, p ,span{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+svg{
+  cursor: pointer;
+}
+svg:hover{
+  color: var(--main);
+}
+
+.active-link{
+  height: 9px;
+  width: 9px;
+  background: var(--main);
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 100px;
+  cursor: pointer;
+}
+.expired-link{
+  height: 9px;
+  width: 9px;
+  background: red;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.profile >.profile-right-sec >.right-container{
+  margin-left: 2%;
+  height: 100%;
+  border-radius: 7px;
+  /* background: red; */
+}
+
+.profile >.profile-right-sec >.right-container>.right-upper,.right-lower{
+
+  margin-top:2%;
+background-color: var(--profile-container-bg);
+width: 95%;
+height: 370px;
+border-radius: 7px;
+/* background: orange; */
+padding: 9px;
+
+}
+
+.profile >.profile-right-sec >.right-container>.right-upper>.user-wrapper,
+.profile >.profile-right-sec >.right-container>.right-lower>.user-wrapper{
+  background-color: var(--profile-container-bg);
+  height: 99.8%;
+  
+}
+
+.profile >.profile-right-sec >.right-container>.right-upper>.user-wrapper>.users-container,
+.profile >.profile-right-sec >.right-container>.right-lower>.user-wrapper>.users-container{
+  overflow-y: scroll;
+  height: 88.5%;
+
+}
+/* profilr css ----end */
 
 @media (max-width:1200px) {
-
+  .dashboard .left ,.profile .left .d-logout,
+  .transactions .left .d-logout {
+    margin-top: 0;
+    box-shadow: none;
+    font-size: xx-large;
+    color: white;
+  }
   .d-overview,
   .d-chart {
     height: max-content;
@@ -929,8 +1118,6 @@ canvas {
   margin-top: 2.25rem;
   height: 55%;
   overflow: scroll;
-
-
 }
 
 .d-clients-container table {
@@ -1738,6 +1925,9 @@ canvas {
   color: var(--main);
   border-radius: 10px;
 }
+.profile-container{
+  display: flex;
+}
 
 @media (max-width:590px) {
 
@@ -1745,7 +1935,9 @@ canvas {
   body {
     overflow-x: hidden;
   }
-
+  .d-logout:hover {
+    color: red;
+  }
   /* body {
   position: relative;
 } */
@@ -1759,7 +1951,48 @@ canvas {
     width: 100%;
 
   }
-
+  .profile{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    /* padding-bottom: 25px; */
+    /* padding-top: 5px; */
+  }
+  .profile>.profile-right-sec{
+    width: 100vw;
+    height: auto;
+    overflow-y: scroll;
+    /* margin-bottom: 70px; */
+  } 
+  .profile> .profile-right-sec> .left-container,
+.profile> .profile-right-sec> .right-container{
+  display: grid;
+  width: 100%;
+  gap:5px;
+  flex-direction: column;
+  background-color: var(--black);
+  margin-bottom:50px;
+}
+.profile> .profile-right-sec> .right-container>.right-lower>.user-wrapper{
+  padding-bottom:9px;
+}
+.profile> .profile-right-sec> .right-container{
+  margin-bottom:70px ;
+  
+}
+.share-link-card{
+  padding: 0;
+  /* margin: auto; */
+  padding-top: 7px;
+  padding-bottom: 7px;
+  height: 35px;
+}
+.profile >.profile-right-sec >.left-container >.left-upper{
+  width: 93.2%;
+}
+.profile >.profile-right-sec >.left-container >.left-lower,.profile >.profile-right-sec >.right-container >.right-upper{
+  width: 95%;
+}
   .right {
     margin: 0;
     width: 100vw;
@@ -1786,7 +2019,7 @@ canvas {
     display: none;
   } */
 
-  .dashboard .left,
+  .dashboard .left,.profile .left,
   .transactions .left {
     position: fixed;
     bottom: 0px;
@@ -1803,7 +2036,7 @@ canvas {
     font-size: x-large;
   }
 
-  .dashboard .left {
+  .dashboard .left, .profile .left {
     cursor: pointer;
 
   }
@@ -1817,7 +2050,7 @@ canvas {
   }
 
   /* for logout button  */
-  .dashboard .left .d-logout,
+  .dashboard .left ,.profile .left .d-logout,
   .transactions .left .d-logout {
     margin-top: 0;
     box-shadow: none;
@@ -1940,7 +2173,9 @@ canvas {
   .d-balance p {
     color: red;
   }
-
+svg{
+  color: white;
+}
 
   /* table --start */
   .d-clients-container {
@@ -2049,7 +2284,7 @@ canvas {
     width: 100%;
     overflow-y: hidden;
     margin: 0;
-    height: 100vh;
+    height: 100%;
     border: none;
     background-color: #303134;
     border-radius: 0;
@@ -2094,8 +2329,9 @@ canvas {
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
-    position: fixed;
-    top: 13.2%;
+    position: sticky;
+    top: 0%;
+    left: 5px;
   }
 
   .t-container1 {
@@ -2110,14 +2346,13 @@ canvas {
     display: none;
   }
 
-  /* .t-right .t-container2 .Transaction-comp{
-  background-color: red;
-} */
+
   .t-container2 {
-    height: 75.2vh;
+    height: 67.2vh;
     border-radius: 0px;
     border: none;
     margin-bottom: 5px;
+    
   }
 
 
@@ -2240,4 +2475,12 @@ canvas {
     box-shadow: var(--shadow);
     background-color: rgb(9, 16, 17);
   }
+
+.profile{
+  width: 100%;
+  display: grid;
+  gap: 5px;
 }
+}
+
+  

@@ -1,7 +1,7 @@
 import React from "react";
 import "../loading.css";
 import { RingLoader } from "react-spinners";
-const Loading = ({ margin }) => {
+export default function Loading({ margin }) {
   return (
     <div
       style={
@@ -27,6 +27,4 @@ const Loading = ({ margin }) => {
       </div>
     </div>
   );
-};
-
-export default Loading;
+}

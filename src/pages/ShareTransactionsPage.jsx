@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useId } from "react";
+import { ToastContainer } from 'react-toastify';
 import InfoIcon from "@mui/icons-material/Info";
 import { useNavigate, useParams } from "react-router-dom";
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import Logo from "./Logo";
-import ShareTransactionCard from "./ShareTransactinCard";
+import Logo from "../components/Logo";
+import ShareTransactionCard from "../components/ShareTransactinCard";
 import { Link } from "react-router-dom";
 import api from "../api_source";
+import Warning from "../components/Warning";
 
 const ShareTransactions = () => {
   const infoIconStyle = {
@@ -27,27 +29,36 @@ const ShareTransactions = () => {
   const { source } = useParams();
 
   useEffect(() => {
-    fetch(`${api}/share`, {
-      method: "get",
-      headers: {
-        "content-type": "application/json",
-        shareToken: source.toString(),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        
+    console.log("Using =>>")
+    try {
+      fetch(`${api}/share`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          shareToken: source.toString(),
+        },
+        credentials: "include"
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.type != "success") {
+            Warning(data.message)
+          }
+          console.log("data=>>", data);
 
-        const besicData = {
-          clientName: data.clientName,
-          parentName: data.parentName,
-          totalRecivedAmount: data.totalRecivedAmount,
-          totalSentAmount: data.totalSentAmount,
-          totalRemainingAmount: data.totalRemainingAmount,
-        };
-        setAPIData(besicData);
-        setTransactions(data.transactions);
-      });
+          const besicData = {
+            clientName: data.clientName,
+            parentName: data.parentName,
+            totalRecivedAmount: data.totalRecivedAmount,
+            totalSentAmount: data.totalSentAmount,
+            totalRemainingAmount: data.totalRemainingAmount,
+          };
+          setAPIData(besicData);
+          setTransactions(data.transactions);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
   return (
     <>
@@ -97,19 +108,21 @@ const ShareTransactions = () => {
         <div className="transaction-card-container">
           {transactions
             ? transactions?.map((transaction) => {
-                return (
-                  <ShareTransactionCard
-                    key={ID}
-                    type={transaction.type}
-                    amount={transaction.amount}
-                    date={new Date(transaction.date).toLocaleString('en-IN')}
-                    message={transaction.dis}
-                  />
-                );
-              })
+              return (
+                <ShareTransactionCard
+                  key={ID}
+                  type={transaction.type}
+                  amount={transaction.amount}
+                  date={new Date(transaction.date).toLocaleString('en-IN')}
+                  message={transaction.dis}
+                />
+              );
+            })
             : ""}
         </div>
       </div>
+      <ToastContainer />
+
     </>
   );
 };

@@ -1,17 +1,37 @@
 // import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './components/Home';
+import Home from './pages/HomePage';
 import Navbar from './components/Navbar';
-import Login from './components/Login';
-import Register from './components/Register';
+import Login from './pages/LoginPage';
+import Register from './pages/RegisterPage';
 import Footer from './components/Footer';
-import Dashboard from './components/Dashboard';
-import Transactions from './components/Transactions';
+import Dashboard from './pages/DashboardPage';
+import Transactions from './pages/TransactionsPage';
 import Protected from './components/Protected';
 import Private from './components/Private';
 import Detail from './components/Detail';
-import ShareTransactions from './components/ShareTransactions';
+import ShareTransactions from './pages/ShareTransactionsPage';
+import UserProfile from './pages/UserProfilePage';
+
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#757ce8',
+      main: '#3f50b5',
+      dark: '#002884',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+  },
+});
 
 
 function App() {
@@ -33,27 +53,31 @@ function App() {
   //     return false;
   // };
   return (
-    <div className="app">
+    <theme>
+      <div className="app">
 
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/share/:source' element={<ShareTransactions />} />
-          <Route element={<Private />}>
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-          </Route>
-          <Route element={<Protected />}>
-            <Route path='/dashboard' element={<Dashboard />} />
-            <Route path='/detail/:id' element={<Transactions />} />
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/share/:source' element={<ShareTransactions />} />
+            <Route element={<Private />}>
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+            </Route>
+            <Route element={<Protected />}>
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/detail/:id' element={<Transactions />} />
 
-            <Route path='/user' element={<><h1 style={{ color: "white", fontSize: "medium", textAlign: "center", marginTop: "10rem" }}>Under Constraction </h1> <a href='/' style={{ color: "rgb(20, 241, 149)", marginLeft: "50%", textAlign: "center", marginTop: "50rem", fontSize: "15px" }}>/Home</a></>} />
-          </Route>
-          <Route path="/" element={<h1> Error 404 Page not Found </h1>} />
-        </Routes>
+              {/* <Route path='/me' element={<UserProfile />} /> */}
+            </Route>
+            <Route path='/me' element={<UserProfile />} />
 
-      </BrowserRouter>
-    </div>
+            <Route path="/*" element={<h1> Error 404 Page not Found </h1>} />
+          </Routes>
+
+        </BrowserRouter>
+      </div>
+    </theme>
   );
 }
 

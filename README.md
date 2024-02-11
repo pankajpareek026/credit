@@ -1,70 +1,105 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Credit                                                                                  
 
-## Available Scripts
+This is a powerful and user-friendly web-based application designed to effortlessly track transactions between friends and families, while also simplifying personal finance management. With its intuitive interface, interactive features.
 
-In the project directory, you can run:
+[Live](https://creditc.vercel.app/)
 
-### `npm start`
+# test user
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+ email : credit@gmail.com  
+ password : 1234#@New
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+## Run Locally
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Clone the project
 
-### `npm run build`
+```bash
+  git clone git@github.com:pankajpareek026/credit.git
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Go to the project directory
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+  cd credit
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Install dependencies
+### 1. install dependencies for Fronted
+```bash
+npm install
+```
+### 2. install dependencies for Backend
 
-### `npm run eject`
+```bash
+  cd api
+  npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Start both  servers (react & node)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+  npm run start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+  //open new tab and start backend server
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+  cd api
+  npm run start
+```
 
-## Learn More
+# Change Database configration at api/db/config.js
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```javascript
+const mongoose = require('mongoose')
+const url = <your connection string>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+const connectionParams = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}
+mongoose.connect(url, connectionParams).then((e) => {
+    // console.log(e)
+    console.log("DB > connected")
+}).catch((ee) => {
+    console.info("ERR: ", ee)
+}) 
+```
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# Screenshots
+**Home page**
 
-### Analyzing the Bundle Size
+![App Screenshot](https://i.ibb.co/rQqVY0k/home.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+**DashBoard**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+![DashBoard](https://i.ibb.co/Vx50X2x/dashboard.png)
 
-### Advanced Configuration
+**Add Transaction**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+![Add Transaction](https://i.ibb.co/wMJ7v9H/Add-transaction-Page.png)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+**Transactions Detail**
 
-### `npm run build` fails to minify
+![Transaction Detail](https://i.ibb.co/YysqfQc/detail-page.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+**Share Transaction Detils Page**
+
+![Transaction Detail](https://i.ibb.co/7pNDg8D/shared-t.png)
+
+
+
+
+
+## Tech Stack
+
+**Client:** ReactJS  
+**Server:** NodeJS, ExpressJS   
+**Database:** MongoDB 
+
+
+

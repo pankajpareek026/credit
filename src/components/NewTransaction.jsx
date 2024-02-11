@@ -21,13 +21,14 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
       headers: { 'content-type': 'application/json', uid: uid, token: localStorage.getItem('user') }
     })
     result = await result.json();
-    if (result.response == "success") {
-      Success(result.response)
+    console.log("result=>", result);
+    if (result.type == "success") {
+      Success(result.message)
       Setshow(now => !now)
       refresh()
     }
     else {
-      Warning(result.response)
+      Warning(result.message)
     }
   }
   // to Handle the Api Operation at "In" Section OR inser data
@@ -64,7 +65,7 @@ const NewTransaction = ({ uid, refresh, Setshow, Thandle, show }) => {
             <div className='form' >
               <h1>IN</h1>
               <input type="number" defaultValue={amount} onChange={(e) => Setamount(e.target.value)} placeholder='Amount' required />
-              <input type="datetime-local" defaultValue={date} onChange={(e) => Setdate(e.target.value)} placeholder='date' required />
+              <input type="datetime-local" onChange={(e) => Setdate(e.target.value)} onSelect={(e) => Setdate(e.target.value)} placeholder='date' required />
               <input type="text" defaultValue={disc} onChange={(e) => Setdisc(e.target.value)} placeholder='Comment' required />
               <button onClick={(e) => handleIn(e)}>IN</button>
             </div>

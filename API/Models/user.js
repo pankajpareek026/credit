@@ -1,18 +1,26 @@
 const mongoose = require('mongoose')
-const userSchema = mongoose.Schema({
-    name:{
-        type:String,
-        default:null
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Name is required !'],
+        minLength: [5, 'Too short Name !'],
+        maxLength: [15, 'Too long Name !']
+
     },
-    email:{
-        type:String,
-        unique: true
+    email: {
+        type: String,
+        unique: true,
+        required: [true, 'Email is required !']
     },
-    pass: String,
+    pass: {
+        type: String,
+        require: [true, 'Password is required !'],
+        min: [8, 'too short password !']
+    },
     //jwt token
-    token:{
-        type:String,
-        default:null
+    token: {
+        type: String,
+        default: null
     }
 })
-module.exports = mongoose.model('credit-users', userSchema)
+module.exports = new mongoose.model('credit-users', userSchema)

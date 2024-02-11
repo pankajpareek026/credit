@@ -6,7 +6,7 @@
 width: 100%;
 font-family: 'Hind', sans-serif;
 /* background: url('../images/side-design.svg')  no-repeat ; */
-background: url('../images/gif.gif')  no-repeat ;
+background: url('./images/gif.gif')  no-repeat ;
 background-size: cover;
 height: auto;
 overflow: scroll;
