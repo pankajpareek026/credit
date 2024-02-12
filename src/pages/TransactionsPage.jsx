@@ -30,6 +30,8 @@ const Transactions = () => {
   const [shareData, setShareData] = useState();
   const [isOpened, setIsOpened] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
+
+  let currentBalance = 0
   const Thandle = () => {
     Setshow((position) => !position);
   };
@@ -41,25 +43,29 @@ const Transactions = () => {
 
   const auth = localStorage.getItem("user");
   const getTransactions = async () => {
-    let result = await fetch(`${api}/client/transactions`, {
-      headers: {
-        uid: params.id,
-        token: auth,
-      },
-      credentials: "include"
-    });
-    result = await result.json();
-    console.log("result =>", result);
-    const { name, transactions } = result.type == "success" ? result.responseData : { name: "", transactions: [] }
+    try {
+      let result = await fetch(`${api}/client/transactions`, {
+        headers: {
+          uid: params.id,
+          token: auth,
+        },
+        credentials: "include"
+      });
+      result = await result.json();
 
-    Setname(name); /* Set the name of user at top and in header section in transactions component */
+      const { name, transactions } = result.type == "success" ? result.responseData : { name: "", transactions: [] }
 
-    SetTransactions(transactions); /* All transaction related to the user  */
+      Setname(name); /* Set the name of user at top and in header section in transactions component */
 
-    transactions?.map((item, index) => {
-      return (balance += item?.amount);
-    });
-    Setbalance(balance);
+      SetTransactions(transactions); /* All transaction related to the user  */
+
+      transactions?.map((item, index) => {
+        return (balance += item?.amount);
+      });
+      Setbalance(balance);
+    } catch (error) {
+      Error(error.message)
+    }
   };
 
   document.title = `Credit | Transaction / ${name}`;
@@ -214,16 +220,21 @@ const Transactions = () => {
             transactions?.map((item, index) => {
               let newDate = new Date(item.date);
               newDate = newDate.toLocaleString("en-IN");
+              currentBalance += item.amount;
               return (
                 <TransactionComp
+
                   key={index}
                   show={show}
                   amount={item.amount}
+                  currentBalance={currentBalance}
+                  previusBalance={currentBalance - item.amount}
                   dis={item.dis}
                   type={item.type}
                   date={newDate}
                 />
               );
+
             })
           }
         </div>

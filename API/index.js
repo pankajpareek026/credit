@@ -21,18 +21,26 @@ let i = 0
 app.use(express.json())
 app.use(cookieParser());
 
-app.use(cors({
-    origin: 'https://creditc.vercel.app/', // Adjust the origin to match your React app's URL
-    credentials: true
-}))
-
+// app.use(cors({
+//     origin: 'http://localhost:3000', // Adjust the origin to match your React app's URL
+//     credentials: true
+// }))
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept,token,clietnId,clientName,uid');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+})
 //
 const port = process.env.port || 2205
 
 async function authy(req, res, next) {
     try {
+        var origin = req.get('origin');
+        console.log("origin=>>", origin)
         const token = req.headers.token;
-        console.log("token=>>>>", token);
+        
         // Check if token is missing or undefined
         if (!token || token === "undefined") {
             // Respond with session expired error
@@ -210,8 +218,7 @@ app.post('/addclient', authy, async (req, res) => {
         // Extract necessary data from the request
         const parentId = req.body.user._id; // Get the parent user's ID
         const name = req.body.name; // Get the name of the new client
-        console.log("parentId=>", parentId, "name :=>", name);
-
+       
         // Check if required fields are provided
         if (!parentId || !name) {
             // If any required field is missing, send a warning response
@@ -232,8 +239,7 @@ app.post('/addclient', authy, async (req, res) => {
 
         // Create a new client with provided data
         const result = await clients.create({ parentId, name });
-        console.log("add client result =>", result);
-
+        
         // Check if the client was successfully added to the database
         if (result.id) {
             // If the client was added successfully, send a success response
@@ -331,7 +337,6 @@ app.delete('/deleteClient', authy, async (req, res) => {
 
 
         // if client deleted successfully
-        console.log("deleteResult=>>>", deleteResult)
         if (deleteResult.deletedCount >= 1) {
             return res.json({
                 type: "success",
@@ -426,7 +431,7 @@ app.get('/client/search', authy, async (req, res) => {
 app.get('/clients', authy, async (req, res) => {
     const parentId = req.body.user._id
     // res.send(parentId)
-    console.log("parentId=>", parentId)
+    
     if (parentId) {
 
         let result = await clients.aggregate([
@@ -461,7 +466,7 @@ app.get('/clients', authy, async (req, res) => {
 app.post('/client/newTransaction', authy, async (req, res) => {
     const parentId = req.body.user._id
     const _id = req.headers.uid
-    console.log("BODY+>", req.body)
+   
     const { amount, date, dis, type } = req.body;
     if (!parentId || !_id || !amount || !date || !dis || !type) {
 
@@ -508,7 +513,7 @@ app.get('/client/transactions', authy, async (req, res) => {
     }
     else {
         const result = await clients.find({ _id, parentId })
-        console.log("result: ", result[0])
+       
         res.json({
             type: 'success',
             responseData: result[0]
@@ -525,7 +530,7 @@ app.post('/shareRequest', authy, async (req, res) => {
         4. otherwise generate new link and send type
         5.
         */
-        console.log("req recived __")
+        
         const { clientId } = req.body;
 
         const parentId = req.body.user._id;
@@ -548,7 +553,7 @@ app.post('/shareRequest', authy, async (req, res) => {
                     ]
                 }
             })
-        console.log("LinkAlReadyExists", linkAlReadyExists)
+       
         if (linkAlReadyExists != null) {
             res.json({
                 "link exists": 'true',
@@ -558,13 +563,13 @@ app.post('/shareRequest', authy, async (req, res) => {
             return
         }
 
-        console.log('EXISTS :', linkAlReadyExists);
+        
 
 
         let clientName = await clients.find({ parentId, _id: clientId });
         clientName = clientName[0].name;
 
-        console.log('client Name  :', clientName)
+        
         const shareToken = await jwtGenetator({ Tn: expireTime + parentId })
         let result = await share.create({ clientId, shareToken, parentId, expireTime: Number(expireTime), clientName })
 
@@ -592,7 +597,7 @@ app.post('/shareRequest', authy, async (req, res) => {
 app.get('/share', async (req, res) => {
     try {
         const shareRequestId = req.headers.sharetoken;  /* id send by user */
-        console.log("req Recived share request !")
+     
         if (!shareRequestId) {
             return res.json({
                 'type': 'error',
@@ -646,7 +651,7 @@ app.get('/share', async (req, res) => {
                     console.log(data.type)
                 })
                 const totalRemainingAmount = totalRecivedAmount - (totalSentAmount * -1)
-                console.table(transactions, changedTransactinFormat)
+              
                 res.json({
                     type: 'success',
                     responseData: {
@@ -709,17 +714,6 @@ app.get('/userProfile', authy, async (req, res) => {
         const allClients = await clients.find({ parentId: _id }, { transactions: 0, parentId: 0 });
         let allSharedLinks = await share.find({ parentId: _id })
         allSharedLinks = allSharedLinks.map(({ shareToken, clientName, expireTime, _id }) => {
-
-            // "_id": "65bfdd3b0c52bc39ca3debb8",
-            // "parentId": "65b89f6c0d8aae52d5a6feec",
-            // "clientId": "65bfd9f3c73ec07c2b907f8d",
-            // "shareToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUbiI6IjE3MDcxNTkyMjY4OTU2NWI4OWY2YzBkOGFhZTUyZDVhNmZlZWMiLCJpYXQiOjE3MDcwNzI4MjcsImV4cCI6MTcwNzE1OTIyN30.zI6uwM3gmlDwsNmuYqEmdUboBIknvLFpIzP3dcaxxiQ",
-            // "clientName": "test3",
-            // "expireTime": "1707159226895",
-            // "__v": 0
-            // if(currentTime>expireTime){
-            //     ret
-            // }
             return {
                 linkId: _id,
                 isActive: currentTime < expireTime,

@@ -19,8 +19,7 @@ const AdvanceNav = ({ refresh, isDashboard = false, isAddUser }) => {
   const redirect = useNavigate()
   const location = useLocation()
   const path = location.pathname
-  console.log("locatiion =..>>", location)
-  console.log("locatiion PATH =..>>", path)
+  
   const activeColor = "rgb(20, 241, 149)"
   const logout = () => {
     // localStorage.clear()

@@ -140,7 +140,7 @@ const textStyle = {
   width: "50%"
 }
 
-const CustomModal = ({ isOpen, handleClose, amount, date, dis, type }) => {
+const CustomModal = ({ isOpen, handleClose, amount, date, dis, type, currentBalance, previusBalance }) => {
   const formattedDate = new Date(date).toLocaleString('en-IN');
 
   return (
@@ -165,21 +165,31 @@ const CustomModal = ({ isOpen, handleClose, amount, date, dis, type }) => {
       <hr />
       <DialogContent>
         <Stack sx={{ width: "98%", marginLeft: "auto", marginRight: "auto" }}>
+
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <strong color='white'>Amount :</strong> <Typography noWrap color={"white"}> ₹ {amount}</Typography>
           </Box>
-
+<hr/>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-
+            <strong color='white'>last balance :</strong> <Typography noWrap color={"white"}> ₹ {previusBalance}</Typography>
+          </Box>
+          <hr/>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <strong color='white'>current balance :</strong> <Typography noWrap color={"white"}> ₹ {currentBalance}</Typography>
+          </Box>
+          <hr/>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <strong color='white'>Date : </strong> <Typography color={"white"}> {formattedDate}</Typography>
           </Box>
+          <hr/>
           <Box sx={{ width: "99%", display: "flex", overflow: "hiden", justifyContent: "space-between" }}>
             <strong color='white'>Description : </strong> <Typography noWrap style={textStyle}> {dis} sdfshfkskdfkjsdhfsd</Typography>
           </Box>
+          <hr/>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <strong color='white'>Type : </strong> <Typography color={"white"}>{type}</Typography>
           </Box>
-
+          <hr/>
         </Stack>
       </DialogContent>
 
@@ -196,7 +206,7 @@ const CustomModal = ({ isOpen, handleClose, amount, date, dis, type }) => {
 
 
 
-const TransactionComp = ({ type, amount, date, dis }) => {
+const TransactionComp = ({ type, amount, date, dis, previusBalance, currentBalance }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showDetails = () => {
@@ -216,6 +226,8 @@ const TransactionComp = ({ type, amount, date, dis }) => {
         date={date}
         dis={dis}
         type={type}
+        previusBalance={previusBalance}
+        currentBalance={currentBalance}
       />
       <div onClick={showDetails} className={`Transaction-comp ${type}`}>
         <div className="tc-amt">₹{amount}</div>

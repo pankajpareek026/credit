@@ -530,7 +530,7 @@ sub {
   width: 50%;
   border-radius: 10px;
   cursor: pointer;
-  /* background-color: var(--main); */
+  background-color: var(--main);
   font-weight: bold;
   font-size: large;
   color: var(--main-back);
@@ -544,7 +544,7 @@ sub {
   margin-top: 0px;
   outline: none;
   border: 2px solid var(--main);
-  background-color: transparent;
+  background-color: var(--main);
   color: var(--main-back);
 }
 
@@ -645,7 +645,7 @@ sub {
 
 /* logout button in dashboard */
 .d-logout {
-  margin-top: 49vh;
+  margin-top: 25vh;
   color: white;
   cursor: pointer;
   font-size: xx-large;
@@ -954,10 +954,10 @@ hr{
   margin-top: 5px;
   border-radius: 7px;
 }
-.profile >.profile-right-sec >.left-container>.left-lower >.share-link-container,svg, p ,span{
+/* .profile >.profile-right-sec >.left-container>.left-lower >.share-link-container,svg, p ,span{
   margin-top: auto;
   margin-bottom: auto;
-}
+} */
 svg{
   cursor: pointer;
 }
@@ -2029,7 +2029,7 @@ canvas {
     width: 100%;
     margin-left: 0%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     flex-direction: row;
     height: 45px;
     background-color: rgb(13, 13, 13);
@@ -2407,12 +2407,13 @@ svg{
     margin-top: 0px;
     outline: none;
     background-color: var(--main);
+    color: black;
   }
 
   .log-btn {
     border: 2px solid var(--main);
-    background-color: transparent;
-    color: var(--main);
+    background-color: var(--main);
+    color: white;
     border: none;
     /* background-color: var(--main); */
   }
