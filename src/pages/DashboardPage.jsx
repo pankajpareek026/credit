@@ -9,6 +9,8 @@ import Warning from "../components/Warning";
 import AddUser from "../components/AddUser";
 import Loader from "../components/Loading";
 import api from "../api_source";
+import customSkeleton from "../mui_comps/CustomSkeleton";
+
 
 const Dashboard = () => {
   let i = 0;
@@ -28,8 +30,8 @@ const Dashboard = () => {
   const [notFound, SetnotFound] = useState(false);
 
 
-  
-  
+
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -58,6 +60,7 @@ const Dashboard = () => {
       SetnotFound(false);
       getUsers();
     } else {
+      setLoading(true);
       let result = await fetch(`${api}/search`, {
         headers: {
           "content-type": "application/json",
@@ -72,6 +75,9 @@ const Dashboard = () => {
         Setusers(result.responseData);
         setApiUserData([])
         setApiUserData(users.responseData);
+
+        setLoading(false);
+
       } else if (result.message == "Not Found !") {
         SetnotFound(true);
       }
@@ -183,6 +189,8 @@ const Dashboard = () => {
           {/*searchbar to search users*/}
           <button className="generateR">Generate Report</button>
         </div>
+
+
         <div className="d-container2">
           {" "}
           {/* contains overviw and chart sections */}
@@ -322,9 +330,16 @@ const Dashboard = () => {
                 </>
               ) : (
                 <>
+
                   {users.map((user, index) => {
                     //   SetTotal(user.totalAmount)
                     // console.log("USER :", user);
+                    if (loading) {
+                      return (
+                        // 
+                        <customSkeleton />
+                      )
+                    }
                     return (
                       <Client
                         key={index}
@@ -343,6 +358,8 @@ const Dashboard = () => {
                       </Client>
                     );
                   })}
+
+
                 </>
               )}
             </tbody>

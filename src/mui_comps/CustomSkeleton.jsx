@@ -6,7 +6,7 @@ export default function customSkeleton() {
   return (
     <Box sx={{ width: 300 }}>
       <Skeleton />
-      <Skeleton animation="wave" />
+      <Skeleton sx={{ backgroundColor: "red" }} animation="wave" />
       <Skeleton animation={false} />
     </Box>
   );

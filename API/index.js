@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Adjust the origin to match your React app's URL
+    origin: 'https://creditc.vercel.app/', // Adjust the origin to match your React app's URL
     credentials: true
 }))
 
