@@ -30,122 +30,88 @@ function Login(e) {
         console.log("offline")
         return Error("you are offline")
     }
-    // const loginHandle = async () => {
-    //     if (!email || !pass) {
-    //         Seterr(true)
-    //         return Warning("All fiels are required")
-    //     }
-    //     else {
 
-    //         SetDisable(true)
-    //         SetLoading(true)
-    //         try {
-
-    //             if (!networkStatus) {
-    //                 console.log("offline")
-    //                 return Error("you are offline")
-    //             }
-    //             let result = await fetch(`${api}/login`, {
-    //                 method: "post",
-    //                 body: JSON.stringify({ email, pass }),
-    //                 headers: { 'content-type': "application/json" }
-    //             })
-    //             result = await result.json()
-    //             if (result.type == "success") {
-    //                 localStorage.setItem("user", result.user)
-    //                 SetLoading(false)
-    //                 Success(result.type)
-    //                 setTimeout(() => {
-    //                     redirect('/dashboard')
-    //                 }, 150)
-    //             }
-    //             else {
-    //                 Warning(result.response);
-    //                 // e.target.disabled = false
-    //                 SetDisable(false)
-    //                 SetLoading(false)
-    //             }
-    //         } catch (error) {
-    //             console.log("Error=>", error);
-    //             Error(error.message)
-    //         }
-
-
-    //     }
-    // }
     const loginHandle = async () => {
-        // Check for missing email or password
+        // Check if the email or password fields are empty
         if (!email || !pass) {
-            Seterr(true);
-            return Warning("All fields are required");
+            Seterr(true); // Set an error state
+            return Warning("All fields are required"); // Let the user know that all fields are required
         }
 
-        SetDisable(true);
-        SetLoading(true);
+        SetDisable(true); // Disable the form elements to prevent multiple submissions
+        SetLoading(true); // Show a loading spinner to indicate that something is happening
 
         try {
-            // Check for network status
+            // Check if the network connection is available
             if (!networkStatus) {
-                console.log("offline");
-                return Error("You are offline");
-                SetDisable(false);
+                console.log("You are offline"); // Log a message indicating offline status
+                SetDisable(false); // Enable the form elements for user interaction
+                SetLoading(false); // start loading 
+                return Error("You are offline"); // Inform the user that they are offline
+
             }
 
-            // Attempt to log in
-            const result = await fetch(`${api}/login`, {
+            // Attempt to log in by sending a request to the server
+            fetch(`${api}/login`, {
                 method: "post",
                 headers: {
-                    'Content-Type': "application/json",
-
+                    'Content-Type': "application/json", // Set the content type of the request
                 },
-                credentials: "include",
-                body: JSON.stringify({ email, pass }),
+                credentials: "include", // Include credentials such as cookies in the request
+                body: JSON.stringify({ email, pass }), // Convert the email and password to JSON format and send it in the request body
+            })
+                .then(response => response.json()) // Parse the response from the server as JSON
+                .then((apiResult) => {
+                    if (apiResult.type === "error") {
+                        // If there's an error response from the server
+                        Error(apiResult.message); // Show the error message to the user
+                        SetLoading(false); // Hide the loading spinner
+                        SetDisable(false); // Enable the form elements for user interaction
+                        return;
+                    }
 
+                    Success(apiResult.message); // Show the success message to the user
 
+                    if (apiResult.type === "success") {
+                        // If the login attempt is successful
+                        localStorage.setItem("user", apiResult.user); // Store user data in local storage
+                        SetLoading(false); // Hide the loading spinner
+                        Success(apiResult.message); // Show the success message to the user
 
-            });
+                        // Redirect to the dashboard page after a short delay
+                        setTimeout(() => {
+                            redirect('/dashboard');
+                        }, 150);
+                        return
+                    }
+                    // If the server response type is unknown
+                    Warning(apiResult.response); // Show a warning message to the user
+                    SetDisable(false); // Enable the form elements for user interaction
+                    SetLoading(false); // Hide the loading spinner
 
-            const parsedResult = await result.json();
-            if (parsedResult.type === "error") {
-                Error(parsedResult.message)
-                SetLoading(false);
-                SetDisable(false);
-                return;
-            }
+                }).catch((error) => Error(error.message))
+                .finally(() => {
+                    SetDisable(false)
+                    SetLoading(false) // Hide
+                })
 
-            Success(parsedResult.message);
-
-            if (parsedResult.type === "success") {
-                localStorage.setItem("user", parsedResult.user);
-                SetLoading(false);
-                Success(parsedResult.message);
-
-                // Redirect to the dashboard after a short delay
-                setTimeout(() => {
-                    redirect('/dashboard');
-                }, 150);
-                return;
-            } else {
-                Warning(parsedResult.response);
-                SetDisable(false);
-                SetLoading(false);
-                SetDisable(false);
-                return;
-            }
         } catch (error) {
-            console.error("Error:", error);
-            Error(error.message);
-            return;
+            // If an unexpected error occurs during the login process
+            console.error("Error:", error); // Log the error message to the console for debugging
+            Error(error.message); // Show the error message to the user
         }
     };
 
+
     return (<>
+
         <Navbar />
         <div className="login-container">
+            {loading && <Loading />}
             <ToastContainer />
 
             <div className='Login'>
-                {loading && <Loading />}
+
                 <h2>Login</h2>
 
                 <input type="email" onChange={(e) => SetEmail(e.target.value)} placeholder='Email' />

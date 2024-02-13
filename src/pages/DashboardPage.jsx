@@ -32,6 +32,7 @@ const Dashboard = () => {
 
 
 
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -86,62 +87,67 @@ const Dashboard = () => {
 
 
 
-  const getUsers = async () => {
+  const getUsers = () => {
     let short = [];
-    setLoading(true);
-    if (Auth) {
-      let users = await fetch(`${api}/clients`, {
+    setLoading(true); // Show loading spinner while fetching data
+
+    if (Auth) { // Check if user is authenticated
+      // Fetch user data from the server
+      fetch(`${api}/clients`, {
         headers: {
           "content-type": "application/json",
-          token: Auth,
+          token: Auth, // Include authentication token in the request headers
         },
         credentials: "include"
-      });
-      users = await users.json();
-      console.log("client data:", users);
-      setApiUserData(users.responseData);
-      console.table(users.responseData);
-      setLoading(false);
-
-      if (
-        users.message === "invalid token" ||
-        users.message === "jwt expired"
-      ) {
-        Warning(users.message);
-        setLoading(false);
-        localStorage.clear();
-        navigate("/login");
-      } else if (users.message == "Not Found !") {
-        SetnotFound(true);
-      } else {
-        let userArray = []; // arrray to store data of all uset for sorting
-        t = 0;
-        users.responseData.map((element) => {
-          userArray.push(element);
-          t = t + element.totalAmount;
-        });
-        //sort array to find out maximum and minimum amount
-        let len = userArray.length;
-        for (var i = 0; i <= len - 1; i++) {
-          for (var j = i + 1; j < len; j++) {
-            if (userArray[j].totalAmount < userArray[i].totalAmount) {
-              let t = userArray[j];
-              userArray[j] = userArray[i];
-              userArray[i] = t;
-            }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
           }
-        }
+          return response.json();
+        })
+        .then(users => {
+          console.log("client data:", users);
+          setApiUserData(users.responseData); // Set user data obtained from the API
+          console.table(users.responseData); // Display user data in a table format
 
-        SetMax(userArray[0]);
-        SetMin(userArray[len - 1]);
-        SetTotal(t);
-        Setusers(users.responseData);
-        //setLoading(false)
-      }
+          if (users.message === "invalid token" || users.message === "jwt expired") {
+            // If token is invalid or expired
+            Warning(users.message); // Show a warning message
+            localStorage.clear(); // Clear local storage
+            navigate("/login"); // Redirect to login page
+          } else if (users.message === "Not Found !") {
+            // If user data is not found
+            SetnotFound(true); // Set state to indicate user not found
+          } else {
+            // If user data is successfully obtained
+            let userArray = users.responseData.slice(); // Create a copy of the user data array for manipulation
+            let totalAmount = userArray.reduce((acc, curr) => acc + curr.totalAmount, 0); // Calculate total amount
+
+            // Sort user array based on totalAmount
+            userArray.sort((a, b) => a.totalAmount - b.totalAmount);
+
+            // Set max and min user based on totalAmount
+            SetMax(userArray[0]); // Maximum total amount user
+            SetMin(userArray[userArray.length - 1]); // Minimum total amount user
+            SetTotal(totalAmount); // Total amount of all users
+            Setusers(userArray); // Set user data with sorted array
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching user data:", error); // Log any errors that occur during data fetching
+          // Handle error as per requirement
+        })
+        .finally(() => {
+          setLoading(false); // Hide loading spinner
+        });
     } else {
-      // console.log("err");
+      // Handle unauthenticated users
+      // Do nothing or handle as per requirement
+      return Promise.resolve();
     }
   };
+
 
 
 
@@ -170,10 +176,12 @@ const Dashboard = () => {
   // console.log("condition :", (!notFound || users.length == 0));
   // get all users
   return (
-    <div className="dashboard">
+    <div className="dashboard profile">
+
       <AdvanceNav refresh={getUsers} isDashboard={true} isAddUser={true} />
 
       <div className="right">
+        
         {" "}
         {/* right side container which containes the compnets of dashboard*/}
         <div className="upper-container">

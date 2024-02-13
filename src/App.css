@@ -644,12 +644,12 @@ sub {
 
 
 /* logout button in dashboard */
-.d-logout {
+/* .d-logout {
   margin-top: 25vh;
   color: white;
   cursor: pointer;
   font-size: xx-large;
-}
+} */
 
 
 
@@ -835,11 +835,19 @@ svg {
 }
 
 .dashboard .left .d-logout {
-  margin-top: 23rem;
+  margin-top: 15rem;
   box-shadow: none;
   font-size: xx-large;
- 
   color: red;
+  background-color: var(--card);
+  padding: 0px;
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+  box-shadow: var(--shadow);
+}
+.profile .left .d-logout {
+  margin-top: 16rem;
 }
 .d-logout:hover{
   color: red;
@@ -850,6 +858,7 @@ svg {
   box-shadow: none;
   font-size: xx-large;
   color: white;
+  padding: 0px;
 }
 
 d-logout:hover {
@@ -861,6 +870,10 @@ d-logout:hover {
   margin: 0;
 background-color:var(--dashboard_bg) !important;
 width: 100%;
+}
+svg{
+  font-size: xx-large !important;
+  padding: 0px;
 }
 
 .profile >.profile-right-sec{
@@ -1019,13 +1032,6 @@ padding: 9px;
 /* profilr css ----end */
 
 @media (max-width:1200px) {
-  .dashboard .left ,.profile .left .d-logout,
-  .transactions .left .d-logout {
-    margin-top: 0;
-    box-shadow: none;
-    font-size: xx-large;
-    color: white;
-  }
   .d-overview,
   .d-chart {
     height: max-content;
@@ -1938,6 +1944,8 @@ canvas {
   .d-logout:hover {
     color: red;
   }
+  
+  
   /* body {
   position: relative;
 } */
@@ -2052,12 +2060,17 @@ canvas {
   /* for logout button  */
   .dashboard .left ,.profile .left .d-logout,
   .transactions .left .d-logout {
-    margin-top: 0;
+    margin-top: auto;
     box-shadow: none;
     font-size: xx-large;
     color: white;
+    background-color: none;
   }
-
+  .d-logout{
+    background-color: transparent !important;
+    padding: 0px;
+    height: 45px;
+  }
 
   /* for logo  */
   .dashboard .left .small,
@@ -2075,6 +2088,7 @@ canvas {
 
   .dashboard .left .d-adduser {
     font-size: 2rem;
+    margin-bottom: auto;
   }
 
   .d-low div span {
@@ -2484,4 +2498,3 @@ svg{
 }
 }
 
-  

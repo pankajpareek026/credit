@@ -135,7 +135,7 @@ const Transactions = () => {
   };
   return (
     <div className="transactions">
-      <div className="left">
+      <div style={{ justifyContent: "space-around" }} className="left" >
         {/* for navbar in left side */}
         <h2
           style={{ cursor: "pointer" }}

@@ -45,7 +45,7 @@ const AdvanceNav = ({ refresh, isDashboard = false, isAddUser }) => {
 
   }
   return (
-    <div className="left mobile-nav">
+    <div className="left">
       {/* for navbar in left side */}
       <h2 style={{ cursor: 'pointer' }} onClick={() => redirect('/')} className="logo small">C</h2>
 
