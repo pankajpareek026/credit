@@ -1,6 +1,7 @@
 import React from 'react'
-import { Outlet,Navigate } from 'react-router-dom'
-export default function Private()
-{const Isuser=localStorage.getItem('user')
-    return  !Isuser?<Outlet/>:<Navigate to={'/'}/>
+import { useSelector } from 'react-redux';
+import { Outlet, Navigate } from 'react-router-dom'
+export default function Private() {
+    const isUser = useSelector(state => state.auth.status)
+    return !isUser ? <Outlet /> : <Navigate to={'/'} />
 }

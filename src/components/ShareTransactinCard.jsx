@@ -5,7 +5,7 @@ import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 
 export default function ShareTransactionCard({
-  message,date,amount,type
+  message, date, amount, type
 }) {
   return (
     <div className="transaction-card-in-share">
@@ -21,7 +21,7 @@ export default function ShareTransactionCard({
         <span className="sender-reciver-transaction-comment">{message}</span>
         <span className="transaction-date">{date}</span>
       </div>
-      <span className="share-transaction-amount">{amount}</span>
+      <span className="share-transaction-amount"> ₹ {amount}</span>
     </div>
   );
 }

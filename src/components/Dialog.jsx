@@ -28,9 +28,10 @@ export default function Dialog({ onClose, link, message, isOpened, on }) {
     <dialog ref={dialogRef}>
       <p className="title">Link Generated successfully !</p>
       <hr />
-      <hr />
-     
+
       <p className="text">{message}</p>
+
+
       <div className="link-container">
         <input ref={linkRef} className="link" value={link} readOnly />
 
@@ -38,10 +39,14 @@ export default function Dialog({ onClose, link, message, isOpened, on }) {
         <button onClick={copyLinkOnClipBoard} className="copy-btn">
           {copied ? "copied" : "copy"}
         </button>
+
       </div>
+
+
       <button className="close-icon" onClick={closeDialog}>
         close
       </button>
+
     </dialog>
   );
 }

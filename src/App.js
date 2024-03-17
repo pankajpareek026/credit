@@ -15,6 +15,10 @@ import ShareTransactions from './pages/ShareTransactionsPage';
 import UserProfile from './pages/UserProfilePage';
 
 import { createTheme } from '@mui/material/styles';
+import { Provider, useDispatch } from 'react-redux';
+import store from './store';
+import { useEffect } from 'react';
+import { setCredentials } from './features/reducers/authSlice';
 
 const theme = createTheme({
   palette: {
@@ -35,27 +39,20 @@ const theme = createTheme({
 
 
 function App() {
-  //   document.addEventListener('contextmenu', (e) => e.preventDefault());
+  const token = localStorage.getItem('user')
+  const dispetch = useDispatch()
+  if (token?.length > 0) {
+    dispetch(setCredentials({ token, status: true }))
+  }
+  else {
+    dispetch(setCredentials({ token: null, status: false }))
+  }
 
-  // function ctrlShiftKey(e, keyCode) {
-  //   return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
-  // }
-
-  // document.onkeydown = (e) => {
-  //   // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
-  //   if (
-  //     e.key === 123 ||
-  //     ctrlShiftKey(e, 'I') ||
-  //     ctrlShiftKey(e, 'J') ||
-  //     ctrlShiftKey(e, 'C') ||
-  //     (e.ctrlKey && e.key === 'U'.charCodeAt(0))
-  //   )
-  //     return false;
-  // };
   return (
     <theme>
       <div className="app">
 
+        {/* <Provider store={store}> */}
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />} />
@@ -67,15 +64,17 @@ function App() {
             <Route element={<Protected />}>
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/detail/:id' element={<Transactions />} />
-
+              <Route path='/me' element={<UserProfile />} />
               {/* <Route path='/me' element={<UserProfile />} /> */}
             </Route>
-            <Route path='/me' element={<UserProfile />} />
+
 
             <Route path="/*" element={<h1> Error 404 Page not Found </h1>} />
+
           </Routes>
 
         </BrowserRouter>
+        {/* </Provider> */}
       </div>
     </theme>
   );

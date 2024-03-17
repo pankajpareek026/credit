@@ -1,9 +1,8 @@
 import { TextField } from '@mui/material'
-import React from 'react'
+import React, { forwardRef, useEffect } from 'react'
 
-const MuiInputBox = (
-    {
-        InpVariant = "outlined",
+const MuiInputBox = forwardRef((props, ref) => {
+    const { InpVariant = "outlined",
         isRequired,
         label,
         isDisabled,
@@ -12,16 +11,22 @@ const MuiInputBox = (
         isReadOnly,
         onChangeFn,
         inputValue,
-        isError, errorInfo }) => {
+        inputType,
+        isError, errorInfo, onKeyPress, } = props
     const inputHandler = (e) => {
+        // e.stopPropagation()
         onChangeFn(e.target.value)
-        console.log("state=>", inputValue)
+
     }
+    useEffect(() => {
+
+    })
     return (
 
         <TextField
 
             sx={{
+                maxWidth: "99%",
                 "& .MuiOutlinedInput-root": {
                     '& fieldset': {
                         borderColor: 'white',
@@ -35,6 +40,7 @@ const MuiInputBox = (
                 },
             }}
             InputLabelProps={{
+
                 style: { color: 'white', borderColor: 'white' },
             }}
             error={isError}
@@ -44,16 +50,24 @@ const MuiInputBox = (
             disabled={isDisabled}
             value={inpValue}
             defaultValue={inputValue}
-            inputProps={{ style: { color: 'white', height: "auto" } }}
+            inputProps={{
+                readOnly: isReadOnly,
+                style: {
+                    color: 'white', height: "auto", overflow: "hidden"
+                }
+            }}
             label={label}
             variant={InpVariant}
             placeholder={placeHolder}
             id="outlined-disabled"
             onChange={inputHandler}
+            onKeyDown={onKeyPress}
+            inputRef={ref}
+            type={inputType}
         />
 
 
     )
-}
+})
 
 export default MuiInputBox

@@ -6,14 +6,14 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import LinkCard from '../components/LinkCard';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CustomModal from '../mui_comps/CustomModal';
-import Warning from '../components/Warning';
 import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
 import api from '../api_source';
-import Error from '../components/Error';
-import { ToastContainer, toast } from 'react-toastify';
-import Success from '../components/Success';
 import { Box, FormLabel, Input, Typography, TextField, CircularProgress } from '@mui/material';
 import MuiInputBox from '../mui_comps/MuiInputBox';
+import Loading from '../components/Loading';
+import SuccessToast from '../components/SuccessToast';
+import ErrorToast from '../components/ErrorToast';
+import WarningToast from '../components/WarningToast';
 // import Modal from '../components/Modal';
 // import NextModal from '../nextUI components/NextModal';
 // CustomModal
@@ -63,6 +63,7 @@ function UserProfile() {
   const [firstLoadingBtnText, setFirstBtnLoadingText] = useState(false)
   const [secondBtnLoadingText, setSecondBtnLoadingText] = useState(false)
   const [isDeleteClientModal, setisDeleteClientModal] = useState(false)
+  const [loading, setLoading] = useState(false)
   const copyRef = useRef()
   const deleteRef = useRef()
 
@@ -78,7 +79,7 @@ function UserProfile() {
 
   }
 
-  // call api to delete link
+  // delete link from database
   const deleteLinkParmanent = () => {
     console.log('deleteLinkParmanent')
     try {
@@ -94,14 +95,15 @@ function UserProfile() {
         .then(res => res.json())
         .then((data) => {
           console.log(data);
-          if (data.type === "error") return Error(data.message);
-          Success(data.message);
+          // if server response an error
+          if (data.isError) return ErrorToast(data.message);
+          SuccessToast(data.message);
           getData();
+
         })
 
     } catch (error) {
-      Error(error.message)
-      console.error(error.message);
+      ErrorToast(error.message);
     }
     setOpen(false)
 
@@ -169,9 +171,9 @@ function UserProfile() {
         .then(response => response.json())
         .then(data => {
           // If request is successful
-          if (data.type === "success") {
+          if (data.isSuccess) {
             // Show success message
-            Success(data.message);
+            SuccessToast(data.message);
             // Clear loading state
             setIsSecondBtnLoading(false);
             // Hide edit modal
@@ -186,21 +188,29 @@ function UserProfile() {
             getData();
             return;
           }
-          Error(data.message);
+          ErrorToast(data.message);
         })
         // Handle errors
-        .catch(err => Error(err.message))
+        .catch(err => ErrorToast(err.message))
         // Finally, clear loading text
         .finally(() => {
           setIsSecondBtnLoading(false);
         });
     } catch (error) {
       // Log and handle errors
-      console.log("Error: ", error);
-      Error(error.message);
+      ErrorToast(error.message);
     }
   };
 
+  // to open delete client modal
+  const deleteClientModalHandle = (clientId, clientName) => {
+    console.log("clientId: ", clientId, "clientName: ", clientName);
+    setisDeleteClientModal(true)
+    setClientCurrentName(clientName)
+    setClientId(clientId)
+  }
+
+  // to delete client from database
   const deleteClientPermanently = async () => {
     try {
       setIsSecondBtnLoading(true)
@@ -211,50 +221,49 @@ function UserProfile() {
         headers: {
           "content-type": "application/json",
           "token": Auth,
-          "clientid": clientId
+          "clientid": clientId,
+          "clientName": clientCurrentName
         },
         credentials: "include"
       })
         .then(response => response.json())
         .then((deleteResponse) => {
           console.log("deleteResponse=>>", deleteResponse)
-          if (deleteResponse.type === "success") {
-            Success(deleteResponse.message)
+          if (deleteResponse.isSuccess) {
+            SuccessToast(deleteResponse.message)
             closeDeleteModal();
             getData()
             return
           }
           return Error(deleteResponse.message)
         }).catch((error) => {
-          Error(error.message)
+          ErrorToast(error.message)
         })
         .finally(() => {
           setIsSecondBtnLoading(false)
         })
     } catch (error) {
-      console.log("Error: ", error);
-      Error(error.message);
+      ErrorToast(error.message);
     }
 
   }
 
+
+  // to close delete client modal
   const closeDeleteModal = () => {
+    console.log("Close Delete Modal clicked=>>");
     setIsSecondBtnLoading(false)
     setisDeleteClientModal(false)
     setClientCurrentName("")
     setClientId("")
   }
 
-  const deleteClientModalHandle = (clientId, clientName) => {
-    console.log("clientId: ", clientId, "clientName: ", clientName);
-    setisDeleteClientModal(true)
-    setClientCurrentName(clientName)
-    setClientId(clientId)
-  }
+
 
   // get all data for profile page
   const getData = async () => {
     try {
+      setLoading(true)
       fetch(`${api}/userProfile`, {
         method: 'GET',
         headers: {
@@ -266,8 +275,8 @@ function UserProfile() {
         .then(res => res.json())
         .then(data => {
           console.log("data=>", data)
-          if (data.status == "ok") {
-            const { allSharedLinks, allClients, symbol, name } = data
+          if (data.isSuccess) {
+            const { allSharedLinks, allClients, symbol, name } = data.responseData
             setSharedLinks(allSharedLinks)
             SetClients(allClients)
             SetUserName(name)
@@ -275,11 +284,13 @@ function UserProfile() {
           }
         })
         .catch(err => {
-          Error(err.message)
+          ErrorToast(err.message)
+        }).finally(() => {
+          setLoading(false)
         })
 
     } catch (error) {
-      Warning("Failed to fetch")
+      WarningToast("Failed to fetch")
     }
   }
   const editUserName = (user) => {
@@ -291,7 +302,14 @@ function UserProfile() {
 
   return (
     <div className='dashboard profile'>
+      <Loading
+        isLoading={loading}
+        isSimpleLoading={true}
+        isFullPageLoading={false}
+      />
+
       <AdvanceNav isDashboard={true} isAddUser={false} navData={userPageNavigationData} />
+
       {/* profile right section which contains all data of profile and all */}
       <section className='profile-right-sec'>
 
@@ -306,11 +324,13 @@ function UserProfile() {
             modalType={"confirm"}
             title={"delete Link"}
             content={"link will be deleted parmanatly you can't restore it"}
-            firstButtonType={"error"}
-            firstButtonName={"Cancel"}
-            secondButtonName={"Delete"}
+            firstButtonType={"close"}
+            firstButtonName={"cancel"}
+            secondButtonName={"delete"}
+            secodButtonType={"delete"}
             isFirstButton={true}
             isSecondButton={true}
+            firstOnClick={() => setOpen(false)}
             secodOnClick={() => deleteLinkParmanent()}
           />
 
@@ -321,6 +341,18 @@ function UserProfile() {
             setOpenModal={closeEditModal}
             modalType={"input"}
             title={`Change client name`}
+            firstOnClick={closeEditModal}
+            isSecondLoading={isSecondBtnLoading}
+            secondLoadingIcn={<CircularProgress />}
+            isFirstLoading={isFirstLoading}
+            firstButtonType={"close"}
+            secodButtonType={"action"}
+            secodLoadingIcn={<CircularProgress />}
+            firstButtonName={"Cancel"}
+            secondButtonName={isSecondBtnLoading ? secondBtnLoadingText : "Save"}
+            isFirstButton={true}
+            isSecondButton={true}
+            secodOnClick={() => saveNewClientName(clientId, clientCurrentName, newClientName)}
             // content={"link will be deleted parmanatly you can't restore it"}
             content={
               <Box display={"grid"} h={"auto"} m={1} gap={1.7} p={.2}>
@@ -331,8 +363,9 @@ function UserProfile() {
                   // isDisabled={true}
                   label={"current client name"}
                   isReadOnly={true}
-                // isDisabled={true}
-                // onChangeFn={setNewClientName}
+
+                  // isDisabled={true}
+                  onChangeFn={() => 0}
                 />
                 <MuiInputBox
                   // InpVariant={"standard"}
@@ -346,45 +379,39 @@ function UserProfile() {
                   errorInfo={"New name is required"}
                   onChangeFn={setNewClientName}
                   inpValue={newClientName}
-                  isSecondtLoading={isSecondBtnLoading}
+
+
                 />
               </Box>
             }
-            isSecondLoading={isSecondBtnLoading}
-            secondLoadingIcn={<CircularProgress />}
-            isFirstLoading={isFirstLoading}
-            firstButtonType={"close"}
-            secodLoadingIcn={<CircularProgress />}
-            firstButtonName={"Cancel"}
-            secondButtonName={isSecondBtnLoading ? secondBtnLoadingText : "Save"}
-            isFirstButton={true}
-            isSecondButton={true}
-            secodOnClick={() => saveNewClientName(clientId, clientCurrentName, newClientName)}
+
           />
 
-          {/* Modal to delete user */}
+          {/* Modal to delete client */}
           <CustomModal
             isTitle={true}
             openModal={isDeleteClientModal}
-            setOpenModal={closeDeleteModal} // to hide modal
+            // setOpenModal={closeDeleteModal} // to hide modal
             modalType={"confirm"}
             title={`Delete client "' ${clientCurrentName} '"`}
             content={`Client  ' ${clientCurrentName} ' will be deleted parmanatly you can't restore it`}
-            firstButtonType={"cancel"}
+            firstButtonType={"close"}
+            secodButtonType={"delete"}
             firstButtonName={"Cancel"}
             secondButtonName={"Delete"}
             isFirstButton={true}
             isSecondButton={true}
             isSecondLoading={isSecondBtnLoading}
             secodOnClick={deleteClientPermanently}
+            firstOnClick={() => closeDeleteModal()}
           />
 
 
           {/* container which contains user picture and usr name */}
           <div className="left-upper">
-            <p className="profile-pic">{symbol}</p>
+            <p className="profile-pic">{symbol.toLocaleUpperCase()}</p>
 
-            <div className="profile-name">{userName}</div>
+            <div className="profile-name">{userName.toLocaleUpperCase()}</div>
 
           </div>
 
@@ -408,13 +435,14 @@ function UserProfile() {
                         } />
                     )
                   })) :
-                    <LinkCard contentColor={"rgb(255, 0, 111)"} content={"Nothing to display !"} />
+                    <LinkCard contentColor={"rgb(255, 0, 111)"} isContentCenter={true} content={"Nothing to display !"} />
                 }
               </div>
             </div>
           </div>
 
         </section>
+
         {/* left container --end */}
 
 
@@ -425,7 +453,7 @@ function UserProfile() {
           {/* container which contains all clients associated with user */}
           <div className="right-upper">
             <div className="user-wrapper">
-              <div style={{fontWeight:"650",fontSize:"large", display: "flex", justifyContent: "space-between",paddingLeft:"7px", paddingRight: "15px" }}><p>Clients</p><p style={{ marginRight: "5px",fontSize:"1.2rem" }}>{allClients.length}</p></div>
+              <div style={{ fontWeight: "650", fontSize: "large", display: "flex", justifyContent: "space-between", paddingLeft: "7px", paddingRight: "15px" }}><p>Clients</p><p style={{ marginRight: "5px", fontSize: "1.2rem" }}>{allClients.length}</p></div>
               <hr />
               {/* container that holds all user cards  */}
               <div className="users-container">
@@ -441,10 +469,13 @@ function UserProfile() {
             </div>
           </div>
 
-          <div style={{ height: "max-content", marginBottom: '250px !important' }} className="right-lower">
+
+          <div className="right-lower profile-settings-container">
             <div className="user-wrapper">
               <p>Profile Settings</p>
               <hr />
+
+
               {/* container that holds all user settings cards  */}
               <div className="users-container">
                 {
@@ -455,12 +486,18 @@ function UserProfile() {
                   })
                 }
               </div>
+
+
             </div>
           </div>
+
+
         </section>
       </section>
+
+
       {/* right container --end */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   )
 }

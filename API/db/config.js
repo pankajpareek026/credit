@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const url = "mongodb+srv://ecom-01:PwEkECJdSt8WQCjj@cluster0.16tcspz.mongodb.net/?retryWrites=true&w=majority"
+
+const url = process.env.MONGO_URL
 console.log("connected 0")
 const connectionParams = {
     useNewUrlParser: true,

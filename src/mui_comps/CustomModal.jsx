@@ -15,76 +15,129 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function CustomModal(
     { openModal,
         setOpenModal,
+        closeModal,
         modalType,
         content,
         isTitle,
         title,
-        headerContent,
+        isHelperText,
+        helperText,
         firstButtonName,
         secondButtonName,
         firstButtonType,
         secodButtonType,
         isSecondButton,
         isFirstButton,
-        firstOnclick,
+        firstOnClick,
         secodOnClick,
-        ousideClose = true,
+        closeOutSideClick = false,
         isFirstDisabled,
         isSecondDisabled,
         isFirstLoading,
         isSecondLoading,
+        isTnxDetailDialog = false,
+        maxW = "470px",
 
-        secondBtnText,
         secodLoadingText }) {
 
 
     const handleClickOpen = () => {
         setOpenModal(true);
     };
+
     const modalTitleColors = {
         confirm: "red",
-        succcess: "rgb(20, 241, 149)",
+        success: "rgb(20, 241, 149)",
         input: "rgb(20, 241, 149)",
         close: "#808080"
     }
 
-    const handleClose = () => {
-        setOpenModal(false)
+
+    const buttonTypes = {
+        close: {
+            border: "2px solid rgb(66,85,141)",
+            color: "rgb(217,221,232)",
+            // backgroundColor: "rgb(66,85,141)",
+            ":hover": {
+                border: "2px solid ",
+                color: "white"
+            }
+        },
+        action: {
+            border: "2px solid rgb(20, 241, 149)",
+            backgroundColor: isSecondLoading ? "grey" : "rgb(20, 241, 149)",
+            color: "black", ":hover": { color: "rgb(20, 241, 149)" }
+        },
+        delete: {
+
+            border: "2px solid rgb(227,0,34)",
+            backgroundColor: isSecondLoading ? "grey" : "rgb(227,0,34)",
+            color: "white", ":hover": { color: "rgb(227,0,34)" }
+
+        }
+    };
+
+
+    const handleClose = (e) => {
+
+        closeModal()
+        return
     };
 
     return (
         <React.Fragment>
-            <Dialog disableBackdropClick
+            <Dialog
                 open={openModal}
-                maxWidth="sm"
-                width="sm"
+                maxWidth="700px"
+                width="350px"
                 TransitionComponent={Transition}
                 keepMounted
-                // {onClose={handleClose}}
+                onClose={(e) => handleClose(e)}
                 aria-describedby="alert-dialog-slide-description"
                 style={{ backdropFilter: "blur(5px)", height: "auto" }}
+
                 PaperProps={{
                     style: {
                         backgroundColor: '#1E1E1E',
                         color: "white",
                         borderRadius: "25px",
-                        maxWidth: "310px",
+                        width: isTnxDetailDialog ? "350px" : "auto",
+                        maxWidth: isTnxDetailDialog ? "750px" : "auto",
                         height: "fit-content",
                     },
                 }}>
                 <DialogTitle p={0} style={{ color: modalTitleColors[modalType], textAlign: "center", fontSize: "1.5rem" }}>{title}</DialogTitle>
                 <hr />
+
                 <DialogContent>
                     <DialogContentText
                         style={{ color: "white" }} id="alert-dialog-slide-description">
+                        {isHelperText && helperText}
                         {content}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions sx={{ display: "flex", width: "85%", marginLeft: "auto", marginRight: "auto", justifyContent: "space-between", padding: ".8rem" }}>
-                    {isFirstButton && <Button startIcon={isFirstLoading && <CircularProgress />} disabled={isFirstLoading} variant='outlined' sx={{ color: modalTitleColors[firstButtonType], backgroundColor: "black", borderColor: modalTitleColors[firstButtonType] }} onClick={handleClose}>{firstButtonName}</Button>}
-                    {isSecondButton && <Button disabled={isSecondLoading} startIcon={isSecondLoading && <CircularProgress size="1rem" style={{ color: "rgb(20, 241, 149)" }} />} sx={{ border: "2px solid rgb(20, 241, 149)", backgroundColor: isSecondLoading ? "grey" : "rgb(20, 241, 149)", color: "black", ":hover": { color: "rgb(20, 241, 149)" } }} variant='success' onClick={secodOnClick}>{secondButtonName}</Button>}
+                    {isFirstButton &&
+                        (<Button startIcon={isFirstLoading && <CircularProgress />}
+                            disabled={isFirstLoading}
+
+                            sx={buttonTypes[firstButtonType]}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                firstOnClick();
+                            }}>{firstButtonName}</Button>)}
+
+                    {isSecondButton &&
+
+                        (<Button
+                            disabled={isSecondLoading}
+                            startIcon={isSecondLoading && <CircularProgress size="1rem" style={{ color: "rgb(20, 241, 149)" }} />}
+                            sx={buttonTypes[secodButtonType]}
+
+                            onClick={secodOnClick}>{secondButtonName}</Button>)}
                 </DialogActions>
             </Dialog>
         </React.Fragment>
     );
+
 }

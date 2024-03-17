@@ -1,128 +1,150 @@
-import React, { useEffect, useState, useId } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer } from 'react-toastify';
 import InfoIcon from "@mui/icons-material/Info";
-import { useNavigate, useParams } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import { useParams, Link } from "react-router-dom";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import Logo from "../components/Logo";
 import ShareTransactionCard from "../components/ShareTransactinCard";
-import { Link } from "react-router-dom";
 import api from "../api_source";
-import Warning from "../components/Warning";
+import Loading from "../components/Loading";
+import WarningToast from "../components/WarningToast";
 
 const ShareTransactions = () => {
+  // Define info icon style
   const infoIconStyle = {
     cursor: "pointer",
     fontSize: "medium",
-    color: "gray",
+    color: "white",
     marginRight: "7px",
+    transform: "scale(0.7)",
     "&:hover": {
       cursor: "pointer",
       color: "rgb(20, 241, 149)",
     },
   };
-  const ID = useId();
-  const [APIdata, setAPIData] = useState();
-  const [transactions, setTransactions] = useState();
+
+  const [APIdata, setAPIData] = useState(null);
+  const [transactions, setTransactions] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { source } = useParams();
 
   useEffect(() => {
-    console.log("Using =>>")
-    try {
-      fetch(`${api}/share`, {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-          shareToken: source.toString(),
-        },
-        credentials: "include"
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.type != "success") {
-            Warning(data.message)
-          }
-          console.log("data=>>", data);
-
-          const besicData = {
-            clientName: data.clientName,
-            parentName: data.parentName,
-            totalRecivedAmount: data.totalRecivedAmount,
-            totalSentAmount: data.totalSentAmount,
-            totalRemainingAmount: data.totalRemainingAmount,
-          };
-          setAPIData(besicData);
-          setTransactions(data.transactions);
+    const fetchShareData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${api}/share`, {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            shareToken: source.toString(),
+          },
+          credentials: "include"
         });
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+        const data = await response.json();
+        if (data.isSuccess) {
+          const { clientName, parentName, totalSent, totalRecived, balance, transactions } = data?.responseData;
+          const basicData = {
+            clientName,
+            parentName,
+            totalRecivedAmount: totalRecived,
+            totalSentAmount: totalSent,
+            totalRemainingAmount: balance,
+          };
+          setAPIData(basicData);
+          setTransactions(transactions);
+          return
+        }
+        WarningToast(data.message);
+      } catch (error) {
+        WarningToast(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchShareData();
+  }, [source]);
+
   return (
     <>
       <div className="share-container">
+
+        <Loading isSimpleLoading={true} isLoading={loading} />
+
         <div className="logo-and-join-container-at-shate-page">
-          <Logo />{" "}
+          <Logo />
+
           <Link to={"/register"} className="join-btn">
-            Join{" "}
+            Join
           </Link>
+
         </div>
         <hr />
-        <h1 className="first-heading">Transaction History </h1>
-        <h2 className="share-name ">
-          {APIdata?.clientName} & {APIdata?.parentName}
-        </h2>
+        <h1 className="first-heading">Transaction History</h1>
 
-        <div className="total-transctions-amount-container">
-          <div className="upper">
-            {" "}
-            <div className="share-left">
-              <ArrowDownwardIcon />₹ {APIdata?.totalRecivedAmount}
-              <span>
+        {APIdata && (
+          <h2 className="share-name">
+            {APIdata.clientName}{" "}
+            <SwapHorizIcon
+              title={`Transactions between ${APIdata.clientName} and ${APIdata.parentName}`}
+              style={{ transform: "scale(.9)", marginTop: "auto" }}
+            />{" "}
+            {APIdata.parentName}
+          </h2>
+        )}
+        {APIdata && (
+          <div className="total-transctions-amount-container">
+
+
+            <div className="upper">
+              <div className="share-left">
+                <ArrowDownwardIcon />
+                ₹ {APIdata.totalRecivedAmount}
+                <span>
+                  <InfoIcon titleAccess="You have Received" style={infoIconStyle} />
+                </span>
+              </div>
+              <div className="share-right">
+                <ArrowUpwardIcon />
+                ₹ {APIdata.totalSentAmount}
+                <span>
+                  <InfoIcon titleAccess="You have Sent" style={infoIconStyle} />
+                </span>
+              </div>
+            </div>
+
+
+            <div className="lower">
+              <div className="remaining-balance">
+                Remaining balance: ₹ {APIdata.totalRemainingAmount}
                 <InfoIcon
-                  titleAccess="You have Recived"
+                  titleAccess={APIdata.totalRemainingAmount > 0 ? "you have to pay" : "you have to collect"}
                   style={infoIconStyle}
                 />
-              </span>
+              </div>
             </div>
-            <div className="share-right">
-              <ArrowUpwardIcon />₹ {APIdata?.totalSentAmount}
-              <span>
-                <InfoIcon titleAccess="You have Send" style={infoIconStyle} />
-              </span>{" "}
-            </div>
+
+
           </div>
+        )}
+        {APIdata && <h2 className="share-heading">Transactions</h2>}
 
-          <div className="lower">
-            <div className="remaining-balance">
-              {" "}
-              Remaining balance : ₹ {APIdata?.totalRemainingAmount}
-            </div>
-          </div>
-        </div>
 
-        <h2 className="share-heading">Transactions</h2>
-
-        <div className="transaction-card-container">
-          {transactions
-            ? transactions?.map((transaction) => {
-              return (
-                <ShareTransactionCard
-                  key={ID}
-                  type={transaction.type}
-                  amount={transaction.amount}
-                  date={new Date(transaction.date).toLocaleString('en-IN')}
-                  message={transaction.dis}
-                />
-              );
-            })
-            : ""}
+        <div style={{ height: APIdata && "auto" }} className="transaction-card-container">
+          {transactions &&
+            transactions.map((transaction, index) => (
+              <ShareTransactionCard
+                key={index}
+                type={transaction.type}
+                amount={transaction.amount}
+                date={new Date(transaction.date).toLocaleString('en-IN')}
+                message={transaction.dis}
+              />
+            ))}
         </div>
       </div>
       <ToastContainer />
-
     </>
   );
 };

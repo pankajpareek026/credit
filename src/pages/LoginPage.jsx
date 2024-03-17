@@ -1,22 +1,27 @@
-import { React, useEffect, useState } from 'react'
-import { Link, redirect, useNavigate } from 'react-router-dom'
+import { React, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { ToastContainer, toast } from 'react-toastify';
-import Success from '../components/Success'
-import Warning from '../components/Warning'
 import Loading from '../components/Loading';
 import api from '../api_source'
 import isOnline from '../utils/isOnline';
-import Error from '../components/Error';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../features/reducers/authSlice';
+import ErrorMessage from '../components/ErrorMessage';
+import ErrorToast from '../components/ErrorToast';
+import WarningToast from '../components/WarningToast';
+import SuccessToast from '../components/SuccessToast';
+import { ToastContainer } from 'react-toastify';
+import validator from 'validator';
+
+
 
 
 
 
 function Login(e) {
-    const Isuser = localStorage.getItem('user')
     const redirect = useNavigate()
     const [email, SetEmail] = useState("")
     const [pass, Setpass] = useState("")
@@ -24,18 +29,27 @@ function Login(e) {
     const [err, Seterr] = useState(false)
     const [disable, SetDisable] = useState(false)
     const [loading, SetLoading] = useState(false)
+    const [isInvalidEmail, SetIsInvalidEmail] = useState(false)
     const networkStatus = isOnline()
+
+    const dipatch = useDispatch()
     if (!networkStatus) {
 
         console.log("offline")
-        return Error("you are offline")
+        return ErrorToast("you are offline")
     }
 
     const loginHandle = async () => {
+        // check if email is valid
+        SetIsInvalidEmail(!validator.isEmail(email))
         // Check if the email or password fields are empty
         if (!email || !pass) {
             Seterr(true); // Set an error state
-            return Warning("All fields are required"); // Let the user know that all fields are required
+            return WarningToast("All fields are required"); // Let the user know that all fields are required
+        }
+        if (isInvalidEmail) {
+            ErrorToast("Invalid email")
+            return
         }
 
         SetDisable(true); // Disable the form elements to prevent multiple submissions
@@ -50,7 +64,7 @@ function Login(e) {
                 return Error("You are offline"); // Inform the user that they are offline
 
             }
-
+            SetLoading(true)
             // Attempt to log in by sending a request to the server
             fetch(`${api}/login`, {
                 method: "post",
@@ -62,34 +76,38 @@ function Login(e) {
             })
                 .then(response => response.json()) // Parse the response from the server as JSON
                 .then((apiResult) => {
-                    if (apiResult.type === "error") {
+                    if (apiResult.isError) {
                         // If there's an error response from the server
-                        Error(apiResult.message); // Show the error message to the user
+                        ErrorToast(apiResult.message); // Show the error message to the user
                         SetLoading(false); // Hide the loading spinner
                         SetDisable(false); // Enable the form elements for user interaction
                         return;
                     }
 
-                    Success(apiResult.message); // Show the success message to the user
+                    SuccessToast(apiResult.message); // Show the success message to the user
 
-                    if (apiResult.type === "success") {
+                    if (apiResult.isSuccess) {
                         // If the login attempt is successful
                         localStorage.setItem("user", apiResult.user); // Store user data in local storage
-                        SetLoading(false); // Hide the loading spinner
-                        Success(apiResult.message); // Show the success message to the user
 
+                        SetLoading(false); // Hide the loading spinner
+
+                        SuccessToast(apiResult.message); // Show the success message to the user
+
+                        dipatch(setCredentials({ token: apiResult.user, status: true }))
                         // Redirect to the dashboard page after a short delay
+
                         setTimeout(() => {
                             redirect('/dashboard');
                         }, 150);
                         return
                     }
                     // If the server response type is unknown
-                    Warning(apiResult.response); // Show a warning message to the user
+                    WarningToast(apiResult.message); // Show a warning message to the user
                     SetDisable(false); // Enable the form elements for user interaction
-                    SetLoading(false); // Hide the loading spinner
 
-                }).catch((error) => Error(error.message))
+
+                }).catch((error) => ErrorToast(error.message))
                 .finally(() => {
                     SetDisable(false)
                     SetLoading(false) // Hide
@@ -98,7 +116,7 @@ function Login(e) {
         } catch (error) {
             // If an unexpected error occurs during the login process
             console.error("Error:", error); // Log the error message to the console for debugging
-            Error(error.message); // Show the error message to the user
+            ErrorToast(error.message); // Show the error message to the user
         }
     };
 
@@ -107,24 +125,48 @@ function Login(e) {
 
         <Navbar />
         <div className="login-container">
-            {loading && <Loading />}
+            <Loading isSimpleLoading={true} isLoading={loading} />
             <ToastContainer />
 
             <div className='Login'>
-
                 <h2>Login</h2>
-
-                <input type="email" onChange={(e) => SetEmail(e.target.value)} placeholder='Email' />
-                {(err && !email) ? <span style={{ color: "red" }}>Email Requires</span> : ""}
+                {/* input box for email */}
 
 
-                <div className="pass">  <input type={hide ? "password" : 'text'} onChange={(e) => Setpass(e.target.value)} placeholder='password' />
+                <input type="email"
+                    value={email}
+                    onChange={(e) => SetEmail(e?.target?.value)}
+                    onKeyDown={(e) => { e.key === "Enter" && loginHandle() }}
+                    placeholder='Email' />
+                <ErrorMessage show={(err && !email)} message={"Email is Required"} />
+                <ErrorMessage show={(err && !validator.isEmail(email))} message={"Invalid Email"} />
 
-                    <p> {hide ? <VisibilityOffIcon onClick={() => Sethide((e) => !e)} sx={{ fontSize: "x-large", cursor: "pointer" }} /> :
-                        <VisibilityIcon onClick={() => Sethide((e) => !e)} sx={{ fontSize: "x-large", cursor: "pointer" }} />}</p>
+
+                {/* input box for password */}
+                <div className="pass">
+                    <input type={hide ? "password" : 'text'}
+                        value={pass}
+                        onChange={(e) => Setpass(e.target.value)}
+                        onKeyDown={(e) => { e.key === "Enter" && loginHandle() }}
+                        placeholder='password' />
+                    <p> {hide ?
+                        <VisibilityOffIcon
+                            onClick={() => Sethide((e) => !e)}
+                            sx={{ fontSize: "x-large", cursor: "pointer" }}
+                        /> :
+                        <VisibilityIcon
+                            onClick={() => Sethide((e) => !e)}
+                            sx={{ fontSize: "x-large", cursor: "pointer" }}
+                        />}</p>
                 </div>
+                <ErrorMessage show={(err && !pass)} message={"Password is Required"} />
+
+
                 <Link>Forget password ?</Link>
+
                 <button className='log-btn' disabled={disable} style={{ backgroundColor: disable && "gray" }} onClick={(e) => loginHandle(e)}>Login</button>
+
+
                 <p>Don't have an account  <Link to="/register">Create New </Link>?</p>
             </div>
         </div>

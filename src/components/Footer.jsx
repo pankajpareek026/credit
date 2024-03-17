@@ -8,7 +8,11 @@ function Footer() {
                 <li>Org</li>
                 <li>Products</li>
                 <li></li>
-            </ul> <ul>
+
+            </ul>
+
+
+            <ul>
                 <li>Partners</li>
                 <li>Org</li>
                 <li>Products</li>

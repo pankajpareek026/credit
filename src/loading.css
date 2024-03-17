@@ -5,34 +5,49 @@
     --main: rgb(20, 241, 149);
     --main-back: #100F0F;
     --advance: #0F3D3E;
-    --shadow: 0 3px 3px 0 #171717;
+    --shadow: 0 3px 3px 0 #171717,0 -3px 3px 0 #171717;
 
 }
-.cont{
+.simple-loading{
    position: absolute;
-    background-color: var(--card);
+    background-color:#0b0b0b;
     height: 80px;
     width: 80px;
-    top: calc(50%-40px);
-    left: calc(-50%-40px);
+    top: calc(50% - 80px); 
+     left: calc(50% - 40px);    
+    /* margin-right: calc(50vh -40px); */
     border-radius: 10px;
-    justify-content: center;
+    justify-content: center;    
+    box-shadow: var(--mobile-shadow);
+    z-index: 999;
     
-    box-shadow: var(--shadow);
 }
+.full-page-loading{
+    position: absolute;
+     background-color: var(--card);
+     height: 100vh;
+     width: 100vw;
+     display:flex;
+     justify-content: center;
+     place-items: center;
+     box-shadow: var(--shadow);
+     backdrop-filter: blur(15px);
+     
+ }
 .lds-default {
     display: inline-block;
     position: absolute;
     width: 20px;
     height: 20px ;
     justify-content: center;
+    z-index: 500;
 }
 
 .lds-default div {
     position: absolute;
     width: 6px;
     height: 6px;
-    background:var(--p);
+    background:var(--main);
     border-radius: 50%;
     animation: lds-default 1.2s linear infinite;
 }
@@ -115,10 +130,12 @@
     20%,
     80%,
     100% {
-        transform: scale(1);
+        transform: scale(1.2);
     }
-
+/* 70% ,40%{
+    transform: scale(1.7);
+} */
     50% {
-        transform: scale(1.5);
+        transform: scale(1.7);
     }
 }

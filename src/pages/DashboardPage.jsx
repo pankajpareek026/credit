@@ -2,167 +2,188 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdPersonSearch } from "react-icons/md";
 import PieChart from "../components/pieChart";
-import UserData from "../components/data";
 import Client from "../components/Client";
 import AdvanceNav from "../components/AdvanceNav";
-import Warning from "../components/Warning";
 import AddUser from "../components/AddUser";
-import Loader from "../components/Loading";
 import api from "../api_source";
-import customSkeleton from "../mui_comps/CustomSkeleton";
+import Loading from "../components/Loading";
+import { useDispatch } from "react-redux";
+import { logout } from "../features/reducers/authSlice";
+import ErrorToast from "../components/ErrorToast";
+import WarningToast from "../components/WarningToast";
+import FilterButton from "../components/FiltersButton";
 
 
 const Dashboard = () => {
-  let i = 0;
   document.title = "Credit | Dashboard";
-  let date = new Date();
-  // console.log(date);
-  const today = date.toLocaleDateString("en-IN");
-  // console.log(today);
+  const date = new Date().toLocaleDateString("en-IN");
   const Auth = localStorage.getItem("user");
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [searchLoaing, setSearchLoaing] = useState(false);
   const [ApiUserData, setApiUserData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
+  const [isFilterApplied, setIsFilterApplied] = useState(false)
+  const [showFilters, setShowFilters] = useState(false);
   const [users, Setusers] = useState([]);
   const [total, SetTotal] = useState(0);
   const [min, SetMin] = useState({});
   const [max, SetMax] = useState({});
   const [notFound, SetnotFound] = useState(false);
-
-
-
-
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    getUsers();
+    getUsers(true);
   }, []);
 
-
+  useEffect(() => {
+    setUserData({
+      ...userData,
+      labels: users.length > 0 ? users?.map((data) => data.name) : [],
+      datasets: [
+        {
+          ...userData.datasets[0],
+          data: users.length > 0 ? users?.map((data) => data.balance) : [],
+        },
+      ],
+    });
+  }, [users]);
 
   const opt = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
-        display: false,
+        display: false, // This hides the legend
       },
       title: {
         display: true,
-        text: "Chart.js Doughnut Chart",
+        text: "",
       },
     },
   };
 
-
-
+  // search lients
   const searchHandle = async (e) => {
-    const query = e.target.value;
-    if (query === "") {
-      SetnotFound(false);
-      getUsers();
-    } else {
-      setLoading(true);
-      let result = await fetch(`${api}/search`, {
+    const query = e.target.value
+    try {
+      if (query === "") {
+        SetnotFound(false);
+        getUsers(false);
+        return
+      }
+      setSearchLoaing(true);
+      setShowFilters(false)
+      setIsFilterApplied(false);
+      fetch(`${api}/search`, {
+        method: 'GET',
         headers: {
           "content-type": "application/json",
           token: Auth,
           query,
         },
         credentials: "include"
-      });
-      result = await result.json();
-      console.log("search result :", result);
-      if (result.message == "success") {
-        Setusers(result.responseData);
-        setApiUserData([])
-        setApiUserData(users.responseData);
+      }).then(res => res.json())
+        .then((result) => {
+          if (result.isSuccess) {
+            Setusers(result.responseData);
+            // setApiUserData([]);
+            setApiUserData(users.responseData);
+            setSearchLoaing(false);
+            return
+          }
 
-        setLoading(false);
 
-      } else if (result.message == "Not Found !") {
-        SetnotFound(true);
-      }
+          if (result.message === "Not Found !") {
+            SetnotFound(true);
+            Setusers([]);
+            setApiUserData([]);
+            setApiUserData([])
+          }
+          return ErrorToast(result.message);
+        }).catch((error) => {
+          ErrorToast(error.message)
+        }).finally(() => {
+          setSearchLoaing(false)
+        })
+
+    } catch (error) {
+      WarningToast("An error occurred. Please try again.");
     }
   };
 
 
 
-  const getUsers = () => {
-    let short = [];
-    setLoading(true); // Show loading spinner while fetching data
-
-    if (Auth) { // Check if user is authenticated
-      // Fetch user data from the server
+  // get all clients
+  const getUsers = (startLoading = false) => {
+    startLoading && setLoading(true);
+    if (Auth) {
       fetch(`${api}/clients`, {
         headers: {
           "content-type": "application/json",
-          token: Auth, // Include authentication token in the request headers
+          token: Auth,
         },
         credentials: "include"
       })
         .then(response => {
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            return ErrorToast('Network response was not ok');
           }
           return response.json();
         })
         .then(users => {
-          console.log("client data:", users);
-          setApiUserData(users.responseData); // Set user data obtained from the API
-          console.table(users.responseData); // Display user data in a table format
+          setApiUserData(users.responseData);
 
           if (users.message === "invalid token" || users.message === "jwt expired") {
-            // If token is invalid or expired
-            Warning(users.message); // Show a warning message
-            localStorage.clear(); // Clear local storage
-            navigate("/login"); // Redirect to login page
-          } else if (users.message === "Not Found !") {
-            // If user data is not found
-            SetnotFound(true); // Set state to indicate user not found
-          } else {
-            // If user data is successfully obtained
-            let userArray = users.responseData.slice(); // Create a copy of the user data array for manipulation
-            let totalAmount = userArray.reduce((acc, curr) => acc + curr.totalAmount, 0); // Calculate total amount
-
-            // Sort user array based on totalAmount
-            userArray.sort((a, b) => a.totalAmount - b.totalAmount);
-
-            // Set max and min user based on totalAmount
-            SetMax(userArray[0]); // Maximum total amount user
-            SetMin(userArray[userArray.length - 1]); // Minimum total amount user
-            SetTotal(totalAmount); // Total amount of all users
-            Setusers(userArray); // Set user data with sorted array
+            WarningToast(users.message);
+            localStorage.clear();
+            dispatch(logout())
+            navigate("/login");
+            return
+          } if (users.message === "Not Found !") {
+            SetnotFound(true);
+            return
           }
+
+          let userArray = users.responseData.slice();
+          let totalAmount = userArray.reduce((acc, curr) => acc + curr.balance, 0);
+          userArray.sort((a, b) => a.balance - b.balance);
+          SetMax(userArray[0]);
+          SetMin(userArray[userArray.length - 1]);
+          SetTotal(totalAmount);
+          Setusers(userArray);
+
         })
         .catch(error => {
-          console.error("Error fetching user data:", error); // Log any errors that occur during data fetching
-          // Handle error as per requirement
+          ErrorToast(error.message);
         })
         .finally(() => {
-          setLoading(false); // Hide loading spinner
+          setLoading(false);
         });
     } else {
-      // Handle unauthenticated users
-      // Do nothing or handle as per requirement
-      return Promise.resolve();
+      return;
     }
   };
 
-
-
-
-  const [userData, setUserData] = React.useState({
-    labels: UserData.map((data) => data.user),
+  const [userData, setUserData] = useState({
+    labels: [],
     datasets: [
       {
-        label: "DEBITORS/CREDITORS",
-        data: UserData.map((data) => data.amount),
+        label: "",
+        data: [],
         backgroundColor: [
-          "rgba(75,192,192,1)",
-          "orange",
-          "#50AF95",
-          "#f3ba2f",
-          "red",
+          'rgba(75, 192, 192, 1)',
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)',
+          'rgb(255, 159, 64)',
+          'rgb(153, 102, 255)',
+          'rgb(255, 0, 255)',
+          'rgb(0, 255, 255)',
+          'rgb(255, 0, 0)',
+          'rgb(0, 255, 0)',
+          'rgb(0, 0, 128)',
+          'rgb(255, 255, 255)',
+          'rgb(255, 255, 0)'
         ],
         borderColor: "black",
         borderWidth: 0.5,
@@ -170,43 +191,45 @@ const Dashboard = () => {
     ],
   });
 
+  const sortByAmount = () => {
 
+  }
+  const sortByNameHandle = () => {
 
-  let t = 0;
-  // console.log("condition :", (!notFound || users.length == 0));
-  // get all users
+  }
+
   return (
+
     <div className="dashboard profile">
 
+      <Loading isLoading={loading} isFullPageLoading={true} />
+      <Loading isLoading={searchLoaing} isFullPageLoading={false} isSimpleLoading={true} />
       <AdvanceNav refresh={getUsers} isDashboard={true} isAddUser={true} />
 
       <div className="right">
-        
-        {" "}
-        {/* right side container which containes the compnets of dashboard*/}
+
         <div className="upper-container">
-          {" "}
-          {/* container for heading search and generate report*/}
-          <h2 className="heading">Dasboard</h2> {/* dashboard heading*/}
-          <MdPersonSearch className="search-p" /> {/* search icon*/}
-          <input
-            type="search"
-            onChange={searchHandle}
-            placeholder="Search User"
-          />
-          {/*searchbar to search users*/}
-          <button className="generateR">Generate Report</button>
+          <h2 className="heading">Dasboard</h2>
+
+          <div className="search-container">
+            <MdPersonSearch className="search-p" />
+            <input
+              type="search"
+              onChange={searchHandle}
+              placeholder="Search User"
+            />
+          </div>
+          {/* <button className="generateR"> Report</button> */}
         </div>
 
 
         <div className="d-container2">
-          {" "}
-          {/* contains overviw and chart sections */}
+
           <div className="d-overview">
             <div className="d-balance">
               <p
                 style={{
-                  position: "abslute",
+                  position: "absolute",
                   backgroundColor: "lightgray",
                   color: "black",
                   padding: "5px 7px",
@@ -215,166 +238,123 @@ const Dashboard = () => {
                   margin: "-5px -3px",
                   fontWeight: "900",
                   fontSize: "x-small",
+                  position: "static",
                 }}
               >
                 Balance
               </p>
-              ₹ {total}
+              ₹ {total ? parseFloat(total).toFixed(2) : 0.00}
             </div>
-
             <div className="d-hl-container">
               <div className="d-high">
-                {/*user has higest credit */}
                 <p>Max</p>
                 <div>
                   <span>{max ? max.name : "NA"}</span>
                   <span style={{ color: "red" }}>
-                    ₹ {min ? max.totalAmount : 0}
+                    ₹ {min ? parseFloat(max.balance).toFixed(2) : 0.00}
                   </span>
                 </div>
               </div>
-
               <div className="d-low">
-                {/*user has lowest credit */}
                 <p>Min</p>
                 <div>
                   <span>{min ? min.name : "NA"}</span>
                   <span style={{ color: "green" }}>
-                    ₹ {min ? min.totalAmount : 0}
+                    ₹ {min ? parseFloat(min.balance).toFixed(2) : 0.00}
                   </span>
                 </div>
               </div>
             </div>
           </div>
+
+
           <div className="d-chart">
-            {ApiUserData.length > 0 ? (
+            {users.length > 0 && (
               <PieChart
                 chartData={userData}
                 options={opt}
-                style={{ hight: "500px" }}
+                style={{ hight: "100%" }}
               />
-            ) : (
-              ""
             )}
           </div>
+
+
         </div>
+
+
+        <div className="sort-by-and-add-user-container">
+          <FilterButton setIsFiltersApplied={setIsFilterApplied} setShowFilters={setShowFilters} setFilteredData={setFilterData} showFilters={showFilters} unFilteredData={ApiUserData} />
+          <AddUser refresh={getUsers} />
+        </div>
+
+
         <div className="d-clients-container">
+
           <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
+            {/* display headers only if any cliet exists */}
+            {
+              users?.length > 0 && <thead>
+                <tr>
+                  <th style={{ cursor: "pointer" }} onClick={sortByNameHandle}>Name</th>
+                  <th>Date</th>
+                  <th style={{ cursor: "pointer" }} onClick={sortByAmount}>Amount</th>
+                </tr>
+              </thead>
+            }
 
             <tbody>
-              {/* <h5>USERS</h5> */}
+              {/* Display custom message if clients not found */}
               {notFound ? (
-                <>
-                  <tr style={{ backgroundColor: "red" }}>
-                    <td
-                      style={{
-                        color: "black",
-                        backgroundColor: "orange",
-                        fontWeight: "900",
-                      }}
-                    >
-                      {" "}
-                      ! USER
-                    </td>
-                    <td
-                      style={{
-                        color: "black",
-                        backgroundColor: "orange",
-                        fontWeight: "900",
-                      }}
-                    >
-                      NOT FOUND
-                    </td>
-                    <td
-                      style={{
-                        color: "black",
-                        backgroundColor: "orange",
-                        fontWeight: "900",
-                      }}
-                    >
-                      <AddUser refresh={getUsers} />{" "}
-                    </td>
-                  </tr>
-                </>
-              ) : users.length == 0 ? (
-                <>
-                  <tr style={{ backgroundColor: "red" }}>
-                    <td
-                      style={{
-                        color: "black",
-                        backgroundColor: "orange",
-                        fontWeight: "900",
-                      }}
-                    >
-                      {" "}
-                      ! NO
-                    </td>
-                    <td
-                      style={{
-                        color: "black",
-                        backgroundColor: "orange",
-                        fontWeight: "900",
-                      }}
-                    >
-                      User{" "}
-                    </td>
-                    <td
-                      style={{
-                        color: "black",
-                        backgroundColor: "orange",
-                        fontWeight: "900",
-                      }}
-                    >
-                      <AddUser refresh={getUsers} />{" "}
-                    </td>
-                  </tr>
-                </>
-              ) : (
-                <>
-
-                  {users.map((user, index) => {
-                    //   SetTotal(user.totalAmount)
-                    // console.log("USER :", user);
-                    if (loading) {
-                      return (
-                        // 
-                        <customSkeleton />
-                      )
+                <tr style={{ backgroundColor: "red" }}>
+                  <Client isClickDisabled={true} name={"Client Not Found!"} />
+                </tr>
+              ) : users?.length === 0 ? (
+                // Display message if no clients found
+                <Client isClickDisabled={true} name={"Client Not Found!"} />
+              ) : isFilterApplied ? (
+                filterData.map((user, index) => (
+                  <Client
+                    isClientComponent={true}
+                    key={index}
+                    lastDate={
+                      user?.lastDate.length > 0
+                        ? new Date(user.lastDate).toLocaleDateString("en-IN")
+                        : date
                     }
-                    return (
-                      <Client
-                        key={index}
-                        lastDate={
-                          user?.lastDate.length > 0 /*to check is a date */
-                            ? new Date(user.lastDate).toLocaleDateString(
-                              "en-IN"
-                            )
-                            : today
-                        }
-                        name={user.name}
-                        amount={user.totalAmount}
-                        Id={user._id}
-                      >
-                        {" "}
-                      </Client>
-                    );
-                  })}
-
-
+                    name={user.name}
+                    amount={user.balance}
+                    Id={user._id}
+                  />
+                ))
+              ) : (
+                // Display clients
+                <>
+                  {users?.map((user, index) => (
+                    <Client
+                      isClientComponent={true}
+                      key={index}
+                      lastDate={
+                        user?.lastDate.length > 0
+                          ? new Date(user.lastDate).toLocaleDateString("en-IN")
+                          : date
+                      }
+                      name={user.name}
+                      amount={user.balance}
+                      Id={user._id}
+                    />
+                  ))}
                 </>
               )}
             </tbody>
+
+
+
           </table>
         </div>
       </div>
-    </div>
+    </div >
+
   );
 };
+
 export default Dashboard;
