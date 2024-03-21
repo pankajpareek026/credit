@@ -19,7 +19,7 @@ app.use(cookieParser());
 
 app.use(cors({
     origin: process.env.CROSS_ORIGIN,//client url
-    credentials: true
+    credentials: true,
 }))
 // app.use(function (req, res, next) {
 //     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');

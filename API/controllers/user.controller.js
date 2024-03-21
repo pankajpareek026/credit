@@ -51,16 +51,18 @@ const register = async (req, res, next) => {
         delete query.email;
 
         // Generate JWT token for authentication
-        const token = await jwtGenetator(query, "28d");
+        // const token = await jwtGenetator(query, "28d");
 
         // Configuring JWT token options
-        const options = {
-            expires: new Date(Date.now() + 27 * 24 * 60 * 60 * 1000),
-            httpOnly: true
-        };
+        // const options = {
+        //     expires: new Date(Date.now() + 27 * 24 * 60 * 60 * 1000),
+        //     httpOnly: true,
+        //     sameSite: 'none',
+        //     secure: true,
+        // };
 
         // Sending JWT token as a cookie along with registration success message
-        return res.status(201).cookie("user", token, options).json(
+        return res.status(201).json(
             new ApiResponse(true, false, "Registration successful", "")
         );
 
@@ -124,20 +126,25 @@ const login = async (req, res, next) => {
         // if errror while generating token
         if (token.error) {
             // return error
+            console.error("Error generating token= >", token.message);
             return next(new ApiError(500, "internal server error",));
         }
         // setting cookies options
         const cookieOptions = {
             expires: new Date(Date.now() + 27 * 24 * 60 * 60 * 1000),
-            httpOnly: true
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
         };
 
         // return response with authorization token
-        return res.status(201).cookie("user", token, cookieOptions).json(new ApiResponse(true, false, "login successfully", { user: token }));
+        res.cookie("user", token, cookieOptions)
+        return res.json(new ApiResponse(true, false, "login successfully", { user: token }));
 
 
     } catch (error) {
         //
+        console.error("login Error= >", error.message);
         return next(new Error(error.message));
     }
 }

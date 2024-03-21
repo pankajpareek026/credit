@@ -39,7 +39,8 @@ const AddUser = ({ refresh }) => {
         method: "post",
         headers: { "content-type": "application/json", token: `${parentId}` },
         body: JSON.stringify({ parentId, name }),
-        credentials: "include"
+        credentials: "include",
+        mode: 'cors'
       })
         .then(response => response.json())
         .then((result) => {

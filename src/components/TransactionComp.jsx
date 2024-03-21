@@ -45,7 +45,8 @@ const TransactionComp = ({ type, amount, date, dis, previusBalance, currentBalan
           "content-type": "application/json",
           token: auth
         },
-        credentials: "include"
+        credentials: "include",
+        mode: 'cors'
       });
       result = await result.json();
       setTransactionData(result.responseData);

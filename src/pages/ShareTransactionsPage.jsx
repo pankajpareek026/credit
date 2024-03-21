@@ -10,6 +10,7 @@ import ShareTransactionCard from "../components/ShareTransactinCard";
 import api from "../api_source";
 import Loading from "../components/Loading";
 import WarningToast from "../components/WarningToast";
+import { Api } from "@mui/icons-material";
 
 const ShareTransactions = () => {
   // Define info icon style
@@ -40,7 +41,8 @@ const ShareTransactions = () => {
             "content-type": "application/json",
             shareToken: source.toString(),
           },
-          credentials: "include"
+          credentials: "include",
+          mode: 'cors'
         });
         const data = await response.json();
         if (data.isSuccess) {
@@ -81,7 +83,9 @@ const ShareTransactions = () => {
 
         </div>
         <hr />
-        <h1 className="first-heading">Transaction History</h1>
+        <marquee behavior="sc" direction="">{`Transactions Bewteen  and `} <span style={{ color: "orange" }}>{APIdata.parentName}</span> and <span style={{ color: "green" }}>{APIdata.clientName}</span>
+        </marquee>
+        <h1 className="share-page-first-heading">Transaction History</h1>
 
         {APIdata && (
           <h2 className="share-name">
@@ -102,14 +106,14 @@ const ShareTransactions = () => {
                 <ArrowDownwardIcon />
                 ₹ {APIdata.totalRecivedAmount}
                 <span>
-                  <InfoIcon titleAccess="You have Received" style={infoIconStyle} />
+                  <InfoIcon titleAccess={`Sent by ${APIdata.parentName}`} style={infoIconStyle} />
                 </span>
               </div>
               <div className="share-right">
                 <ArrowUpwardIcon />
                 ₹ {APIdata.totalSentAmount}
                 <span>
-                  <InfoIcon titleAccess="You have Sent" style={infoIconStyle} />
+                  <InfoIcon titleAccess={`Sent by ${APIdata.clientName}`} style={infoIconStyle} />
                 </span>
               </div>
             </div>
@@ -119,7 +123,7 @@ const ShareTransactions = () => {
               <div className="remaining-balance">
                 Remaining balance: ₹ {APIdata.totalRemainingAmount}
                 <InfoIcon
-                  titleAccess={APIdata.totalRemainingAmount > 0 ? "you have to pay" : "you have to collect"}
+                  titleAccess={APIdata.totalRemainingAmount < 0 ? `${APIdata.clientName}you have to pay` : `${APIdata.clientName}  have to collect`}
                   style={infoIconStyle}
                 />
               </div>

@@ -29,6 +29,7 @@ const Dashboard = () => {
   const [total, SetTotal] = useState(0);
   const [min, SetMin] = useState({});
   const [max, SetMax] = useState({});
+  const [searchQuery, SetSearchQuery] = useState(null)
   const [notFound, SetnotFound] = useState(false);
   const dispatch = useDispatch()
 
@@ -64,9 +65,10 @@ const Dashboard = () => {
 
   // search lients
   const searchHandle = async (e) => {
-    const query = e.target.value
+    console.log("search Q=> ", e.target.value)
+    SetSearchQuery(e.target.value)
     try {
-      if (query === "") {
+      if (searchQuery === null) {
         SetnotFound(false);
         getUsers(false);
         return
@@ -79,9 +81,10 @@ const Dashboard = () => {
         headers: {
           "content-type": "application/json",
           token: Auth,
-          query,
+          query: searchQuery,
         },
-        credentials: "include"
+        credentials: "include",
+        mode: 'cors'
       }).then(res => res.json())
         .then((result) => {
           if (result.isSuccess) {
@@ -122,7 +125,8 @@ const Dashboard = () => {
           "content-type": "application/json",
           token: Auth,
         },
-        credentials: "include"
+        credentials: "include",
+        mode: 'cors'
       })
         .then(response => {
           if (!response.ok) {
@@ -249,16 +253,16 @@ const Dashboard = () => {
               <div className="d-high">
                 <p>Max</p>
                 <div>
-                  <span>{max ? max.name : "NA"}</span>
+                  <span>{max ? max.name : "Max"}</span>
                   <span style={{ color: "red" }}>
-                    ₹ {min ? parseFloat(max.balance).toFixed(2) : 0.00}
+                    ₹ {max ? parseFloat(max.balance).toFixed(2) : 0.00}
                   </span>
                 </div>
               </div>
               <div className="d-low">
                 <p>Min</p>
                 <div>
-                  <span>{min ? min.name : "NA"}</span>
+                  <span>{min ? min.name : "MIN"}</span>
                   <span style={{ color: "green" }}>
                     ₹ {min ? parseFloat(min.balance).toFixed(2) : 0.00}
                   </span>

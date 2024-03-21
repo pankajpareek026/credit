@@ -119,7 +119,8 @@ const Transactions = () => {
         clientid: params.id,
         token: auth,
       },
-      credentials: "include"
+      credentials: "include",
+      mode: 'cors'
     })
       .then(response => {
         // Check if response is successful
@@ -200,6 +201,7 @@ const Transactions = () => {
           token: auth.toString(),
         },
         credentials: "include",
+        mode: 'cors',
         body: JSON.stringify({
           clientId: params.id.toString(),
         }),
@@ -357,12 +359,13 @@ const Transactions = () => {
         />
         {/* container which contains user name and share button */}
         <div className="t-upper-container">
-          <div
+          <p
             style={show ? { filter: "blur(.7px)" } : {}}
             className="t-username"
+            title={`Client Name : ${name}`}
           >
             {name}
-          </div>
+          </p>
           <div className="search-container">
             <SearchIcon className="search-p" />
             <input

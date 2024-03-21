@@ -36,7 +36,6 @@ function Register() {
             SetEmpty(true); // Set empty state to true
             return;
         }
-        e.target.disabled = true; // Disable the button
         SetDisabled(true); // Disable form elements
         SetLoading(true); // Show loading spinner
 
@@ -45,17 +44,20 @@ function Register() {
             method: "post",
             body: JSON.stringify({ name, email, pass }),
             headers: { 'content-type': 'application/json' },
-            credentials: "include"
+            credentials: "include",
+            mode: 'cors'
         })
             .then(response => {
-                if (!response.ok) {
-                    return ErrorToast('Network Error');
-                }
+                // if (!response.ok) {
+                //     return ErrorToast('Network Error');
+                // }
+                // console.log("response STS=>", response)
                 return response.json();
             })
             .then(result => {
-                if (result.isSuccess) {
-                    SuccessToast(result.message); // Show success message
+                console.log("rslt =>", result)
+                if (result?.isSuccess) {
+                    SuccessToast(result?.message); // Show success message
                     setTimeout(() => {
                         redirect('/login'); // Redirect to login page after a delay
                     }, 1500);
@@ -71,7 +73,6 @@ function Register() {
                 return ErrorToast(error.message)
             })
             .finally(() => {
-                e.target.disabled = false; // Enable the button
                 SetDisabled(false); // Enable form elements
                 SetLoading(false); // Hide loading spinner
             });
@@ -90,7 +91,7 @@ function Register() {
 
                             <h2>Register</h2>
                             <input type="text"
-                                onKeyDown={(e) => { e.key == "Enter" && registerHandle() }}
+                                onKeyDown={(e) => { e.key == "Enter" && registerHandle(e) }}
                                 onChange={(e) => Setname(e.target.value)}
                                 placeholder='Full Name' />
                             <ErrorMessage show={(empty && !name)} message={"Name is Required"} />

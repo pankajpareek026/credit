@@ -71,20 +71,21 @@ function Login(e) {
                 headers: {
                     'Content-Type': "application/json", // Set the content type of the request
                 },
-                credentials: "include", // Include credentials such as cookies in the request
+                credentials: "include",// Include credentials such as cookies in the request
+                mode: 'cors',
                 body: JSON.stringify({ email, pass }), // Convert the email and password to JSON format and send it in the request body
             })
                 .then(response => response.json()) // Parse the response from the server as JSON
                 .then((apiResult) => {
                     if (apiResult.isError) {
                         // If there's an error response from the server
-                        ErrorToast(apiResult.message); // Show the error message to the user
+                        ErrorToast(apiResult?.message); // Show the error message to the user
                         SetLoading(false); // Hide the loading spinner
                         SetDisable(false); // Enable the form elements for user interaction
                         return;
                     }
 
-                    SuccessToast(apiResult.message); // Show the success message to the user
+                    SuccessToast(apiResult?.message); // Show the success message to the user
 
                     if (apiResult.isSuccess) {
                         // If the login attempt is successful
@@ -92,9 +93,9 @@ function Login(e) {
 
                         SetLoading(false); // Hide the loading spinner
 
-                        SuccessToast(apiResult.message); // Show the success message to the user
+                        SuccessToast(apiResult?.message); // Show the success message to the user
 
-                        dipatch(setCredentials({ token: apiResult.user, status: true }))
+                        dipatch(setCredentials({ token: apiResult?.user, status: true }))
                         // Redirect to the dashboard page after a short delay
 
                         setTimeout(() => {
@@ -139,7 +140,7 @@ function Login(e) {
                     onKeyDown={(e) => { e.key === "Enter" && loginHandle() }}
                     placeholder='Email' />
                 <ErrorMessage show={(err && !email)} message={"Email is Required"} />
-                <ErrorMessage show={(err && !validator.isEmail(email))} message={"Invalid Email"} />
+                <ErrorMessage show={(err && email && !validator.isEmail(email))} message={"Invalid Email"} />
 
 
                 {/* input box for password */}

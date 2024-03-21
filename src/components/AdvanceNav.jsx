@@ -27,8 +27,8 @@ const AdvanceNav = ({ refresh, isDashboard = false, isAddUser }) => {
   const [isLogoutModal, setIsLogoutModal] = useState(false)
   const path = location.pathname
   const dispatch = useDispatch()
-  const activeColor = "#FFFFFF"
-  const activeBg = "#24260b"
+  const activeColor = "#14f195"
+  const activeBg = "#303134"
   const closeModal = () => {
     setIsLogoutModal(false)
   }
@@ -40,7 +40,8 @@ const AdvanceNav = ({ refresh, isDashboard = false, isAddUser }) => {
         headers: {
           "content-type": "application/json"
         },
-        credentials: "include"
+        credentials: "include",
+        mode: 'cors'
       }).then(res => res.json())
         .then((result) => {
           if (result.isSuccess) {

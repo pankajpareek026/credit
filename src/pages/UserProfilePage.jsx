@@ -90,7 +90,8 @@ function UserProfile() {
           shareid: deleteLinkId,
           token: Auth
         },
-        credentials: "include"
+        credentials: "include",
+        mode: 'cors'
       })
         .then(res => res.json())
         .then((data) => {
@@ -161,6 +162,7 @@ function UserProfile() {
           "token": Auth
         },
         credentials: "include",
+        mode: 'cors',
         body: JSON.stringify({
           "clientId": clientId,
           "newName": newName,
@@ -224,7 +226,8 @@ function UserProfile() {
           "clientid": clientId,
           "clientName": clientCurrentName
         },
-        credentials: "include"
+        credentials: "include",
+        mode: 'cors'
       })
         .then(response => response.json())
         .then((deleteResponse) => {
@@ -270,7 +273,8 @@ function UserProfile() {
           "content-type": "application/json",
           token: Auth,
         },
-        credentials: "include"
+        credentials: "include",
+        mode: 'cors'
       })
         .then(res => res.json())
         .then(data => {

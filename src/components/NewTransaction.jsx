@@ -42,6 +42,7 @@ const NewTransaction = ({ isOpen, close, transactionId, refresh, SetIsOpen, head
         body: JSON.stringify({ amount, date, dis, type }),
         headers: { 'content-type': 'application/json', clientid: clientId, token: localStorage.getItem('user') },
         credentials: "include",
+        mode: 'cors'
       }).then(response => response.json())
         .then((result) => {
           if (result.isSuccess) {
@@ -80,8 +81,8 @@ const NewTransaction = ({ isOpen, close, transactionId, refresh, SetIsOpen, head
           token: token,
           clientid: clientId
         },
-
         credentials: "include",
+        mode: 'cors',
         body: JSON.stringify({
           tId,
           amount,
