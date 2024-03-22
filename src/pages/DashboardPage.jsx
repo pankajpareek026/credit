@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdPersonSearch } from "react-icons/md";
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import PieChart from "../components/pieChart";
 import Client from "../components/Client";
 import AdvanceNav from "../components/AdvanceNav";
@@ -65,53 +65,62 @@ const Dashboard = () => {
 
   // search lients
   const searchHandle = async (e) => {
-    console.log("search Q=> ", e.target.value)
-    SetSearchQuery(e.target.value)
-    try {
-      if (searchQuery === null) {
-        SetnotFound(false);
-        getUsers(false);
-        return
-      }
-      setSearchLoaing(true);
-      setShowFilters(false)
-      setIsFilterApplied(false);
-      fetch(`${api}/search`, {
-        method: 'GET',
-        headers: {
-          "content-type": "application/json",
-          token: Auth,
-          query: searchQuery,
-        },
-        credentials: "include",
-        mode: 'cors'
-      }).then(res => res.json())
-        .then((result) => {
-          if (result.isSuccess) {
-            Setusers(result.responseData);
-            // setApiUserData([]);
-            setApiUserData(users.responseData);
-            setSearchLoaing(false);
-            return
-          }
 
 
-          if (result.message === "Not Found !") {
-            SetnotFound(true);
-            Setusers([]);
-            setApiUserData([]);
-            setApiUserData([])
-          }
-          return ErrorToast(result.message);
-        }).catch((error) => {
-          ErrorToast(error.message)
-        }).finally(() => {
-          setSearchLoaing(false)
-        })
-
-    } catch (error) {
-      WarningToast("An error occurred. Please try again.");
+    const query = e.target.value.trim();
+    console.log("query  length=> ", query?.length)
+    if (query?.length <= 0) {
+      SetnotFound(false);
+      SetSearchQuery(null)
+      getUsers(false);
+      return
     }
+    if (query.length > 0) {
+      try {
+
+        setSearchLoaing(true);
+        setShowFilters(false)
+        setIsFilterApplied(false);
+        fetch(`${api}/search`, {
+          method: 'GET',
+          headers: {
+            "content-type": "application/json",
+            token: Auth,
+            query,
+          },
+          mode: 'cors',
+          credentials: "include",
+
+        }).then(res => res.json())
+          .then((result) => {
+            console.log(" search result =>", result)
+            if (result.isSuccess) {
+              Setusers(result.responseData);
+              setApiUserData([]);
+              setApiUserData(users.responseData);
+              setSearchLoaing(false);
+              return
+            }
+
+
+            if (result.message === "Not Found !") {
+              SetnotFound(true);
+              Setusers([]);
+              setApiUserData([]);
+              setApiUserData([])
+            }
+            return ErrorToast(result.message);
+          }).catch((error) => {
+            ErrorToast(error.message)
+          }).finally(() => {
+            setSearchLoaing(false)
+          })
+
+      } catch (error) {
+        WarningToast("An error occurred. Please try again.");
+      }
+    }
+
   };
 
 
@@ -132,6 +141,7 @@ const Dashboard = () => {
           if (!response.ok) {
             return ErrorToast('Network response was not ok');
           }
+          console.log("intermediate response")
           return response.json();
         })
         .then(users => {
@@ -216,8 +226,10 @@ const Dashboard = () => {
           <h2 className="heading">Dasboard</h2>
 
           <div className="search-container">
-            <MdPersonSearch className="search-p" />
+            <PersonSearchIcon className="search-p" />
+
             <input
+              value={null}
               type="search"
               onChange={searchHandle}
               placeholder="Search User"

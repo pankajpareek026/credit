@@ -1,7 +1,5 @@
 import React from "react";
 import "../loading.css";
-import { RingLoader } from "react-spinners";
-import { Circles } from "react-loader-spinner";
 export default function Loading({ isLoading, isFullPageLoading, isSimpleLoading }) {
 
   if (isLoading) {

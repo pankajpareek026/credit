@@ -16,6 +16,7 @@ const NewTransaction = ({ isOpen, close, transactionId, refresh, SetIsOpen, head
   const [date, setDate] = useState();
   const [disc, setDisc] = useState(tData?.dis);
   const [isLoading, setIsLoading] = useState(false);
+  const [ediMode, setEditMode] = useState(modalType == "edit");
   const clientId = useSelector(state => state.clientData.clientId);
 
   // function which handle add  / edit transactions
@@ -196,7 +197,7 @@ const NewTransaction = ({ isOpen, close, transactionId, refresh, SetIsOpen, head
                     style={{ cursor: isLoading ? "not-allowed" : "pointer", backgroundColor: isLoading ? "gray" : "green" }}
                     disabled={isLoading}
                     onClick={() => handleTransaction('IN')}
-                  >{isLoading ? "processing . . . ." : "IN"}</button>
+                  >{isLoading ? "processing . . . ." : ediMode ? "Update" : "IN"}</button>
                 </div>
 
 
@@ -209,7 +210,7 @@ const NewTransaction = ({ isOpen, close, transactionId, refresh, SetIsOpen, head
                   <input type="number" autoFocus value={amount} onChange={(e) => setAmount(e.target.value)} placeholder='Amount' required />
                   <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} placeholder='Date' required />
                   <input type="text" value={disc} onChange={(e) => setDisc(e.target.value)} onKeyDown={(e) => { e.key == "Enter" && handleSubmit("OUT", e.key) }} placeholder='Comment' required />
-                  <button style={{ cursor: isLoading ? "not-allowed" : "pointer", backgroundColor: isLoading ? "gray" : "red" }} disabled={isLoading} onClick={() => handleTransaction('OUT')}>{isLoading ? "processing . .  . ." : "OUT"}</button>
+                  <button style={{ cursor: isLoading ? "not-allowed" : "pointer", backgroundColor: isLoading ? "gray" : "red" }} disabled={isLoading} onClick={() => handleTransaction('OUT')}>{isLoading ? "processing . .  . ." : ediMode ? "Update" : "OUT"}</button>
                 </div>
 
 

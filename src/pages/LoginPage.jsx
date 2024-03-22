@@ -79,7 +79,7 @@ function Login(e) {
                 .then((apiResult) => {
                     if (apiResult.isError) {
                         // If there's an error response from the server
-                        ErrorToast(apiResult?.message); // Show the error message to the user
+                        ErrorToast(apiResult?.responseData.message); // Show the error message to the user
                         SetLoading(false); // Hide the loading spinner
                         SetDisable(false); // Enable the form elements for user interaction
                         return;
@@ -87,15 +87,15 @@ function Login(e) {
 
                     SuccessToast(apiResult?.message); // Show the success message to the user
 
-                    if (apiResult.isSuccess) {
+                    if (apiResult.isSuccess && apiResult.responseData !== undefined) {
                         // If the login attempt is successful
-                        localStorage.setItem("user", apiResult.user); // Store user data in local storage
+                        localStorage.setItem("user", apiResult.responseData.user); // Store user data in local storage
 
                         SetLoading(false); // Hide the loading spinner
 
                         SuccessToast(apiResult?.message); // Show the success message to the user
 
-                        dipatch(setCredentials({ token: apiResult?.user, status: true }))
+                        dipatch(setCredentials({ token: apiResult.responseData?.user, status: true }))
                         // Redirect to the dashboard page after a short delay
 
                         setTimeout(() => {
@@ -132,8 +132,6 @@ function Login(e) {
             <div className='Login'>
                 <h2>Login</h2>
                 {/* input box for email */}
-
-
                 <input type="email"
                     value={email}
                     onChange={(e) => SetEmail(e?.target?.value)}
@@ -141,7 +139,6 @@ function Login(e) {
                     placeholder='Email' />
                 <ErrorMessage show={(err && !email)} message={"Email is Required"} />
                 <ErrorMessage show={(err && email && !validator.isEmail(email))} message={"Invalid Email"} />
-
 
                 {/* input box for password */}
                 <div className="pass">

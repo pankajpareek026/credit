@@ -2,15 +2,11 @@ import React, { useState } from 'react'
 
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom'
-import Swal from 'sweetalert2'
 import 'react-toastify/dist/ReactToastify.css';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import AddUser from './AddUser';
 import Success from './SuccessToast';
 import CustomModal from '../mui_comps/CustomModal';
 import { useDispatch } from 'react-redux';

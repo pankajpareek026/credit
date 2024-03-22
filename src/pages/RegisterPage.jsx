@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import validator from 'validator'
-import { AiFillEye } from 'react-icons/ai';
-import { AiFillEyeInvisible } from 'react-icons/ai';
 //mui icons --start
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
