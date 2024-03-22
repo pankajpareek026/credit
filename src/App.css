@@ -2894,7 +2894,7 @@ svg{
     /* text-align: center; */
     height: 100%;
     /* border-bottom: 1px solid gray; */
-    font-size:x-small;
+    font-size:small;
     height: 40px;
     /* margin-top: 10px; */
     /* background-color: #24262b; */
@@ -2911,8 +2911,10 @@ svg{
     /* border-radius: 10px 0px 0px 10px; */
     border-radius: 0;
     text-transform: capitalize;
+    text-align: left;
     cursor: pointer;
     font-size: small;
+    padding-left: 2px;
   }
   .d-clients-container table tbody tr td:last-child {
     font-family: monospace;
