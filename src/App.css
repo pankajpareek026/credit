@@ -2806,7 +2806,9 @@ position: static !important;
   }
   .d-balance{
 font-size: 1.45rem;
+width: 100%;
 overflow: hidden;
+padding-top: 7px;
   }
 
   /*  mobile navbar */
@@ -2894,7 +2896,7 @@ svg{
     /* text-align: center; */
     height: 100%;
     /* border-bottom: 1px solid gray; */
-    font-size:small;
+    font-size: small;
     height: 40px;
     /* margin-top: 10px; */
     /* background-color: #24262b; */
@@ -2913,15 +2915,14 @@ svg{
     text-transform: capitalize;
     text-align: left;
     cursor: pointer;
-    font-size: small;
-    padding-left: 2px;
+    padding-left: 7px;
   }
   .d-clients-container table tbody tr td:last-child {
     font-family: monospace;
-    font-size: small!important;
     /* border-radius: 0px 10px 10px 0px; */
     border-radius: 0;
     cursor: pointer;
+    /* font-size: medium!important; */
   }
   .d-clients-container table tbody tr td p {
     color: var(--main) !important;
