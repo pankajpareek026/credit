@@ -335,6 +335,7 @@ function UserProfile() {
             isFirstButton={true}
             isSecondButton={true}
             firstOnClick={() => setOpen(false)}
+            closeModal={() => setOpen(false)}
             secodOnClick={() => deleteLinkParmanent()}
           />
 
@@ -344,6 +345,7 @@ function UserProfile() {
             openModal={showEditModal}
             setOpenModal={closeEditModal}
             modalType={"input"}
+            closeModal={closeEditModal}
             title={`Change client name`}
             firstOnClick={closeEditModal}
             isSecondLoading={isSecondBtnLoading}
@@ -374,7 +376,7 @@ function UserProfile() {
                 <MuiInputBox
                   // InpVariant={"standard"}
                   isRequired={true}
-                  placeHolder={"New name"}
+                  placeHolder={"Enter New name"}
                   // inpValue={clientCurrentName}
                   // isDisabled={true}
                   label={"New name"}
@@ -405,6 +407,7 @@ function UserProfile() {
             secondButtonName={"Delete"}
             isFirstButton={true}
             isSecondButton={true}
+            closeModal={closeDeleteModal}
             isSecondLoading={isSecondBtnLoading}
             secodOnClick={deleteClientPermanently}
             firstOnClick={() => closeDeleteModal()}

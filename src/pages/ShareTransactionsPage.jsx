@@ -11,7 +11,7 @@ import api from "../api_source";
 import Loading from "../components/Loading";
 import WarningToast from "../components/WarningToast";
 import { Api } from "@mui/icons-material";
-
+document.title = "Credit | Shared Transaction History"
 const ShareTransactions = () => {
   // Define info icon style
   const infoIconStyle = {
@@ -83,18 +83,18 @@ const ShareTransactions = () => {
 
         </div>
         <hr />
-        <marquee behavior="sc" direction="">{`Transactions Bewteen  and `} <span style={{ color: "orange" }}>{APIdata.parentName}</span> and <span style={{ color: "green" }}>{APIdata.clientName}</span>
-        </marquee>
+        {/* <div style={{ fontSize: "small",textAlign:"center",color:"gray", backgroundColor :"black" }}>{`Transactions Between `} <span style={{ color: "orange" }}>{APIdata?.parentName}</span> and <span style={{ color: "red" }}>{APIdata?.clientName}</span>
+        </div> */}
         <h1 className="share-page-first-heading">Transaction History</h1>
 
         {APIdata && (
           <h2 className="share-name">
             {APIdata.clientName}{" "}
             <SwapHorizIcon
-              title={`Transactions between ${APIdata.clientName} and ${APIdata.parentName}`}
+              title={`Transactions between ${APIdata?.clientName} and ${APIdata?.parentName}`}
               style={{ transform: "scale(.9)", marginTop: "auto" }}
             />{" "}
-            {APIdata.parentName}
+            {APIdata?.parentName}
           </h2>
         )}
         {APIdata && (
@@ -104,16 +104,16 @@ const ShareTransactions = () => {
             <div className="upper">
               <div className="share-left">
                 <ArrowDownwardIcon />
-                ₹ {APIdata.totalRecivedAmount}
+                ₹ {APIdata.totalSentAmount ? APIdata.totalSentAmount : 0.00}
                 <span>
-                  <InfoIcon titleAccess={`Sent by ${APIdata.parentName}`} style={infoIconStyle} />
+                  <InfoIcon titleAccess={`Sent by ${APIdata?.parentName}`} style={infoIconStyle} />
                 </span>
               </div>
               <div className="share-right">
                 <ArrowUpwardIcon />
-                ₹ {APIdata.totalSentAmount}
+                ₹ {APIdata?.totalRecivedAmount ? APIdata?.totalRecivedAmount : 0.00}
                 <span>
-                  <InfoIcon titleAccess={`Sent by ${APIdata.clientName}`} style={infoIconStyle} />
+                  <InfoIcon titleAccess={`Sent by ${APIdata?.clientName}`} style={infoIconStyle} />
                 </span>
               </div>
             </div>
@@ -121,9 +121,9 @@ const ShareTransactions = () => {
 
             <div className="lower">
               <div className="remaining-balance">
-                Remaining balance: ₹ {APIdata.totalRemainingAmount}
+                Remaining balance: ₹ {APIdata?.totalRemainingAmount ? APIdata.totalRemainingAmount : 0.00}
                 <InfoIcon
-                  titleAccess={APIdata.totalRemainingAmount < 0 ? `${APIdata.clientName}you have to pay` : `${APIdata.clientName}  have to collect`}
+                  titleAccess={APIdata?.totalRemainingAmount > 0 ? `${APIdata?.clientName} have to pay` : `${APIdata?.clientName}  have to collect`}
                   style={infoIconStyle}
                 />
               </div>
@@ -140,10 +140,10 @@ const ShareTransactions = () => {
             transactions.map((transaction, index) => (
               <ShareTransactionCard
                 key={index}
-                type={transaction.type}
-                amount={transaction.amount}
-                date={new Date(transaction.date).toLocaleString('en-IN')}
-                message={transaction.dis}
+                type={transaction?.type}
+                amount={transaction?.amount}
+                date={new Date(transaction?.date).toLocaleString('en-IN')}
+                message={transaction?.dis}
               />
             ))}
         </div>

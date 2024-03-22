@@ -14,8 +14,6 @@ const { default: mongoose } = require("mongoose");
 const GenetateShareLink = async (req, res, next) => {
     try {
         const { value, unit } = req.params;
-        console.log(req.params);
-
         const newTime = moment().add(value, unit).format('lll');
         const expireTimeMili = moment(newTime).valueOf(); // expire time in milliseconds
         const expireTime = value + " " + unit // expire time in milliseconds
@@ -106,7 +104,7 @@ const getTransactionByShareToken = async (req, res, next) => {
             const tokenStatus = await jwtVerify(shareToken);
 
             console.log(" JWT token status=>>", tokenStatus);
-
+            console.log("token Status=>>", tokenStatus);
             // Check if the JWT token is expired
             if (tokenStatus.isExpired) {
                 return next(new ApiError(402, "Expired Link"))
@@ -145,7 +143,7 @@ const getTransactionByShareToken = async (req, res, next) => {
                         $group: {
                             _id: "$_id",
                             clientName: { $first: "$name" },
-                            totalRecived: {
+                            totalRecived: { //total amount recived by parent
                                 $sum: {
                                     $cond: {
                                         if: { $eq: ["$trnsData.type", "IN"] },
@@ -154,7 +152,7 @@ const getTransactionByShareToken = async (req, res, next) => {
                                     }
                                 }
                             },
-                            totalSent: {
+                            totalSent: { // total amount sent by parent
                                 $sum: {
                                     $cond: {
                                         if: { $eq: ["$trnsData.type", "OUT"] },
@@ -219,7 +217,6 @@ const getTransactionByShareToken = async (req, res, next) => {
 const deleteShareToken = async (req, res, next) => {
     try {
         const { shareid } = req.headers
-        console.log("Headers =>>>", req.headers)
         //*********** */ to find out that provided id is valid object Id or not********
         const isObjectId = mongoose.isValidObjectId(shareid)
 

@@ -113,44 +113,48 @@ const Transactions = () => {
   const getTransactions = () => {
     setIsLoading(true)
     // Fetch transactions data from the server
-    fetch(`${api}/client/transactions`, {
+    try {
+      fetch(`${api}/client/transactions`, {
 
-      headers: {
-        clientid: params.id,
-        token: auth,
-      },
-      credentials: "include",
-      mode: 'cors'
-    })
-      .then(response => {
-        // Check if response is successful
-        if (!response.ok) {
-          return ErrorToast('Network response was not ok');
-        }
-        // Parse response JSON
-        return response.json();
+        headers: {
+          clientid: params.id,
+          token: auth,
+        },
+        credentials: "include",
+        mode: 'cors'
       })
-      .then(result => {
-        // console.log("result=>", result);
-        // Extract necessary data from the result
-        if (result.isError) return ErrorToast(result.message);
-        const { name, trns, balance } = result.isSuccess ? result.responseData : { name: "", transactions: [], balance: 0 };
+        .then(response => {
+          // Check if response is successful
+          if (!response.ok) {
+            return ErrorToast('Network response was not ok');
+          }
+          // Parse response JSON
+          return response.json();
+        })
+        .then(result => {
+          // console.log("result=>", result);
+          // Extract necessary data from the result
+          if (result.isError) return ErrorToast(result.message);
+          const { name, trns, balance } = result.isSuccess ? result.responseData : { name: "", transactions: [], balance: 0 };
 
-        // Set the name of the user at the top and in the header section in the transactions component
-        Setname(name);
+          // Set the name of the user at the top and in the header section in the transactions component
+          Setname(name);
 
-        // Set all transaction related to the client
-        SetTransactions(trns);
+          // Set all transaction related to the client
+          SetTransactions(trns);
 
-        // Set the balance
-        Setbalance(balance);
-      })
-      .catch(error => {
-        // Handle errors
-        ErrorToast(error.message);
-      }).finally(() => {
-        setIsLoading(false)
-      });
+          // Set the balance
+          Setbalance(balance);
+        })
+        .catch(error => {
+          // Handle errors
+          ErrorToast(error.message);
+        }).finally(() => {
+          setIsLoading(false)
+        });
+    } catch (error) {
+
+    }
   };
 
   const closeShareModal = () => {

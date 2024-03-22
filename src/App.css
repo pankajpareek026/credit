@@ -1198,7 +1198,6 @@ width: 100%;
   /* flex:1; */
   flex-wrap: wrap;
   margin:  0px ;
-  /* background-color: var(--black); */
   background-color: var(--dashboard_bg);
   height: 100vh;
   overflow-y:scroll ;
@@ -1234,10 +1233,8 @@ width: 100%;
   width: 50px;
   text-align: center;
   padding: 10px;
-  font-size: xxx-large;
+  font-size: 45px;
   color: var(--main);
-   ;
-
   background-color: var(--black);
 
 
@@ -1339,6 +1336,7 @@ svg:hover{
   margin-left: 2%;
   height: 100%;
   border-radius: 7px;
+  margin-bottom: 1.5rem;
   /* background: red; */
 }
 
@@ -2597,6 +2595,7 @@ position: static !important;
   .t-username {
     margin-left: 0;
   }
+  
   .profile{
     width: 100%;
     display: flex;
@@ -2616,7 +2615,7 @@ position: static !important;
   width: 100%;
   gap:5px;
   flex-direction: column;
-  background-color: var(--black);
+  /* background-color: var(--black); */
   margin-bottom:50px;
 }
 .profile> .profile-right-sec> .right-container>.right-lower>.user-wrapper{
@@ -3187,5 +3186,10 @@ svg{
   padding-left: 2px;
 }
 
+
+.right-container{
+  /* background-color: red!important; */
+  margin-bottom: 19vh!important;
+}
 }
 

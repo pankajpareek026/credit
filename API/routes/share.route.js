@@ -4,7 +4,7 @@ const authy = require('../middlewares/auth.middleware')
 const Router = require('express').Router
 const router = Router()
 router.route('/shareRequest/:value/:unit').post(authy, GenetateShareLink)
-router.route('/share').get(authy, getTransactionByShareToken)
+router.route('/share').get(getTransactionByShareToken)
 router.route('/deleteSharedLink').delete(authy, deleteShareToken)
 
 

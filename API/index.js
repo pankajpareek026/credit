@@ -17,18 +17,18 @@ const transactionRouter = require('./routes/transaction.route.js')
 app.use(express.json())
 app.use(cookieParser());
 
-// app.use(cors({
-//     origin: process.env.CROSS_ORIGIN,//client url
-//     credentials: true,
-// }))
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', process.env.CROSS_ORIGIN);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept,query,token,clietnId,clientName,shareid,tid,uid,clientid,parentid,sharetoken');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader("access-control-allow-params", 'tId')
-    next();
-})
+app.use(cors({
+    origin: process.env.CROSS_ORIGIN,//client url
+    credentials: true,
+}))
+// app.use(function (req, res, next) {
+//     res.setHeader('Access-Control-Allow-Origin', process.env.CROSS_ORIGIN);
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept,query,token,clietnId,clientName,shareid,tid,uid,clientid,parentid,sharetoken');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//     res.setHeader("access-control-allow-params", 'tId')
+//     next();
+// })
 
 
 
