@@ -285,7 +285,9 @@ function UserProfile() {
             SetClients(allClients)
             SetUserName(name)
             setSymbol(symbol)
+            return
           }
+          ErrorToast(data.message)
         })
         .catch(err => {
           ErrorToast(err.message)
