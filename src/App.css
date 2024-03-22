@@ -268,6 +268,7 @@ padding-left: 13px;
   cursor: pointer;
   border-radius: 5px;
   box-shadow: var(--shadow2);
+  position: static;
   
 }
 .add-user-icon-container:hover,.sort-by:hover,.add-transaction-icon:hover{
@@ -288,26 +289,7 @@ padding-left: 13px;
 }
 /* add user icon css for large screen ---end */
 /* sort by css ---start for large screen */
-/* .sort-by{
-  position:sticky;
-  margin-top: 1rem;
-  background-color:var(--new-dark);
-  font-size: large;
-  margin-left: 4%;
-  margin-right: auto;
-  width: 11%;
-  padding: 3px 10px;
-  display: flex;
-  justify-content: center;
-  padding: 3px 7px;
-  cursor: pointer;
-  border-radius: 5px;
-  box-shadow: var(--shadow2);
-} */
-.sort-by ::before{
-  content: "Filters";
-  color: red;
-}
+
 
 /* sort by css ---end for large screen */
 
@@ -1589,8 +1571,8 @@ canvas {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  height: 90% !important;
-  width: 90%;
+  height: fit-content !important;
+  width: 50%!important;
   cursor: pointer;
   /* height: fit-content; */
 }
@@ -2428,7 +2410,11 @@ height: fit-content;
 }
 
 @media (max-width:590px) {
-
+  canvas{
+    height: 99%!important;
+    width: fit-content!important;
+    display: flex;
+  }
   html,
   body {
     overflow-x: hidden;
@@ -2524,12 +2510,14 @@ margin-top: 15px;
 padding: 7px 4px;
 margin-bottom: 0px;
 box-shadow: 0 0px 0px 1px #363434 ,0 -0px 6px 0 #0e0d0d;
+position: static !important;
   }
   .sort-by svg ,.add-user-icon-container svg{
-    transform: scale(1.3);
-    padding: 2px;
+    transform: scale(1.4);
+    padding: 3px;
+    position: static;
   }
- .sort-by:hover{
+ .add-user-icon-container:hover,.sort-by:hover{
     background-color: var(--black);
     box-shadow: 0 0px 0px 1px var(--main);
   }
@@ -2539,16 +2527,22 @@ box-shadow: 0 0px 0px 1px #363434 ,0 -0px 6px 0 #0e0d0d;
   }
   .add-user-icon-container svg, .sort-by svg{
     font-size: large;
+    position: static !important;
+    z-index: 1;
   }
- .sort-by:hover svg{
+ .sort-by:hover svg,.add-user-icon-container:hover svg{
     color: var(--main);
   }
+  
   .add-transaction-icon:hover{
-    background-color: var(--black)!important;
     box-shadow: 0 0px 0px 1px var(--main)!important;
-  }
-  .add-user-icon-container :hover .add-user-icon-container svg{
+    background-color: var(--black)!important;
     color: var(--main)!important;
+    
+  }
+  .add-user-icon-container :hover {
+    color: var(--main)!important;
+
   }
 
   /* sort by css ---end for mobile screen */
@@ -2878,6 +2872,7 @@ svg{
     overflow-y: scroll;
     max-width: 90%;
     margin-bottom: 150px;
+   
 
   }
 
@@ -2900,7 +2895,8 @@ svg{
     /* text-align: center; */
     height: 100%;
     /* border-bottom: 1px solid gray; */
-    font-size: small;
+    font-size:x-small;
+    height: 40px;
     /* margin-top: 10px; */
     /* background-color: #24262b; */
     /* background-color: #0547ef; */
@@ -2917,10 +2913,11 @@ svg{
     border-radius: 0;
     text-transform: capitalize;
     cursor: pointer;
+    font-size: small;
   }
   .d-clients-container table tbody tr td:last-child {
     font-family: monospace;
-    font-size: large;
+    font-size: small!important;
     /* border-radius: 0px 10px 10px 0px; */
     border-radius: 0;
     cursor: pointer;
