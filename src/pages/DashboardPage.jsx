@@ -68,7 +68,6 @@ const Dashboard = () => {
 
 
     const query = e.target.value.trim();
-    console.log("query  length=> ", query?.length)
     if (query?.length <= 0) {
       SetnotFound(false);
       SetSearchQuery(null)
@@ -93,7 +92,6 @@ const Dashboard = () => {
 
         }).then(res => res.json())
           .then((result) => {
-            console.log(" search result =>", result)
             if (result.isSuccess) {
               Setusers(result.responseData);
               setApiUserData([]);
@@ -257,7 +255,7 @@ const Dashboard = () => {
                 <div>
                   <span>{max ? max.name : "Max"}</span>
                   <span style={{ color: "red" }}>
-                    ₹ {max ? parseFloat(max.balance).toFixed(2) : 0.00}
+                    ₹ {!isNaN(max) ? parseFloat(max?.balance).toFixed(2) : 0.00}
                   </span>
                 </div>
               </div>
@@ -266,7 +264,7 @@ const Dashboard = () => {
                 <div>
                   <span>{min ? min.name : "MIN"}</span>
                   <span style={{ color: "green" }}>
-                    ₹ {min ? parseFloat(min.balance).toFixed(2) : 0.00}
+                    ₹ {!isNaN(min) ? parseFloat(min?.balance).toFixed(2) : 0.00}
                   </span>
                 </div>
               </div>

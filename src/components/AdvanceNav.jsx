@@ -9,7 +9,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import Success from './SuccessToast';
 import CustomModal from '../mui_comps/CustomModal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Error from './ErrorToast';
 import api from '../api_source';
 import { logout } from '../features/reducers/authSlice';
@@ -28,13 +28,15 @@ const AdvanceNav = ({ refresh, isDashboard = false, isAddUser }) => {
   const closeModal = () => {
     setIsLogoutModal(false)
   }
+  const auth = useSelector(state => state.auth.token)
   const logoutHandle = () => {
     try {
 
       fetch(`${api}/logout`, {
         method: "POST",
         headers: {
-          "content-type": "application/json"
+          "content-type": "application/json",
+          token: auth
         },
         credentials: "include",
         mode: 'cors'
