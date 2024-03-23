@@ -175,6 +175,7 @@ const NewTransaction = ({ isOpen, close, transactionId, refresh, SetIsOpen, head
                     autoFocus value={amount}
                     min={0}
                     onChange={(e) => setAmount(e.target.value)}
+                    onKeyDown={(e) => { e.key == "Enter" && handleSubmit("IN", e.key) }}
                     placeholder='Amount'
                     required />
 
@@ -207,8 +208,8 @@ const NewTransaction = ({ isOpen, close, transactionId, refresh, SetIsOpen, head
 
                 <div className='form'>
                   <h1>OUT</h1>
-                  <input type="number" autoFocus value={amount} onChange={(e) => setAmount(e.target.value)} placeholder='Amount' required />
-                  <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} placeholder='Date' required />
+                  <input type="number" autoFocus value={amount} onKeyDown={(e) => { e.key == "Enter" && handleSubmit("OUT", e.key) }} onChange={(e) => setAmount(e.target.value)} placeholder='Amount' required />
+                  <input type="datetime-local" placeholder={"transaction date"} value={date} onChange={(e) => setDate(e.target.value)} required />
                   <input type="text" value={disc} onChange={(e) => setDisc(e.target.value)} onKeyDown={(e) => { e.key == "Enter" && handleSubmit("OUT", e.key) }} placeholder='Comment' required />
                   <button style={{ cursor: isLoading ? "not-allowed" : "pointer", backgroundColor: isLoading ? "gray" : "red" }} disabled={isLoading} onClick={() => handleTransaction('OUT')}>{isLoading ? "processing . .  . ." : ediMode ? "Update" : "OUT"}</button>
                 </div>
