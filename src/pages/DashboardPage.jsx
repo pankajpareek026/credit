@@ -12,6 +12,7 @@ import { logout } from "../features/reducers/authSlice";
 import ErrorToast from "../components/ErrorToast";
 import WarningToast from "../components/WarningToast";
 import FilterButton from "../components/FiltersButton";
+import { object } from "yup";
 
 
 const Dashboard = () => {
@@ -255,7 +256,7 @@ const Dashboard = () => {
                 <div>
                   <span>{max ? max.name : "Max"}</span>
                   <span style={{ color: "red" }}>
-                    ₹ {!isNaN(max) ? parseFloat(max?.balance).toFixed(2) : 0.00}
+                    ₹ {!isNaN(max.balance) ? parseFloat(max?.balance).toFixed(2) : 0.00}
                   </span>
                 </div>
               </div>
@@ -264,7 +265,7 @@ const Dashboard = () => {
                 <div>
                   <span>{min ? min.name : "MIN"}</span>
                   <span style={{ color: "green" }}>
-                    ₹ {!isNaN(min) ? parseFloat(min?.balance).toFixed(2) : 0.00}
+                    ₹ {!isNaN(min.balance) ? parseFloat(min?.balance).toFixed(2) : 0.00}
                   </span>
                 </div>
               </div>
