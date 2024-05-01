@@ -46,14 +46,12 @@ function Register() {
             mode: 'cors'
         })
             .then(response => {
-                // if (!response.ok) {
-                //     return ErrorToast('Network Error');
-                // }
-                // console.log("response STS=>", response)
+
                 return response.json();
+
             })
             .then(result => {
-                console.log("rslt =>", result)
+
                 if (result?.isSuccess) {
                     SuccessToast(result?.message); // Show success message
                     setTimeout(() => {

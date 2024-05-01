@@ -79,7 +79,7 @@ function Login(e) {
                 .then((apiResult) => {
                     if (apiResult.isError) {
                         // If there's an error response from the server
-                        ErrorToast(apiResult?.responseData.message); // Show the error message to the user
+                        ErrorToast(apiResult?.message); // Show the error message to the user
                         SetLoading(false); // Hide the loading spinner
                         SetDisable(false); // Enable the form elements for user interaction
                         return;
