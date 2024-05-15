@@ -19,7 +19,7 @@
 
 .vanta-canvas {
   width: 100vw !important;
-  height: 100vh !important;
+  height: 110vh !important;
   background-color: var(--new-dark) !important;
 }
 
@@ -38,7 +38,7 @@
 .first-section {
   margin-top: 0;
   padding-top: 7%;
-  height: max-content;
+  height: 110vh;
   width: 100vw;
 }
 
@@ -334,3 +334,4 @@
     text-align: center;
   }
 }
+
