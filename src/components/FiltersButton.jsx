@@ -77,7 +77,7 @@ const FilterButton = ({ unFilteredData, setIsFiltersApplied, showFilters, setFil
     return (
         <>
             <div onClick={() => setShowFilters(current => !current)} className="sort-by">
-                <TuneIcon />
+                <TuneIcon sx={{ zIndex: 0 }} />
             </div>
             {
                 showFilters && <FiltersCard

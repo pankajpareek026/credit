@@ -1,119 +1,111 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import '../HomePage.css';
+import "../HomePage.css";
 import { useSelector } from "react-redux";
+import DOTS from 'vanta/dist/vanta.dots.min.js'
+import GLOBE from 'vanta/dist/vanta.globe.min.js'
 
 const Home = () => {
-  const loginInfo = useSelector(data => data.auth.status)
-  console.log("LI =>", loginInfo)
-  const redirect = useNavigate();
-  document.title = "Credit | HOME";
-  const gettingStartedHandle = () => {
-    if (loginInfo) {
-      redirect("/dashboard")
-      return
-    }
-    redirect("/login")
-  }
-  const features = [
-    {
-      title: 'User-Friendly UI',
-      content: '"Credit" offers a user interface reminiscent of the simplicity and ease of use found in WhatsApp. Users can effortlessly navigate through the apps features and functionalities, enjoying a familiar and intuitive experience akin to their favorite messaging platform.'
-    }, {
-      title: 'Data Encryption',
-      content: 'All data stored and transmitted within "Credit" is encrypted, providing an additional layer of security.This encryption protects users financial information from unauthorized access, enhancing confidentiality and trust in the app.'
-    },
-    {
-      title: 'Share Transaction Feature',
-      content: '"Credit" introduces a unique Share Transaction feature, allowing users to generate a secure link to all transactions associated with a particular client.With this feature, users can easily share a comprehensive overview of transactions with clients or stakeholders without requiring them to log in to the app.The generated link provides convenient access to transaction details while maintaining security and confidentiality, ensuring transparency and facilitating collaboration with external parties.'
-    },
+    const loginInfo = useSelector((data) => data.auth.status);
+    const redirect = useNavigate();
+    const vantaRef = useRef(null);
+    const vantaRef2 = useRef(null);
+    console.log("vantaref=>", vantaRef)
 
-  ]
-  return (
-    <>
-      <div className="home-page">
-        <Navbar />
+    useEffect(() => {
 
-        <section className="first-section">
+        vantaRef.current = DOTS({
+            el: ".first-section",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: true,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x20ff28,
+            color2: "rgb(255, 0, 111)"
+        })
 
-          <div className="first-heading">
-            Ready to simplify your finances ?
-          </div>
+        vantaRef2.current = GLOBE({
+            el: ".second-section",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: "rgb(20, 241, 149)"
+        })
+        // Cleanup Vanta.js on component unmount
 
+    }, []);
 
-          <button onClick={gettingStartedHandle} className="started-btn">{loginInfo ? "Dashboard" : "Getting Started"} &#8594; </button>
+    const gettingStartedHandle = () => {
+        if (loginInfo) {
+            redirect("/dashboard");
+        } else {
+            redirect("/login");
+        }
+    };
 
-        </section>
-        {/* screen shot  */}
-        <section className="second-section">
+    const features = [
+        {
+            title: "Simple UI",
+            content:
+                '"Credit" offers a user interface reminiscent of the simplicity and ease of use found in WhatsApp. Users can effortlessly navigate through the apps features and functionalities, enjoying a familiar and intuitive experience akin to their favorite messaging platform.',
+        },
+        {
+            title: "Data Encryption",
+            content:
+                'All data stored and transmitted within "Credit" is encrypted, providing an additional layer of security. This encryption protects users financial information from unauthorized access, enhancing confidentiality and trust in the app.',
+        },
+        {
+            title: "Share Transactions ",
+            content:
+                '"Credit"  introduces Share Transaction, allowing users to generate secure links to client transactions for easy sharing. No app login required. Enhances transparency, collaboration, and confidentiality, enabling seamless communication with clients.',
+        },
+    ];
 
-          <h3>Why credit ?</h3>
-          <hr />
+    return (
+        <>
+            <div className="home-page">
+                <Navbar />
 
+                <section className="first-section">
+                    <div className="first-heading">
+                        Ready to simplify your finances ?
+                    </div>
 
-          <div className="features-container">
-            {
-              features.map(({ title, content }, index) => {
-                return (
-                  <div className="feature">
-                    <h3>{index + 1 + ". "}{title}</h3>
+                    <button onClick={gettingStartedHandle} className="started-btn">
+                        {loginInfo ? "Dashboard" : "Getting Started"} &#8594;{" "}
+                    </button>
+                </section>
+
+                <section className="second-section">
+                    <h3>Why credit ?</h3>
                     <hr />
-                    <span className="content-span">
-                      {content}
-                    </span>
-                  </div>
-                )
-              })
-            }
-          </div>
 
-        </section>
-
-
-
-      </div>
-      {/* <Footer /> */}
-    </>
-  );
+                    <div className="features-container">
+                        {features.map(({ title, content }, index) => {
+                            return (
+                                <div className="feature" key={index}>
+                                    {/* <h3>{index + 1 + ". "}</h3> */}
+                                    <h3>{title}</h3>
+                                    <hr />
+                                    <span className="content-span">{content}</span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+            </div>
+            {/* <Footer /> */}
+        </>
+    );
 };
+
 export default Home;
-
-
-
-
-
-
-
-{/* <div className="home-page">
-
-<section className="section-one">
-  <canvas class="webgl-canvas" data-engine="three.js r158" width="2608" height="1372" style="width: 1304px; height: 686px;"></canvas>
-  <div className="section-one-inner-card-container">
-    <span className="title">
-      {" "}
-      <p>Ready to simplify your finances</p>
-      <>
-        {!isUser ? (
-          <button className="btn" onClick={() => redirect("/register")}>
-            {" "}
-            <Link to={"/register"}></Link>
-            Get started &#x2192;
-          </button>
-        ) : (
-          <button className="btn" onClick={() => redirect("/dashboard")}>
-            {" "}
-            <Link className="btn" to={"/dashboard"}></Link>
-            Dashboard &#x2192;
-          </button>
-        )}
-      </>
-    </span>
-    <img src={rightImage} alt="" />
-  </div >
-</section >
-<section className="section-two">
-  <h2 className="title">Why Should You Use Credit</h2>
-</section>
-</div> */}
