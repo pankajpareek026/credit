@@ -174,7 +174,8 @@ const getTransactionByShareToken = async (req, res, next) => {
                                         else: {
                                             "type": "recived",
                                             "amount": { $multiply: ["$trnsData.amount", -1] },
-                                            "dis": "$trnsData.dis"
+                                            "dis": "$trnsData.dis",
+                                            "date": "$trnsData.date"
                                         }
                                     }
                                 }
