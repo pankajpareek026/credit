@@ -121,7 +121,7 @@ const ShareTransactions = () => {
 
             <div className="lower">
               <div className="remaining-balance">
-                Remaining balance: ₹ {APIdata?.totalRemainingAmount ? APIdata.totalRemainingAmount : 0.00}
+                Remaining balance: ₹ {APIdata?.totalRemainingAmount ? parseFloat(APIdata.totalRemainingAmount).toFixed(2) : 0.00}
                 <InfoIcon
                   titleAccess={APIdata?.totalRemainingAmount > 0 ? `${APIdata?.clientName} have to pay` : `${APIdata?.clientName}  have to collect`}
                   style={infoIconStyle}
