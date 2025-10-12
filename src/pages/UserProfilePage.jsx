@@ -68,7 +68,6 @@ function UserProfile() {
   const deleteRef = useRef()
 
   const copyLink = (link, index) => {
-    // console.log("REF=>", ref)
     window.navigator.clipboard.writeText(link)
     setIsCopied(true)
     setCopyIndex(index)
@@ -81,7 +80,6 @@ function UserProfile() {
 
   // delete link from database
   const deleteLinkParmanent = () => {
-    console.log('deleteLinkParmanent')
     try {
       fetch(`${api}/deleteSharedLink`, {
         method: 'DELETE',
@@ -95,7 +93,6 @@ function UserProfile() {
       })
         .then(res => res.json())
         .then((data) => {
-          console.log(data);
           // if server response an error
           if (data.isError) return ErrorToast(data.message);
           SuccessToast(data.message);
@@ -114,14 +111,12 @@ function UserProfile() {
 
   // function to display confirm delete link modal
   const deleteLink = (linkId) => {
-    console.log("delete linkID", linkId);
     setOpen(true)
     setDeleteLinkId(linkId)
   }
 
   // open modal to change client name
   const editClientName = (clientName, clientId) => {
-    console.log(" clientName=>", clientName, "clientId =>", clientId);
     setClientCurrentName(clientName)
     setShowEditModal(true);
     setClientId(clientId);
@@ -150,9 +145,6 @@ function UserProfile() {
       // Set loading state and text
       setIsSecondBtnLoading(true);
       setSecondBtnLoadingText("Saving");
-
-      // Log function call
-      console.log("Save function called");
 
       // Make PUT request to update client name
       fetch(`${api}/editClient`, {
@@ -206,7 +198,6 @@ function UserProfile() {
 
   // to open delete client modal
   const deleteClientModalHandle = (clientId, clientName) => {
-    console.log("clientId: ", clientId, "clientName: ", clientName);
     setisDeleteClientModal(true)
     setClientCurrentName(clientName)
     setClientId(clientId)
@@ -216,8 +207,6 @@ function UserProfile() {
   const deleteClientPermanently = async () => {
     try {
       setIsSecondBtnLoading(true)
-      console.log("clientId", clientId);
-      console.log("clientName", clientCurrentName)
       fetch(`${api}/deleteClient`, {
         method: 'DELETE',
         headers: {
@@ -231,7 +220,6 @@ function UserProfile() {
       })
         .then(response => response.json())
         .then((deleteResponse) => {
-          console.log("deleteResponse=>>", deleteResponse)
           if (deleteResponse.isSuccess) {
             SuccessToast(deleteResponse.message)
             closeDeleteModal();
@@ -254,7 +242,6 @@ function UserProfile() {
 
   // to close delete client modal
   const closeDeleteModal = () => {
-    console.log("Close Delete Modal clicked=>>");
     setIsSecondBtnLoading(false)
     setisDeleteClientModal(false)
     setClientCurrentName("")
@@ -278,7 +265,6 @@ function UserProfile() {
       })
         .then(res => res.json())
         .then(data => {
-          console.log("data=>", data)
           if (data.isSuccess) {
             const { allSharedLinks, allClients, symbol, name } = data.responseData
             setSharedLinks(allSharedLinks)

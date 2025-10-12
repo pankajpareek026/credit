@@ -25,7 +25,7 @@ async function authy(req, res, next) {
         const user = jwt.verify(req.headers.token, privetKey, (err, valid) => {
             if (err) {
                 res.json({ response: err.message })
-                console.log("AUTHY ERROR :", err)
+                
             }
             else {
                 req.body.user = valid;

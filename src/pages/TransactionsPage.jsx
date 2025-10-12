@@ -1,17 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useParams } from "react-router-dom";
 
 //mui icons  --start
 import ShareIcon from "@mui/icons-material/Share";
+import MergeIcon from '@mui/icons-material/Merge';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownSharpIcon from '@mui/icons-material/KeyboardArrowDownSharp';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 //mui icons --end
 import TransactionComp from "../components/TransactionComp";
 import NewTransaction from "../components/NewTransaction";
 import SuccessToast from "../components/SuccessToast";
 import Loading from "../components/Loading";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setClientId } from "../features/reducers/clientDataSlice";
 import CustomModal from "../mui_comps/CustomModal";
 import MuiInputBox from "../mui_comps/MuiInputBox";
@@ -23,8 +27,6 @@ import ErrorToast from "../components/ErrorToast";
 
 
 const Transactions = () => {
-  let balance = 0;
-  const redirect = useNavigate();
   let params = useParams();
   const [show, Setshow] = useState(false);
   const [transactions, SetTransactions] = useState([]); //array for transactions
@@ -38,19 +40,25 @@ const Transactions = () => {
   const [notFound, setNotFound] = useState(false)
   const [isGeneratingLink, setIsGeneratingLink] = useState(false)
   const [isScrollDownButton, setIsScrollDownButton] = useState(true)
-  const [isScrollHigh, setIsScrollHigh] = useState(false)
+  const [isScrollHigh, setIsScrollHigh] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
+  const [showMergeModal, setShowMergeModal] = useState(false);
+  const [showShareTransactionModal, setShowShareTransactionModal] = useState(false);
+  const [allClients, setAllClients] = useState([]);
+  const [selectedClients, setSelectedClients] = useState([]);
+  const [clientSearchQuery, setClientSearchQuery] = useState("");
+  const [filteredClients, setFilteredClients] = useState([]);
   let currentBalance = 0
   const linkRef = useRef()
   const transactionsContainerRef = useRef(null);
 
-  const clientId = useSelector((state) => state.clientData.clientId)
   const scrollToBottom = () => {
     if (transactionsContainerRef.current) {
       const scrollHeight = transactionsContainerRef.current.scrollHeight;
       const scrollTop = transactionsContainerRef.current.scrollTop;
       const clientHeight = transactionsContainerRef.current.clientHeight;
       const isScrolledToBottom = scrollHeight - scrollTop === clientHeight;
-      console.log(`scrollTop: ${isScrolledToBottom}`)
+      
 
       if (!isScrolledToBottom) {
         transactionsContainerRef.current.scrollTo({
@@ -100,17 +108,39 @@ const Transactions = () => {
   };
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(setClientId({ clientId: params.id }))
-    getTransactions();
-
-  }, []);
-
-
-
   const auth = localStorage.getItem("user");
-  const getTransactions = () => {
+
+  const getAllClients = useCallback(() => {
+    if (auth) {
+      fetch(`${api}/clients`, {
+        headers: {
+          "content-type": "application/json",
+          token: auth,
+        },
+        credentials: "include",
+        mode: 'cors'
+      })
+        .then(response => {
+          if (!response.ok) {
+            return ErrorToast('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(result => {
+          if (result.isSuccess) {
+            setAllClients(result.responseData);
+            setFilteredClients(result.responseData);
+          } else {
+            ErrorToast(result.message);
+          }
+        })
+        .catch(error => {
+          ErrorToast(error.message);
+        });
+    }
+  }, [auth]);
+
+  const getTransactions = useCallback(() => {
     setIsLoading(true)
     // Fetch transactions data from the server
     try {
@@ -155,7 +185,24 @@ const Transactions = () => {
     } catch (error) {
 
     }
-  };
+  }, [params.id, auth]);
+
+  useEffect(() => {
+    dispatch(setClientId({ clientId: params.id }))
+    getTransactions();
+    getAllClients();
+  }, [dispatch, params.id, getTransactions, getAllClients]);
+
+  useEffect(() => {
+    if (clientSearchQuery.trim() === "") {
+      setFilteredClients(allClients);
+    } else {
+      const filtered = allClients.filter(client =>
+        client.name.toLowerCase().includes(clientSearchQuery.toLowerCase())
+      );
+      setFilteredClients(filtered);
+    }
+  }, [clientSearchQuery, allClients]);
 
   const closeShareModal = () => {
     setIsShareModalOpen(false);
@@ -166,17 +213,17 @@ const Transactions = () => {
   const timeValueHandle = (e) => {
     if (e.target.value >= 10) {
       setValidTill(current => ({
-        ...current, ["value"]: 10
+        ...current, value: 10
       }))
     }
     else if (e.target.value < 0) {
       setValidTill(current => ({
-        ...current, ["value"]: 1
+        ...current, value: 1
       }))
     }
     else {
       setValidTill(current => ({
-        ...current, ["value"]: e.target.value
+        ...current, value: e.target.value
       }))
     }
   }
@@ -233,6 +280,87 @@ const Transactions = () => {
     } catch (error) {
       // console.log("share :", error);
       ErrorToast(error.message)
+    }
+  };
+
+  const handleClientSelect = (client) => {
+    const isSelected = selectedClients.some(selected => selected._id === client._id);
+    if (isSelected) {
+      setSelectedClients(selectedClients.filter(selected => selected._id !== client._id));
+    } else {
+      setSelectedClients([...selectedClients, client]);
+    }
+  };
+
+  const removeSelectedClient = (clientId) => {
+    setSelectedClients(selectedClients.filter(client => client._id !== clientId));
+  };
+
+  const handleClientSearch = (e) => {
+    setClientSearchQuery(e.target.value);
+  };
+
+  const handleMergeProceed = () => {
+    if (selectedClients.length === 0) {
+      ErrorToast("Please select at least one client");
+      return;
+    }
+    setShowMergeModal(false);
+    setShowShareTransactionModal(true);
+  };
+
+  const getValidityInMs = () => {
+    const { value, unit } = validTill;
+    const multipliers = {
+      hours: 60 * 60 * 1000,
+      days: 24 * 60 * 60 * 1000,
+      weeks: 7 * 24 * 60 * 60 * 1000,
+      months: 30 * 24 * 60 * 60 * 1000,
+      years: 365 * 24 * 60 * 60 * 1000
+    };
+    return value * multipliers[unit];
+  };
+
+  const handleCreateShareLink = async () => {
+    if (selectedClients.length === 0) {
+      ErrorToast("Please select at least one client");
+      return;
+    }
+
+    try {
+      setIsGeneratingLink(true);
+
+      const clientIds = selectedClients.map(client => client._id);
+
+      const response = await fetch(`${api}/shareRequest/${validTill.value}/${validTill.unit}`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          token: auth.toString(),
+        },
+        credentials: "include",
+        mode: 'cors',
+        body: JSON.stringify({
+          clientIds: clientIds,
+          currentClientId: params.id
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.isSuccess) {
+        const { link } = data.responseData;
+        setLink(link);
+        setShowShareTransactionModal(false);
+        setIsShareModalOpen(true);
+        SuccessToast("Share link created successfully!");
+      } else {
+        ErrorToast(data.message);
+      }
+    } catch (error) {
+      ErrorToast("Failed to create share link");
+    } finally {
+      setIsGeneratingLink(false);
     }
   };
 
@@ -329,7 +457,7 @@ const Transactions = () => {
               {!link && <>
                 <legend>Choose link validity time </legend>
                 <div className="input-and-selection-container">
-                  <input className="time-inp" value={validTill.value} onKeyDown={(e) => { e.key == "Enter" && getTransactionsLink() }} onChange={timeValueHandle} type="number" min={1} max={10} placeholder="Enter Time" />
+                  <input className="time-inp" value={validTill.value} onKeyDown={(e) => { e.key === "Enter" && getTransactionsLink() }} onChange={timeValueHandle} type="number" min={1} max={10} placeholder="Enter Time" />
                   <select value={validTill.unit} onChange={timeUnitHandle} >
                     <option value="hours">Hour</option>
                     <option value="days">Day</option>
@@ -361,6 +489,240 @@ const Transactions = () => {
               }            </div>
           }
         />
+
+
+        {/* Modal for the share options like share / merge and share */}
+
+        <CustomModal
+          openModal={showShareOptions}
+          isTitle={true}
+          title={"Share"}
+          isFirstButton={false}
+          isSecondButton={false}
+          maxW="550px"
+          isTnxDetailDialog={true}
+          closeModal={() => setShowShareOptions(false)}
+          content={
+            <div className="flex justify-center items-center gap-8 py-8 font-primary">
+              <div className="flex flex-col items-center gap-4 cursor-pointer group" onClick={() => {
+                setShowShareOptions(false);
+                setIsShareModalOpen(true);
+              }}>
+                <div className="font-bold text-lg text-white">Share</div>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 bg-card border-2 border-main shadow-theme-2 ">
+                  <ShareIcon sx={{ color: "white", fontSize: "30px" }} />
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center gap-4 cursor-pointer group" onClick={() => {
+                setShowShareOptions(false);
+                setShowMergeModal(true);
+              }}>
+                <div className="font-bold text-lg text-white">Merge & Share</div>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 bg-card border-2 border-main shadow-theme-2 ">
+                  <MergeIcon sx={{ color: "white", fontSize: "30px",hover: { color: "white" } }} />
+                </div>
+              </div>
+            </div>
+          }
+        />
+
+        {/* Merge & Share Modal */}
+        <CustomModal
+          openModal={showMergeModal}
+          isTitle={true}
+          title={"Merge & Share"}
+          isFirstButton={true}
+          firstButtonType={"close"}
+          firstButtonName={"cancel"}
+          isSecondButton={true}
+          secondButtonName={"Proceed"}
+          secodButtonType={"action"}
+          maxW="600px"
+          closeModal={() => {
+            setShowMergeModal(false);
+            setSelectedClients([]);
+            setClientSearchQuery("");
+          }}
+          firstOnClick={() => {
+            setShowMergeModal(false);
+            setSelectedClients([]);
+            setClientSearchQuery("");
+          }}
+          secodOnClick={handleMergeProceed}
+          content={
+            <div className="flex flex-col gap-4 font-primary">
+              {/* Selected Clients Section */}
+              {false && <div>
+                <div className="text-white font-bold text-lg mb-3">selected clients</div>
+                <div className="flex flex-wrap gap-2 mb-4  p-3 rounded-lg">
+                  {selectedClients.map((client) => (
+                    <div
+                      key={client._id}
+                      className="flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-main shadow-theme-2"
+                    >
+                      <span className="text-sm text-white">{client.name}</span>
+                      <CloseIcon
+                        sx={{
+                          color: "var(--main)",
+                          fontSize: "16px",
+                          cursor: "pointer",
+                          '&:hover': { color: 'white' }
+                        }}
+                        onClick={() => removeSelectedClient(client._id)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>}
+
+              {/* Separator */}
+              <hr className="border-card border" />
+
+              {/* Clients List Section */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="font-bold text-lg text-white">clients</div>
+                  <SearchIcon sx={{ color: "white", fontSize: "20px" }} />
+                </div>
+
+                {/* Search Input */}
+                <div className="mb-4">
+                  <input
+                    type="text"
+                    placeholder="Search clients..."
+                    value={clientSearchQuery}
+                    onChange={handleClientSearch}
+                    className="w-full px-3 py-2 rounded bg-second-dark border border-card text-white outline-none focus:border-main font-primary transition-colors"
+                  />
+                </div>
+
+                {/* Clients List */}
+                <div className="max-h-64 overflow-y-auto space-y-2">
+                  {filteredClients.map((client) => {
+                    const isSelected = selectedClients.some(selected => selected._id === client._id);
+                    return (
+                      <div
+                        key={client._id}
+                        className="flex items-center justify-between p-3 rounded cursor-pointer bg-mobile-client-card-bg border border-card shadow-none hover:bg-card hover:border-main transition-all duration-200"
+                        onClick={() => handleClientSelect(client)}
+                      >
+                        <div className="flex items-center gap-3">
+                          {isSelected ? (
+                            <CheckBoxIcon sx={{ color: "var(--main)", fontSize: "24px" }} />
+                          ) : (
+                            <CheckBoxOutlineBlankIcon sx={{ color: "white", fontSize: "24px" }} />
+                          )}
+                          <span className="font-medium text-white">{client.name}</span>
+                        </div>
+                        <span className="text-white font-mono">₹ {parseFloat(client.balance).toFixed(2)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          }
+        />
+
+        {/* Share Transaction Modal */}
+        <CustomModal
+          openModal={showShareTransactionModal}
+          isTitle={true}
+          title={"Share Transaction"}
+          isFirstButton={true}
+          firstButtonType={"close"}
+          firstButtonName={"cancel"}
+          isSecondButton={true}
+          secondButtonName={"Create Link"}
+          secodButtonType={"action"}
+          maxW="600px"
+          closeModal={() => {
+            setShowShareTransactionModal(false);
+            setSelectedClients([]);
+            setClientSearchQuery("");
+          }}
+          firstOnClick={() => {
+            setShowShareTransactionModal(false);
+            setSelectedClients([]);
+            setClientSearchQuery("");
+          }}
+          secodOnClick={handleCreateShareLink}
+          isSecondLoading={isGeneratingLink}
+          content={
+            <div className="flex flex-col gap-4 font-primary">
+              {/* Selected Clients Section */}
+              <div>
+                <div className="text-white font-bold text-lg mb-3">selected clients</div>
+                <div className="flex flex-wrap gap-2 mb-4 bg-mobile-client-card-bg p-3 rounded-lg">
+                  {selectedClients.map((client) => (
+                    <div
+                      key={client._id}
+                      className="flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-main shadow-theme-2"
+                    >
+                      <span className="text-sm text-white">{client.name}</span>
+                      <CloseIcon
+                        sx={{
+                          color: "var(--main)",
+                          fontSize: "16px",
+                          cursor: "pointer",
+                          '&:hover': { color: 'white' }
+                        }}
+                        onClick={() => removeSelectedClient(client._id)}
+                      />
+                    </div>
+                  ))}
+                  <div
+                    className="w-8 h-8 rounded-full bg-main flex items-center justify-center cursor-pointer hover:bg-advance transition-colors"
+                    onClick={() => {
+                      setShowShareTransactionModal(false);
+                      setShowMergeModal(true);
+                    }}
+                  >
+                    <AddIcon sx={{ color: "white", fontSize: "20px" }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Link Validity Section */}
+              <div>
+                <div className="text-white font-bold text-lg mb-3">Choose link validity</div>
+                <div className="flex items-center gap-3 mb-3">
+                  <input
+                    type="number"
+                    min="1"
+                    max="365"
+                    value={validTill.value}
+                    onChange={timeValueHandle}
+                    className="w-20 px-3 py-2 rounded bg-second-dark border border-card text-white outline-none focus:border-main font-primary"
+                  />
+                  <select
+                    value={validTill.unit}
+                    onChange={timeUnitHandle}
+                    className="px-3 py-2 rounded bg-second-dark border border-card text-white outline-none focus:border-main font-primary"
+                  >
+                    <option value="hours">Hour</option>
+                    <option value="days">Day</option>
+                    <option value="weeks">Week</option>
+                    <option value="months">Month</option>
+                    <option value="years">Year</option>
+                  </select>
+                </div>
+                <div className="text-main text-sm">
+                  Valid till: {new Date(Date.now() + getValidityInMs()).toLocaleString('en-IN', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                  })}
+                </div>
+              </div>
+            </div>
+          }
+        />
+
         {/* container which contains user name and share button */}
         <div className="t-upper-container">
           <p
@@ -379,7 +741,7 @@ const Transactions = () => {
               onChange={searchHandle}
             />
           </div>
-          <button onClick={() => setIsShareModalOpen(true)} className="share">
+          <button onClick={() => setShowShareOptions(true)} className="share">
             <ShareIcon sx={{ color: "rgb(20, 241, 149)", fontsize: "30px" }} />
           </button>
         </div>

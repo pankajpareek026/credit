@@ -88,7 +88,7 @@ export default function CustomModal(
         <React.Fragment>
             <Dialog
                 open={openModal}
-                maxWidth="700px"
+                maxWidth={maxW}
                 width="350px"
                 TransitionComponent={Transition}
                 keepMounted
@@ -100,7 +100,7 @@ export default function CustomModal(
                     style: {
                         backgroundColor: '#1E1E1E',
                         color: "white",
-                        borderRadius: "25px",
+                        borderRadius: "12px",
                         width: isTnxDetailDialog ? "350px" : "auto",
                         maxWidth: isTnxDetailDialog ? "750px" : "auto",
                         height: "fit-content",

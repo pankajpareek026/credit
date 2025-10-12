@@ -41,11 +41,11 @@ const Dashboard = () => {
   useEffect(() => {
     setUserData({
       ...userData,
-      labels: users.length > 0 ? users?.map((data) => data.name) : [],
+      labels: users.length > 0 ? users?.map((data) => data?.name) : [],
       datasets: [
         {
-          ...userData.datasets[0],
-          data: users.length > 0 ? users?.map((data) => data.balance) : [],
+          ...userData?.datasets[0],
+          data: users.length > 0 ? users?.map((data) => data?.balance) : [],
         },
       ],
     });
@@ -140,7 +140,7 @@ const Dashboard = () => {
           if (!response.ok) {
             return ErrorToast('Network response was not ok');
           }
-          console.log("intermediate response")
+          
           return response.json();
         })
         .then(users => {
